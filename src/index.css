@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body::-webkit-scrollbar {
+  width: 8px;
+  height: 10px;
+  border-radius: 10px;
+}
+body::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: transparent;
+}
+body::-webkit-scrollbar-thumb {
+  background: #02bd95;
+  border-radius: 10px;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.navcolor:after {
+  background: none repeat scroll 0 0 transparent;
+  content: "";
+  display: block;
+  height: 2px;
+  background: #02bd95;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+.navcolor:hover:after {
+  width: 100%;
+  left: 0;
+}
+.navlink:after {
+  background: none repeat scroll 0 0 transparent;
+  content: "";
+  display: block;
+  height: 2px;
+  background: #02bd95;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+.navlink:hover:after {
+  width: 100%;
+  left: 0;
+}
+.title:after,
+.heading:after {
+  background: #009f4b;
+  content: "";
+  display: block;
+  height: 3px;
+  width: 60px;
+  margin-top: 7px;
+}
+.line:after,
+.heading2:after {
+  background: #009f4b;
+  content: "";
+  display: block;
+  height: 4px;
+  width: 60px;
+  margin: 7px auto;
+  /* margin: 0 auto; */
+}
+@layer base {
+  html,
+  body {
+    font-family: "Poppins", sans-serif;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+}
+.primary_color {
+  @apply bg-[#02BD95] text-[#02BD95];
+}
+.para_color {
+  @apply text-[#666];
+}
+.green_button {
+  @apply focus:outline-none bg-[#02BD95] text-white font-medium rounded-full active:scale-90 transition text-sm md:px-10 px-5 md:py-3 py-2;
+}
