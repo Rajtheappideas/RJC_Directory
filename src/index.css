@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body::-webkit-scrollbar {
+/* body::-webkit-scrollbar {
   width: 8px;
   height: 10px;
   border-radius: 10px;
@@ -14,6 +14,19 @@ body::-webkit-scrollbar-track {
 body::-webkit-scrollbar-thumb {
   background: #02bd95;
   border-radius: 10px;
+} */
+
+body::-webkit-scrollbar {
+  width: 1em;
+}
+ 
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px #02BD95;
+}
+ 
+body::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -80,5 +93,19 @@ body::-webkit-scrollbar-thumb {
   @apply text-[#666];
 }
 .green_button {
-  @apply focus:outline-none bg-[#02BD95] text-white font-medium rounded-full active:scale-90 transition text-sm md:px-10 px-5 md:py-3 py-2;
+  @apply focus:outline-none bg-[#02BD95] text-white font-semibold rounded-full active:scale-90 transition text-lg md:px-10 px-5 md:py-3 py-2;
+}
+.blue_button {
+  @apply focus:outline-none bg-[#1489FB] text-white font-semibold rounded-full active:scale-90 transition text-lg md:px-10 px-5 md:py-3 py-2;
+}
+.darkGray_button {
+  @apply focus:outline-none bg-[#B4B4B4] text-white font-semibold rounded-full active:scale-90 transition text-lg md:px-10 px-5 md:py-3 py-2;
+}
+
+.input_field {
+  @apply border border-borderColor w-full rounded-lg p-3 outline-none focus:border-green-500;
+}
+
+.Label {
+  @apply opacity-50 font-light capitalize;
 }

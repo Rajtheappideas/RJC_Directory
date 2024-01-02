@@ -34,7 +34,12 @@ const Footer = () => {
       // className={`bg-[#004D7F] lg:py-8 py-5 lg:px-20 px-4 space-y-4 relative w-full text-black  ${
       //   !checkPageUrl() && "mt-20"
       // }`}
-      className="lg:py-8 py-5 lg:px-20 px-4 space-y-4 relative w-full text-black"
+      className={` ${
+        (window.location.href.includes("sign-in") ||
+          window.location.href.includes("sign-up") ||
+          window.location.href.includes("forgot-password")) &&
+        "hidden"
+      } lg:py-8 py-5 lg:px-20 px-4 space-y-4 relative w-full text-black`}
     >
       {/* <div className="container"> */}
       <div className="grid md:grid-cols-2 lg:gap-0 gap-10  lg:grid-cols-5 lg:px-10">

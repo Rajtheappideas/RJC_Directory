@@ -12,11 +12,11 @@ const Home = () => {
     <div className="lg:space-y-20 space-y-10">
       <Banner />
       <Category />
-      <div className="bg-[#FAFCFF] w-full">
+      <div className="bg-bgGray w-full">
         <Latest_Listing />
       </div>
       <Business />
-      <div className="bg-[#FAFCFF] w-full">
+      <div className="bg-bgGray w-full">
         <Download />
       </div>
       <TestiMonials />

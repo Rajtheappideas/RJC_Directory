@@ -115,10 +115,10 @@ const Latest_Listing = () => {
                   <FcLike className="absolute top-3 right-2 cursor-pointer text-2xl" />
                 </div>
                 <div className="space-y-2 p-3">
-                  <p className="text-[#272727] text-left font-semibold xl:text-xl text-base">
+                  <p className="text-textColor text-left font-semibold xl:text-xl text-base">
                     {item?.title}
                   </p>
-                  <p className="text-[#222] font-normal xl:text-base text-sm">
+                  <p className="text-textColor font-normal xl:text-base text-sm">
                     {item?.des}
                   </p>
                   <div className="flex items-center gap-2">

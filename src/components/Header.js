@@ -4,7 +4,6 @@ import { RiMenu3Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import LogoColor from "../assets/images/headerColor.svg";
 import Logo from "../assets/images/Logo.png";
-import { IoIosArrowForward } from "react-icons/io";
 
 const Header = () => {
   const [sticky, setSticky] = useState(false);
@@ -25,7 +24,12 @@ const Header = () => {
   }, []);
   return (
     <div
-      className={` p-4 top-0 fixed z-40 w-full  ${
+      className={` p-4 top-0 fixed z-40 w-full ${
+        (window.location.href.includes("sign-in") ||
+          window.location.href.includes("sign-up") ||
+          window.location.href.includes("forgot-password")) &&
+        "hidden"
+      }  ${
         sticky ? " bg-white text-black  z-10 top-0  shadow-lg" : "text-white"
       }`}
     >

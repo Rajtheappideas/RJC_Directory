@@ -10,7 +10,7 @@ const Download = () => {
         <p className="md:text-3xl text-lg font-semibold">
           Download Now for Seamless Business Discoveries on the Go!
         </p>
-        <p className="text-[#222] md:text-base text-sm">
+        <p className="text-textColor md:text-base text-sm">
           Download our business directory app now for instant access to a
           diverse range of local services. Discover businesses effortlessly,
           explore services, and access contact details on-the-go. Simplify your
