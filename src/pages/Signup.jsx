@@ -10,7 +10,7 @@ const Signup = () => {
 
   return (
     <>
-    <SuccessModal/>
+    {/* <SuccessModal/> */}
       {showPreferenceBox && <SetYourPreference />}
       <div className="w-screen overflow-y-auto grid xl:grid-cols-2 xl:gap-0 gap-5 place-items-center items-center h-screen">
         {/* images */}
