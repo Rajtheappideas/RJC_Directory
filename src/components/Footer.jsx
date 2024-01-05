@@ -87,7 +87,7 @@ const Footer = () => {
           </p>
           <p className=" cursor-pointer font-light text-[#403D3D]">
             <Link
-              to="/terms-and-conditions"
+              to="/terms"
               onClick={() => {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
