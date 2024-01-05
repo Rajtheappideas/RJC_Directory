@@ -1,25 +1,27 @@
-import React, { useRef } from "react";
+import React from "react";
 // import Swiper core and required modules
 import { Navigation } from "swiper/modules";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { GoStarFill } from "react-icons/go";
 import { FcLike } from "react-icons/fc";
-
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// import Swiper core and required modules
+// import Swiper coBestoffersre and required modules
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 // import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { Link } from "react-router-dom";
+import SingleItemBox from "../components/SingleItemBox";
 
+const Bestoffer = () => {
+  
 const listingData = [
   {
     id: 1,
-    image: require("../../assets/images/latest_slider/Rectangle 375.png"),
+    image: require("../assets/images/latest_slider/Rectangle 375.png"),
     title: "Home appliances repair",
     des: "304 Kent St, Sydney NSW 2000.Austrakia",
     review: <GoStarFill />,
@@ -27,7 +29,7 @@ const listingData = [
   },
   {
     id: 2,
-    image: require("../../assets/images/latest_slider/Rectangle 375 (1).png"),
+    image: require("../assets/images/latest_slider/Rectangle 375 (1).png"),
     title: "Furniture dealer",
     des: "304 Kent St, Sydney NSW 2000.Austrakia",
     review: <GoStarFill />,
@@ -35,7 +37,7 @@ const listingData = [
   },
   {
     id: 3,
-    image: require("../../assets/images/latest_slider/Rectangle 375 (2).png"),
+    image: require("../assets/images/latest_slider/Rectangle 375 (2).png"),
     title: "Pest control service",
     des: "304 Kent St, Sydney NSW 2000.Austrakia",
     review: <GoStarFill />,
@@ -43,7 +45,7 @@ const listingData = [
   },
   {
     id: 4,
-    image: require("../../assets/images/latest_slider/Rectangle 375 (3).png"),
+    image: require("../assets/images/latest_slider/Rectangle 375 (3).png"),
     title: "Home appliances repair",
     des: "304 Kent St, Sydney NSW 2000.Austrakia",
     review: <GoStarFill />,
@@ -51,7 +53,7 @@ const listingData = [
   },
   {
     id: 5,
-    image: require("../../assets/images/latest_slider/Rectangle 375.png"),
+    image: require("../assets/images/latest_slider/Rectangle 375.png"),
     title: "Furniture dealer",
     des: "304 Kent St, Sydney NSW 2000.Austrakia",
     review: <GoStarFill />,
@@ -59,27 +61,26 @@ const listingData = [
   },
 ];
 
-const Business = () => {
   return (
-    <div className="container mx-auto xl:px-0 px-5 space-y-5">
+    <div className="container mx-auto space-y-5">
       <div className="space-y-1">
         <div className="flex justify-between items-center">
-          <div>
-            <p className="xl:text-[30px] text-2xl font-semibold title heading uppercase">
-              Near by <span className="text-[#023F86]">business</span>
-            </p>
-          </div>
+          <p className="xl:text-[30px] text-2xl font-semibold title heading uppercase">
+            Near by <span className="text-[#023F86]">business</span>
+          </p>
           <div className="flex items-center gap-1">
-            <p className="text-primary_color hover:underline cursor-pointer">
+            <Link
+              to="/search"
+              className="text-primary_color hover:underline cursor-pointer"
+            >
               More
-            </p>
+            </Link>
             <IoIosArrowForward className="text-primary_color" />
           </div>
         </div>
       </div>
       <div className="px-3">
         <Swiper
-          style={{ height: "350px" }}
           // install Swiper modules
           modules={[Navigation]}
           className="relative"
@@ -115,28 +116,7 @@ const Business = () => {
         >
           {listingData.map((item) => (
             <SwiperSlide key={item.id}>
-              <div className="space-y-2 bg-white rounded-md shadow-md">
-                <div>
-                  <img
-                    src={item?.image}
-                    alt=""
-                    style={{ width: "100%", position: "relative" }}
-                  />
-                  <FcLike className="absolute top-3 right-2 cursor-pointer text-2xl" />
-                </div>
-                <div className="space-y-2 p-3">
-                  <p className="text-textColor text-left font-semibold xl:text-xl text-base">
-                    {item?.title}
-                  </p>
-                  <p className="text-textColor font-normal xl:text-base text-sm">
-                    {item?.des}
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <div className="text-[#FFCC00]">{item?.review}</div>
-                    <div className="text-base">{item?.rating}</div>
-                  </div>
-                </div>
-              </div>
+              <SingleItemBox data={item} boxType="grid" />
             </SwiperSlide>
           ))}
 
@@ -152,4 +132,4 @@ const Business = () => {
   );
 };
 
-export default Business;
+export default Bestoffer;

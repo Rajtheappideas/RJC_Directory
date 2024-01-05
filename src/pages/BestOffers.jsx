@@ -1,0 +1,73 @@
+import React from "react";
+import Bestoffer from "../components/Bestoffer";
+import Business from "../components/Home/Business";
+import NewLetter from "../components/NewLetter";
+import { Swiper, SwiperSlide } from "swiper/react";
+// import Swiper coBestoffersre and required modules
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+// import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import { Link } from "react-router-dom";
+import SingleItemBox from "../components/SingleItemBox";
+import { Autoplay, Navigation } from "swiper/modules";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { GoStarFill } from "react-icons/go";
+
+const BestOffers = () => {
+  const offers = new Array(5);
+  return (
+    <div className="w-full">
+      {/* <img src="" alt="" /> */}
+      <div className="px-3">
+        <Swiper
+          // install Swiper modules
+          modules={[Navigation, Autoplay]}
+          className="relative"
+          spaceBetween={30}
+          slidesPerView={1}
+          navigation={{
+            nextEl: ".swiper-next-button",
+            prevEl: ".swiper-prev-button",
+          }}
+          loop={true}
+          speed={1500}
+          autoplay={{
+            delay: 1000,
+            disableOnInteraction: true,
+            pauseOnMouseEnter: true,
+            waitForTransition: true,
+          }}
+          // pagination={{ clickable: true }}
+        >
+          {offers.fill(5).map((item) => (
+            <SwiperSlide key={item.id}>
+              <img
+                src={require("../assets/images/home_slider_desktop_Web-Banner-bbq-dec 1.png")}
+                alt=""
+                className="w-full h-80 object-cover"
+              />
+              {/* <SingleItemBox data={item} boxType="grid" /> */}
+            </SwiperSlide>
+          ))}
+
+          <div className="swiper-prev-button absolute top-[40%] left-20 bg-white p-2 cursor-pointer shadow-lg rounded-full z-10">
+            <IoIosArrowBack className="text-[#007aff]" />
+          </div>
+          <div className="swiper-next-button absolute top-[40%] right-20 bg-white shadow-lg p-2 cursor-pointer rounded-full z-20">
+            <IoIosArrowForward className="text-[#007aff]" />
+          </div>
+        </Swiper>
+      </div>
+      <div className="container md:py-10 py-5 w-full mx-auto xl:px-0 md:px-10 px-5 lg:space-y-14 space-y-7">
+        <Bestoffer />
+        <Business />
+      </div>
+      <NewLetter />
+    </div>
+  );
+};
+
+export default BestOffers;

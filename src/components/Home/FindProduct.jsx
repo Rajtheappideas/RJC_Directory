@@ -6,11 +6,6 @@ import { IoIosSearch } from "react-icons/io";
 const FindProduct = () => {
   return (
     <div className="bg-white flex items-center relative  flex-col gap-y-4 lg:p-[3rem] p-4 md:w-[60%] lg:w-[70%] xl:w-[60%] w-11/12 rounded-2xl">
-      {/* <img
-        src={require("../../assets/Pattern.png")}
-        alt=""
-        className="absolute lg:block hidden -right-12 top-8 w-20"
-      /> */}
       <span className="lg:text-[30px] 2xl:text-[42px] text-lg">
         Welcome to the <b className="text-[#023F86]">RJC</b>{" "}
         <b className="text-primary_color">Directory</b>{" "}
@@ -21,7 +16,7 @@ const FindProduct = () => {
         simplifying your decision-making process.
       </p>
 
-      <form
+      <div
         // onSubmit={hanldeFindJob}
         className="shadow-[0px_7px_29px_0px_rgba(100,100,111,0.2)] rounded-lg flex gap-3 justify-around items-center xl:flex-row xl:w-full flex-col w-full px-3 py-4"
       >
@@ -30,8 +25,6 @@ const FindProduct = () => {
             type="text"
             placeholder="Search..."
             className="outline-none w-full px-3"
-            // value={jobTitleKeyword ? jobTitleKeyword : usersSearch.jobTitle}
-            // onChange={(e) => dispatch(handleChangeJobKeyword(e.target.value))}
           />
         </div>
         <div className="gap-3 flex  xl:flex-row flex-col items-center w-full">
@@ -41,25 +34,19 @@ const FindProduct = () => {
               type="text"
               placeholder="All Cities"
               className="outline-none text-sm w-full"
-              // value={locationKeyword ? locationKeyword : usersSearch.location}
-              // onChange={(e) =>
-              //   dispatch(handleChangeLocationKeyword(e.target.value))
-              // }
             />
           </div>
           <button
             type="submit"
             className="green_button  px-4 hover:bg-blue_button/80 active:scale-90 transition"
-            // disabled={findJobLoading || loading}
           >
-            {/* {loading ? "Finding..." : "Find Job"} */}
             <div className="flex items-center justify-center gap-1">
               <IoIosSearch className="text-lg" />
               FIND
             </div>
           </button>
         </div>
-      </form>
+      </div>
       {/* <div className="space-y-4 w-full"> */}
       {/* {loading && <span>Loading...</span>} */}
       {/* {searchResult.length > 0 && (

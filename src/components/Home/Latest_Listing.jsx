@@ -15,6 +15,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { Link } from "react-router-dom";
+import SingleItemBox from "../SingleItemBox";
 
 const listingData = [
   {
@@ -63,13 +65,23 @@ const Latest_Listing = () => {
   return (
     <div className="container mx-auto xl:px-0 px-5 xl:py-10 space-y-5">
       <div className="space-y-1">
-        <p className="xl:text-[30px] text-2xl font-semibold title heading uppercase">
-          Latest <span className="text-[#023F86]">listings</span>
-        </p>
+        <div className="flex justify-between items-center">
+          <p className="xl:text-[30px] text-2xl font-semibold title heading uppercase">
+            Latest <span className="text-[#023F86]">listings</span>
+          </p>
+          <div className="flex items-center gap-1">
+            <Link
+              to="/search"
+              className="text-primary_color hover:underline cursor-pointer"
+            >
+              More
+            </Link>
+            <IoIosArrowForward className="text-primary_color" />
+          </div>
+        </div>
       </div>
       <div className="px-3">
         <Swiper
-          style={{ height: "350px" }}
           // install Swiper modules
           modules={[Navigation]}
           className="relative"
@@ -105,36 +117,15 @@ const Latest_Listing = () => {
         >
           {listingData.map((item) => (
             <SwiperSlide key={item.id}>
-              <div className="space-y-2 bg-white rounded-2xl shadow-md">
-                <div>
-                  <img
-                    src={item?.image}
-                    alt=""
-                    style={{ width: "100%", position: "relative" }}
-                  />
-                  <FcLike className="absolute top-3 right-2 cursor-pointer text-2xl" />
-                </div>
-                <div className="space-y-2 p-3">
-                  <p className="text-textColor text-left font-semibold xl:text-xl text-base">
-                    {item?.title}
-                  </p>
-                  <p className="text-textColor font-normal xl:text-base text-sm">
-                    {item?.des}
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <div className="text-[#FFCC00]">{item?.review}</div>
-                    <div className="text-base">{item?.rating}</div>
-                  </div>
-                </div>
-              </div>
+              <SingleItemBox data={item} boxType="grid" />
             </SwiperSlide>
           ))}
 
           <div className="swiper-prev-button absolute top-[35%] bg-white p-2 cursor-pointer shadow-lg rounded-full z-10">
-            <IoIosArrowBack className="text-[#007aff]"/>
+            <IoIosArrowBack className="text-[#007aff]" />
           </div>
           <div className="swiper-next-button absolute top-[35%] right-0 bg-white shadow-lg p-2 cursor-pointer rounded-full z-20">
-            <IoIosArrowForward className="text-[#007aff]"/>
+            <IoIosArrowForward className="text-[#007aff]" />
           </div>
         </Swiper>
       </div>

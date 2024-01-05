@@ -9,6 +9,11 @@ import Signin from "./pages/Signin";
 import Header from "./components/Header";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
+import SearchResult from "./pages/SearchResult";
+import ItemDetails from "./pages/ItemDetails";
+import BestOffers from "./pages/BestOffers";
+import MyAccount from "./pages/MyAccount";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   return (
@@ -23,6 +28,11 @@ function App() {
         <Route path="/sign-in" element={<Signin />} />
         <Route path="/sign-up" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/search" element={<SearchResult />} />
+        <Route path="/details" element={<ItemDetails />} />
+        <Route path="/best-offers" element={<BestOffers />} />
+        <Route path="/my-account" element={<MyAccount />} />
+        <Route path="/*" element={<PageNotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>
