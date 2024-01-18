@@ -31,7 +31,7 @@ const NewLetter = () => {
                   className="outline-none text-sm w-full"
                 />
               </div>
-              <button type="submit" className="darkBlue_button md:flex-none flex-1">
+              <button type="submit" className="darkBlue_button md:flex-none w-fit">
                 Subscirbe
               </button>
             </div>

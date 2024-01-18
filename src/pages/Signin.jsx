@@ -16,16 +16,21 @@ const Signin = () => {
           alt=""
           className="w-full h-screen object-cover"
         />
-        <img
-          src={require("../assets/images/logoMain.png")}
-          alt=""
-          className="w-40 h-fit object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-        />
-        <img
-          src={require("../assets/images/logoTitle.png")}
-          alt=""
-          className="w-40 h-fit object-cover absolute top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-        />
+        <Link
+          to="/"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 space-y-4"
+        >
+          <img
+            src={require("../assets/images/logoMain.png")}
+            alt=""
+            className="w-40 h-fit object-cover"
+          />
+          <img
+            src={require("../assets/images/logoTitle.png")}
+            alt=""
+            className="w-40 h-fit object-cover "
+          />
+        </Link>
       </div>
       {/* form */}
       {!showOtpBox ? (
@@ -35,17 +40,18 @@ const Signin = () => {
             alt=""
             className="w-full h-screen fixed lg:hidden -z-10 object-cover"
           />
-
           <div className="bg-white relative text-[#000D23] space-y-4 rounded-lg md:p-10 p-4 shadow-lg">
-            <img
-              src={require("../assets/images/Logo.png")}
-              alt=""
-              className="w-fit h-fit object-cover lg:hidden absolute -top-16 left-1/2 -translate-x-1/2 z-10"
-            />
-            <p className="font-semibold  text-left text-2xl">Sign in</p>
+            <Link to="/">
+              <img
+                src={require("../assets/images/Logo.png")}
+                alt=""
+                className="w-fit h-fit object-cover lg:hidden absolute -top-16 left-1/2 -translate-x-1/2 z-10"
+              />
+            </Link>
+            <p className="font-semibold  text-left text-2xl">Sign In</p>
             <div className="space-y-1">
               <label htmlFor="PhoneNumber" className="Label">
-                Phone number
+                Phone number or Email id
               </label>
               <input type="text" className="input_field" />
             </div>
@@ -83,7 +89,9 @@ const Signin = () => {
             </p>
             <div className="flex items-center gap-2 opacity-50 w-full">
               <hr className="flex-1" />
-              <p className=" text-xs flex-1">OR SIGN-IN WITH</p>
+              <p className=" text-xs flex-1 font-semibold tracking-widest">
+                OR SIGN-IN WITH
+              </p>
               <hr className="flex-1" />
             </div>
             {/* social login */}
@@ -96,11 +104,11 @@ const Signin = () => {
               </button>
             </div>
             {/* sign up  url */}
-            <p className=" text-sm text-center">
+            <p className="text-base text-center text-textColor text-opacity-50">
               Don’t have an account?{" "}
               <Link
                 to="/sign-up"
-                className="text-blue-500 font-semibold text-base opacity-100"
+                className="text-blue-500 underline underline-offset-4 font-semibold text-base opacity-100"
               >
                 Sign Up
               </Link>
@@ -123,8 +131,11 @@ const Signin = () => {
             />
             <p className="font-semibold  text-left text-2xl">
               Continue to your account
+              <span className="font-semibold block text-left text-base opacity-50">
+                Check your email or phone for the OTP
+              </span>
             </p>
-            <p className="font-medium text-left text-base opacity-50">
+            <p className="font-medium text-left text-base opacity-50 tracking-wide">
               Enter the 4-digit code sent to you{" "}
             </p>
             <div className="flex w-full  items-center gap-2">
@@ -146,17 +157,19 @@ const Signin = () => {
               />
             </div>
 
-            <button className="green_button w-full">Verify My Email</button>
-            <p
+            <button className="green_button w-full font-poppins">
+              Verify My Email
+            </button>
+            {/* <p
               onClick={() => setSignInWithPassword(!signInWithPassword)}
               className="text-center text-lg cursor-pointer font-semibold"
             >
               {signInWithPassword
                 ? "Sign In with Password"
                 : " Sign In with OTP"}
-            </p>
+            </p> */}
             <div className="text-center">
-              <p className="text-xs">Resend code 0:57</p>
+              <p className="text-base font-medium">Resend code 0:57</p>
             </div>
           </div>
         </div>

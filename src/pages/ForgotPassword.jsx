@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import SuccessModal from "../components/SuccessModal";
+import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
   const [showOtpBox, setShowOtpBox] = useState(false);
@@ -17,18 +18,23 @@ const ForgotPassword = () => {
             alt=""
             className="w-full h-full object-cover"
           />
-          <img
-            src={require("../assets/images/logoMain.png")}
-            alt=""
-            className="w-40 h-fit object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0"
-          />
-          <img
-            src={require("../assets/images/logoTitle.png")}
-            alt=""
-            className="w-40 h-fit object-cover absolute top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0"
-          />
+          <Link
+            to="/"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 space-y-4"
+          >
+            <img
+              src={require("../assets/images/logoMain.png")}
+              alt=""
+              className="w-40 h-fit object-cover"
+            />
+            <img
+              src={require("../assets/images/logoTitle.png")}
+              alt=""
+              className="w-40 h-fit object-cover "
+            />
+          </Link>
         </div>
-        {!showResetPasswordBox ? (
+        {showResetPasswordBox ? (
           <>
             {/* form */}
             {!showOtpBox && (
@@ -47,13 +53,13 @@ const ForgotPassword = () => {
                   />
                   <p className="font-semibold  text-left text-2xl">
                     Forgot your password?
-                  </p>
-                  <p className="font-semibold  text-left text-base">
-                    We'll help you reset it and get back on track.
+                    <span className="font-semibold block  text-left text-base text-textColor text-opacity-50">
+                      We'll help you reset it and get back on track.
+                    </span>
                   </p>
                   <div className="space-y-1">
                     <label htmlFor="PhoneNumber" className="Label">
-                      Phone number
+                      Phone number or Email id
                     </label>
                     <input type="text" className="input_field" />
                   </div>
@@ -79,6 +85,9 @@ const ForgotPassword = () => {
                   />
                   <p className="font-semibold  text-left text-2xl">
                     Continue to your account
+                    <span className="block font-semibold text-base text-textColor text-opacity-50">
+                      Check your email or phone for the OTP
+                    </span>
                   </p>
                   <p className="font-medium text-left text-base opacity-50">
                     Enter the 4-digit code sent to you{" "}
@@ -86,19 +95,19 @@ const ForgotPassword = () => {
                   <div className="flex w-full  items-center gap-2">
                     <input
                       type="text"
-                      className="border border-borderColor w-1/6 rounded-lg p-3 outline-none focus:border-green-500"
+                      className="border border-borderColor w-[14%] rounded-lg p-3 outline-none focus:border-green-500"
                     />
                     <input
                       type="text"
-                      className="border border-borderColor w-1/6 rounded-lg p-3 outline-none focus:border-green-500"
+                      className="border border-borderColor w-[14%] rounded-lg p-3 outline-none focus:border-green-500"
                     />
                     <input
                       type="text"
-                      className="border border-borderColor w-1/6 rounded-lg p-3 outline-none focus:border-green-500"
+                      className="border border-borderColor w-[14%] rounded-lg p-3 outline-none focus:border-green-500"
                     />
                     <input
                       type="text"
-                      className="border border-borderColor w-1/6 rounded-lg p-3 outline-none focus:border-green-500"
+                      className="border border-borderColor w-[14%] rounded-lg p-3 outline-none focus:border-green-500"
                     />
                   </div>
 
@@ -107,7 +116,9 @@ const ForgotPassword = () => {
                   </button>
 
                   <div className="text-center">
-                    <p className="text-xs">Resend code 0:57</p>
+                    <p className="text-base text-textColor text-opacity-50">
+                      Resend code 0:57
+                    </p>
                   </div>
                 </div>
               </div>
@@ -116,38 +127,37 @@ const ForgotPassword = () => {
         ) : (
           <>
             {/* form */}
-
             <div className="lg:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">
               <img
                 src={require("../assets/images/bgImage.png")}
                 alt=""
                 className="w-full h-full fixed lg:hidden -z-10 object-cover"
               />
-
               <div className="bg-white relative text-[#000D23] space-y-4 rounded-lg md:p-10 p-4 shadow-lg">
-                <img
-                  src={require("../assets/images/Logo.png")}
-                  alt=""
-                  className="w-fit h-fit object-cover lg:hidden absolute -top-16 left-1/2 -translate-x-1/2 z-10"
-                />
+                <div className="lg:hidden absolute -top-16 left-1/2 -translate-x-1/2 z-10">
+                  <Link to="/">
+                    <img
+                      src={require("../assets/images/Logo.png")}
+                      alt=""
+                      className="w-fit h-fit object-cover "
+                    />
+                  </Link>
+                </div>
                 <p className="font-semibold  text-left text-2xl">
                   Reset your password
                 </p>
-                <p className="font-semibold  text-left text-base">
-                  <span className="text-blue-500">4561231854</span>{" "}
-                  <span className="cursor-pointer">change</span>
+                <p className="font-semibold  text-left text-base text-textColor text-opacity-50">
+                  Set your new password
                 </p>
-                <p className="font-semibold  text-left text-base">
-                  We'll help you reset it and get back on track.
-                </p>
+
                 <div className="space-y-1">
                   <label htmlFor="password" className="Label">
-                    Password
+                    password
                   </label>
                   <input
                     type="password"
                     placeholder="* * * * * *"
-                    className="input_field text-center"
+                    className="input_field"
                   />
                 </div>
                 <div className="space-y-1">
@@ -157,7 +167,7 @@ const ForgotPassword = () => {
                   <input
                     type="password"
                     placeholder="* * * * * *"
-                    className="input_field text-center"
+                    className="input_field"
                   />
                 </div>
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CategoryModal from "./CategoryModal";
 import RatingsModal from "./RatingsModal";
 import FoodChoiceModal from "./FoodChoiceModal";
+import { MdKeyboardArrowRight } from "react-icons/md";
 
 const SetYourPreference = () => {
   const [showOtpBox, setShowOtpBox] = useState(false);
@@ -34,7 +35,7 @@ const SetYourPreference = () => {
           <img
             src={require("../../assets/images/logoTitle.png")}
             alt=""
-            className="w-40 h-fit object-cover absolute top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0"
+            className="w-40 h-fit object-cover absolute top-[63%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0"
           />
         </div>
         {/* form */}
@@ -46,43 +47,52 @@ const SetYourPreference = () => {
               className="w-full h-full fixed lg:hidden -z-10 object-cover  top-0 left-0"
             />
             <div className="bg-white text-[#000D23] space-y-4 rounded-lg md:p-10 p-4 shadow-lg relative">
-            <img
-              src={require("../../assets/images/Logo.png")}
-              alt=""
-              className="w-fit h-fit object-cover lg:hidden absolute -top-14 left-1/2 -translate-x-1/2 z-10"
-            />
+              <img
+                src={require("../../assets/images/Logo.png")}
+                alt=""
+                className="w-fit h-fit object-cover lg:hidden absolute -top-14 left-1/2 -translate-x-1/2 z-10"
+              />
               <p className="font-semibold  text-left text-2xl">
-                Set your preference
+                Set your preferences
               </p>
-              <div className="space-y-1">
-                <label htmlFor="Category" className="Label">
+              <div className="space-y-1 w-full relative">
+                <label htmlFor="category" className="Label">
                   Category
                 </label>
                 <input
                   type="text"
-                  className="input_field"
-                  placeholder="Select"
+                  readOnly
+                  placeholder="category..."
+                  className="input_field cursor-pointer placeholder:text-black"
+                  onClick={() => setShowCategoryMOdal(true)}
                 />
+                <MdKeyboardArrowRight className="absolute top-9 right-2 h-6 w-6" />
               </div>
-              <div className="space-y-1">
-                <label htmlFor="Ratings" className="Label">
+              <div className="space-y-1 w-full relative">
+                <label htmlFor="ratings" className="Label">
                   Ratings
                 </label>
                 <input
-                  type="Ratings"
-                  className="input_field"
-                  placeholder="Select"
+                  type="text"
+                  placeholder="ratings..."
+                  className="input_field cursor-pointer placeholder:text-black"
+                  readOnly
+                  onClick={() => setRatingModal(true)}
                 />
+                <MdKeyboardArrowRight className="absolute top-9 right-2 h-6 w-6" />
               </div>
-              <div className="space-y-1">
-                <label htmlFor="Food Choices" className="Label">
-                  Food Choices
+              <div className="space-y-1 w-full relative">
+                <label htmlFor="foodchoices" className="Label">
+                  Food choices
                 </label>
                 <input
-                  type="Food Choices"
-                  className="input_field"
-                  placeholder="Select"
+                  type="text"
+                  placeholder="food choices..."
+                  className="input_field cursor-pointer placeholder:text-black"
+                  readOnly
+                  onClick={() => setFoodChoiceModal(true)}
                 />
+                <MdKeyboardArrowRight className="absolute top-9 right-2 h-6 w-6" />
               </div>
               <div className="space-y-1">
                 <label htmlFor="Food Choices" className="Label">

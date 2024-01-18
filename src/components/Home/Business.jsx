@@ -62,9 +62,12 @@ const listingData = [
 ];
 
 const Business = () => {
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+
   return (
-    <div className="container mx-auto space-y-5">
-      <div className="space-y-1">
+    <div className="container mx-auto space-y-5 xl:px-0 px-5 lg:py-10 ">
+      <div className="space-y-3">
         <div className="flex justify-between items-center">
           <p className="xl:text-[30px] text-2xl font-semibold title heading uppercase">
             Near by <span className="text-[#023F86]">business</span>
@@ -80,7 +83,7 @@ const Business = () => {
           </div>
         </div>
       </div>
-      <div className="px-3">
+      <div className="relative">
         <Swiper
           // install Swiper modules
           modules={[Navigation]}
@@ -88,28 +91,28 @@ const Business = () => {
           spaceBetween={30}
           slidesPerView={4}
           navigation={{
-            nextEl: ".swiper-next-button",
-            prevEl: ".swiper-prev-button",
+            prevEl: prevRef.current,
+            nextEl: nextRef.current,
+            enabled: true,
           }}
+          observer={true}
+          parallax={true}
+          observeParents={true}
           // pagination={{ clickable: true }}
           breakpoints={{
-            320: {
+            200: {
               slidesPerView: 1,
               spaceBetween: 10,
-            },
-            425: {
-              slidesPerView: 1,
-              spaceBetween: 20,
             },
             640: {
               slidesPerView: 2,
               spaceBetween: 20,
             },
-            768: {
-              slidesPerView: 3,
-              spaceBetween: 20,
-            },
             1024: {
+              slidesPerView: 3,
+              spaceBetween: 10,
+            },
+            1280: {
               slidesPerView: 4,
               spaceBetween: 10,
             },
@@ -120,14 +123,19 @@ const Business = () => {
               <SingleItemBox data={item} boxType="grid" />
             </SwiperSlide>
           ))}
-
-          <div className="swiper-prev-button absolute top-[40%] bg-white p-2 cursor-pointer shadow-lg rounded-full z-10">
-            <IoIosArrowBack className="text-[#007aff]" />
-          </div>
-          <div className="swiper-next-button absolute top-[40%] right-0 bg-white shadow-lg p-2 cursor-pointer rounded-full z-20">
-            <IoIosArrowForward className="text-[#007aff]" />
-          </div>
         </Swiper>
+        <div
+          ref={prevRef}
+          className="swiper-prev-button absolute top-[35%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10"
+        >
+          <IoIosArrowBack className="text-[#007aff]" />
+        </div>
+        <div
+          ref={nextRef}
+          className="swiper-next-button absolute top-[35%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10"
+        >
+          <IoIosArrowForward className="text-[#007aff]" />
+        </div>
       </div>
     </div>
   );

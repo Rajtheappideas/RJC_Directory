@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { FaPhoneAlt } from "react-icons/fa";
 import { HiOutlineHeart, HiHeart } from "react-icons/hi";
+import { IoHeartOutline } from "react-icons/io5";
+import { RiHeartFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
 const SingleItemBox = ({ data, boxType }) => {
@@ -11,16 +13,16 @@ const SingleItemBox = ({ data, boxType }) => {
   return (
     <>
       {boxType === "grid" ? (
-        <div className="w-full relative rounded-lg border select-none bg-bgGray">
+        <div className={`w-full relative rounded-lg border select-none bg-bgGray`}>
           {/* heart icon */}
           <div
             onClick={() => setIsFavourite(!isFavourite)}
-            className="absolute top-3 right-3 border border-white rounded-lg p-2 cursor-pointer"
+            className={`absolute top-3 right-3 ${isFavourite && "bg-red-500"} border border-white rounded-lg p-2 cursor-pointer`}
           >
             {isFavourite ? (
-              <HiHeart className="text-red-500 text-3xl" />
+              <RiHeartFill className="text-white text-3xl" />
             ) : (
-              <HiOutlineHeart className="text-white text-3xl" />
+              <IoHeartOutline className="text-white text-3xl" />
             )}
           </div>
           <Link to="/details">

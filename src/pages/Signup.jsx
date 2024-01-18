@@ -22,16 +22,21 @@ const Signup = () => {
               alt=""
               className="w-full h-full object-cover"
             />
-            <img
-              src={require("../assets/images/logoMain.png")}
-              alt=""
-              className="w-40 h-fit object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-            />
-            <img
-              src={require("../assets/images/logoTitle.png")}
-              alt=""
-              className="w-40 h-fit object-cover absolute top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-            />
+            <Link
+              to="/"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 space-y-4"
+            >
+              <img
+                src={require("../assets/images/logoMain.png")}
+                alt=""
+                className="w-40 h-fit object-cover"
+              />
+              <img
+                src={require("../assets/images/logoTitle.png")}
+                alt=""
+                className="w-40 h-fit object-cover "
+              />
+            </Link>
           </div>
           {/* form */}
           <div className="xl:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">
@@ -41,12 +46,14 @@ const Signup = () => {
               className="w-full h-full fixed xl:hidden -z-10 object-cover  top-0 left-0"
             />
             <div className="bg-white relative text-[#000D23] space-y-4 xl:mt-0 mt-14 rounded-lg md:p-10 p-4 shadow-lg md:w-2/3 w-full">
+            <Link to="/">
               <img
                 src={require("../assets/images/Logo.png")}
                 alt=""
-                className="w-fit h-fit object-cover xl:hidden absolute -top-14 left-1/2 -translate-x-1/2 z-10"
+                className="w-fit h-fit object-cover lg:hidden absolute -top-16 left-1/2 -translate-x-1/2 z-10"
               />
-              <p className="font-semibold  text-left text-2xl">Sign up</p>
+            </Link>
+              <p className="font-semibold  text-left text-2xl">Sign Up</p>
               <div className="space-y-1">
                 <label htmlFor="Name" className="Label">
                   Name
@@ -84,7 +91,7 @@ const Signup = () => {
                 </div>
                 <div className="space-y-1 w-1/2">
                   <label htmlFor="city" className="Label">
-                    city
+                    City
                   </label>
                   <select name="city" id="" className="input_field">
                     <option value="ahmedabad">ahmedabad</option>
@@ -130,11 +137,11 @@ const Signup = () => {
                 </button>
               </div>
               {/* sign up  url */}
-              <p className=" text-sm text-center">
+              <p className=" text-base text-opacity-50 text-textColor text-center">
                 Don’t have an account?{" "}
                 <Link
                   to="/sign-in"
-                  className="text-blue-500 font-semibold text-base opacity-100"
+                  className="text-blue-500 underline underline-offset-4 font-semibold text-base opacity-100"
                 >
                   Sign In
                 </Link>

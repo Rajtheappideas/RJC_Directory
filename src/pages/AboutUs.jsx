@@ -8,7 +8,7 @@ const AboutUs = () => {
     <div className="w-full lg:space-y-14 space-y-7">
       <TItleSection image={aboutus} title="About us" />
       <div className="lg:space-y-14 space-y-7 container mx-auto xl:px-0 md:px-10 px-5 w-full">
-        <div className="w-full ">
+        <div className="w-full">
           <p className="text-textColor text-opacity-50 lg:w-10/12 text-center mx-auto">
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam
             temporibus quia dolores ea mollitia id eveniet magnam odit ullam

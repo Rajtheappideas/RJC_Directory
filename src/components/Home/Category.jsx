@@ -56,38 +56,40 @@ const categoryData = [
 ];
 
 const Category = () => {
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+
   return (
     <div className="container mx-auto xl:px-0 px-5 space-y-5">
-      <div className="space-y-1">
+      <div className="space-y-3">
         <p className="xl:text-[30px] text-2xl font-semibold title heading uppercase">
           Categories
         </p>
-        <p className="para_color xl:text-base text-sm">
+        <p className=" text-textColor font-medium text-opacity-50 xl:text-base text-sm w-11/12">
           Explore businesses effortlessly in your preferred category. Our
           directory simplifies your search, offering services, contact details,
           and reviews for quick and informed decision-making.
         </p>
       </div>
-      <div>
+      <div className="relative">
         <Swiper
           // install Swiper modules
           modules={[Navigation]}
           spaceBetween={30}
-          className="relative"
           slidesPerView={6}
           navigation={{
-            nextEl: ".swiper-next-button",
-            prevEl: ".swiper-prev-button",
+            prevEl: prevRef.current,
+            nextEl: nextRef.current,
+            enabled: true,
           }}
+          observer={true}
+          parallax={true}
+          observeParents={true}
           pagination={{ clickable: true }}
           breakpoints={{
-            320: {
-              slidesPerView: 2,
+            240: {
+              slidesPerView:2,
               spaceBetween: 10,
-            },
-            425: {
-              slidesPerView: 2,
-              spaceBetween: 20,
             },
             640: {
               slidesPerView: 2,
@@ -98,6 +100,10 @@ const Category = () => {
               spaceBetween: 20,
             },
             1024: {
+              slidesPerView: 5,
+              spaceBetween: 10,
+            },
+            1280: {
               slidesPerView: 6,
               spaceBetween: 10,
             },
@@ -106,21 +112,26 @@ const Category = () => {
           {categoryData.map((item) => (
             <SwiperSlide key={item.id}>
               <div className="space-y-2">
-                <img src={item?.image} alt="" style={{ width: "100%" }} />
-                <p className="text-[#272727] text-center xl:text-lg text-sm">
+                <img src={item?.image} alt="" className="w-full h-fit"/>
+                <p className="text-textColor font-semibold text-center xl:text-lg text-sm">
                   {item?.title}
                 </p>
               </div>
             </SwiperSlide>
           ))}
-
-          <div className="swiper-prev-button absolute top-[35%] bg-white p-2 cursor-pointer shadow-lg rounded-full z-10">
-            <IoIosArrowBack className="text-[#007aff]" />
-          </div>
-          <div className="swiper-next-button absolute top-[35%] right-0 bg-white shadow-lg p-2 cursor-pointer rounded-full z-20">
-            <IoIosArrowForward className="text-[#007aff]" />
-          </div>
         </Swiper>
+        <div
+          ref={prevRef}
+          className="swiper-prev-button absolute top-[35%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10"
+        >
+          <IoIosArrowBack className="text-[#007aff]" />
+        </div>
+        <div
+          ref={nextRef}
+          className="swiper-next-button absolute top-[35%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10"
+        >
+          <IoIosArrowForward className="text-[#007aff]" />
+        </div>
       </div>
     </div>
   );

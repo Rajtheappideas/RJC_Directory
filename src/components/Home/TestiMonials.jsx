@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { IoIosArrowBack } from "react-icons/io";
@@ -34,16 +34,19 @@ const testimonialData = [
 ];
 
 const TestiMonials = () => {
+
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
   return (
     <div className="container mx-auto xl:px-2 px-5 space-y-5">
       <div className="space-y-1 text-center">
         <div className=" mx-auto">
-          <p className="xl:text-[30px] text-2xl text-center  font-semibold line heading2 uppercase">
-            User’s <span className="text-[#023F86]">Testimonials</span>
+          <p className="xl:text-[30px] text-2xl text-center  font-semibold line heading2 capitalize">
+            User’s <span className="text-[#023F86]"> Testimonials</span>
           </p>
         </div>
       </div>
-      <div className="px-3">
+      <div className="relative md:px-10">
         <Swiper
           // install Swiper modules
           modules={[Navigation]}
@@ -51,9 +54,13 @@ const TestiMonials = () => {
           spaceBetween={10}
           slidesPerView={1}
           navigation={{
-            nextEl: ".swiper-next-button",
-            prevEl: ".swiper-prev-button",
+            prevEl: prevRef.current,
+            nextEl: nextRef.current,
+            enabled: true,
           }}
+          observer={true}
+          parallax={true}
+          observeParents={true}
           // pagination={{ clickable: true }}
           breakpoints={{
             320: {
@@ -80,7 +87,7 @@ const TestiMonials = () => {
         >
           {testimonialData.map((item) => (
             <SwiperSlide key={item.id}>
-              <div className="border bottom-2 lg:p-14 p-3 rounded-md shadow-md">
+              <div className="border bottom-2 lg:p-14 p-3 rounded-2xl shadow-lg">
                 <div className="space-y-3 text-center">
                   <img src={item?.image} alt="" className="mx-auto" />
                   <p className="xl:text-xl text-base">{item?.title}</p>
@@ -93,14 +100,19 @@ const TestiMonials = () => {
               </div>
             </SwiperSlide>
           ))}
-
-          <div className="swiper-prev-button absolute top-[50%] bg-white p-2 cursor-pointer shadow-lg rounded-full z-10">
-            <IoIosArrowBack className="text-[#007aff]" />
-          </div>
-          <div className="swiper-next-button absolute top-[50%] right-0 bg-white shadow-lg p-2 cursor-pointer rounded-full z-20">
-            <IoIosArrowForward className="text-[#007aff]" />
-          </div>
         </Swiper>
+        <div
+          ref={prevRef}
+          className="swiper-prev-button absolute md:border-0 border top-[40%] active:-translate-x-1 transition-all -left-4  bg-white p-3 cursor-pointer hover:shadow-xl rounded-full z-10"
+        >
+          <IoIosArrowBack className="text-[#007aff]" />
+        </div>
+        <div
+          ref={nextRef}
+          className="swiper-next-button absolute md:border-0 border top-[40%] active:translate-x-1 transition-all -right-4 bg-white hover:shadow-xl p-3 cursor-pointer rounded-full z-10"
+        >
+          <IoIosArrowForward className="text-[#007aff]" />
+        </div>
       </div>
     </div>
   );

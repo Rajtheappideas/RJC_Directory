@@ -116,5 +116,5 @@ body::-webkit-scrollbar-thumb {
 }
 
 .Label {
-  @apply opacity-50 font-light capitalize;
+  @apply opacity-50 font-light ;
 }

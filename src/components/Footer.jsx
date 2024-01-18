@@ -32,11 +32,11 @@ const Footer = () => {
       } lg:py-8 py-5 lg:px-20 px-4 space-y-4 relative w-full text-black`}
     >
       {/* <div className="container"> */}
-      <div className="grid md:grid-cols-2 lg:gap-0 gap-10  lg:grid-cols-5 lg:px-10">
+      <div className="grid md:grid-cols-2 lg:gap-0 gap-4 lg:grid-cols-5 lg:px-10">
         <Link to="/">
-          <img src={FooterLogo} alt="" className="lg:w-2/5 w-32" />
+          <img src={FooterLogo} alt="" className="lg:w-2/5 w-20" />
         </Link>
-        <div className="space-y-4 text-white">
+        <div className="md:space-y-4 space-y-1 text-white">
           <p className="text-primary_color text-base font-normal footer heading">
             Resources
           </p>
@@ -71,7 +71,7 @@ const Footer = () => {
             </Link>
           </p>
         </div>
-        <div className="space-y-4">
+        <div className="md:space-y-4 space-y-1">
           <p className="text-primary_color text-base font-normal footer heading">
             Legal
           </p>
@@ -96,7 +96,7 @@ const Footer = () => {
             </Link>
           </p>
         </div>
-        <div className="space-y-4">
+        <div className="md:space-y-4 space-y-1">
           <p className="text-primary_color text-base font-normal footer heading">
             TOP CITIES
           </p>
@@ -141,7 +141,7 @@ const Footer = () => {
             </Link>
           </p>
         </div>
-        <div className="space-y-4">
+        <div className="md:space-y-4 space-y-1">
           <p className="text-primary_color text-base font-normal footer heading">
             Social Media
           </p>
@@ -168,13 +168,12 @@ const Footer = () => {
         </div>
       </div>
       {/* </div> */}
-      <div className="pt-11">
+      <div className="md:pt-11 pt-1">
         <hr className=" w-full h-[1px]" />
       </div>
-      <div className="text-center p-3">
-        <p className="text-[#403D3D] ">
-          {/* Copyright @FOOTBALL Recruitment 2023 All Right Reserved */}
-          Copyright @RJC Directory 2024 All Right Reserved
+      <div className="text-center md:p-3 p-1">
+        <p className="text-[#403D3D]">
+          Copyright @RJC Directory {new Date().getFullYear()} All Right Reserved
         </p>
       </div>
     </footer>
