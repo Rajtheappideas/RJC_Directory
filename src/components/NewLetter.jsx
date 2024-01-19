@@ -13,28 +13,29 @@ const NewLetter = () => {
         width: "100%",
       }}
     >
-      <div className="space-y-5">
+      <div className="space-y-5 container mx-auto xl:px-0 px-5 w-full">
         <div className="space-y-3">
           <p className="lg:text-3xl  text-lg text-white font-bold">
             Subscribe our newsletter
           </p>
           <p className="text-white text-base">Subscribe for get update info</p>
         </div>
-        <div>
-          <div className="bg-white border border-[#2588C9] rounded-full flex mx-auto justify-around items-center flex-row lg:w-[40%] md:w-2/3 w-full px-2 py-2">
-            <div className="gap-3 flex md:justify-between justify-center  items-center w-full ">
-              <div className="flex gap-3 flex-1 pl-3">
-                <CiMail className="text-3xl" />
-                <input
-                  type="text"
-                  placeholder="Your Email Address"
-                  className="outline-none text-sm w-full"
-                />
-              </div>
-              <button type="submit" className="darkBlue_button md:flex-none w-fit">
-                Subscirbe
-              </button>
+        <div className="bg-white border border-[#2588C9] rounded-full flex mx-auto justify-around items-center flex-row 2xl:w-[50%] lg:w-[40%] md:w-2/3 w-full px-2 py-2">
+          <div className="gap-3 flex md:justify-between justify-center  items-center w-full ">
+            <div className="flex gap-3 flex-1 pl-3">
+              <CiMail className="text-3xl" />
+              <input
+                type="text"
+                placeholder="Your Email Address"
+                className="outline-none text-sm w-full"
+              />
             </div>
+            <button
+              type="submit"
+              className="darkBlue_button md:flex-none w-fit"
+            >
+              Subscirbe
+            </button>
           </div>
         </div>
       </div>

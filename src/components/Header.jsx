@@ -3,9 +3,9 @@ import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 import { RiMenu3Line } from "react-icons/ri";
 import { Link, useLocation } from "react-router-dom";
 import LogoColor from "../assets/images/headerColor.svg";
-import Logo from "../assets/images/Logo.png";
 import {
   FaChevronDown,
+  FaChevronRight,
   FaLocationDot,
   FaLocationPin,
   FaSortDown,
@@ -40,6 +40,39 @@ const Header = () => {
       window.removeEventListener("scroll", () => {});
     };
   }, [location]);
+
+  const categoires = [
+    "Agriculture & Farming",
+    "Appliances",
+    "Architecture & Interiors",
+    "Automobile",
+    "Bicycle",
+    "Beauty",
+    "Computers",
+    "Books & Stationery",
+    "Electrical",
+    "Restaurant",
+    "Jewelry",
+    "Machinery",
+    "Healthcare",
+    "Other Services",
+  ];
+
+  const restaurants = [
+    "All",
+    "american restaurant",
+    "asian restaurant",
+    "barbecue restaurant",
+    "breakfast restaurant",
+    "chicken restaurant",
+    "chinese restaurant",
+    "family restaurant",
+    "books & stationery",
+    "fast food restaurant",
+    "french restaurant",
+    "indian restaurant",
+    "italian restaurant",
+  ];
 
   return (
     <div
@@ -168,20 +201,47 @@ const Header = () => {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         >
-          <img src={LogoColor} alt="" className="lg:w-full md:w-28 w-24 h-fit" />
+          <img
+            src={LogoColor}
+            alt=""
+            className="lg:w-full md:w-28 w-24 h-fit"
+          />
         </Link>
         {/* search box */}
         <div className="xl:w-1/3 lg:w-1/2 w-2/3 hidden border p-3 rounded-full md:flex items-center gap-2 bg-gray-100">
-          <div className="w-1/2 flex items-center justify-between cursor-pointer">
+          <div className="w-1/2 relative group flex items-center justify-between cursor-pointer">
             <div className="flex items-center gap-2 w-full">
               <FaLocationDot className="h-6 w-6" />
-              <select name="locations" id="" className="outline-none text-textColor cursor-pointer text-opacity-70 font-semibold bg-transparent w-full">
-                <option value="new york">New york</option>
-                <option value="new york">New york</option>
-                <option value="new york">New york</option>
-                <option value="new york">New york</option>
-                <option value="new york">New york</option>
-              </select>
+              <span className="font-medium capitalize">New York</span>
+              <FaSortDown
+                className={`text-black ml-auto min-h-4 min-w-[1rem] mb-2 group-hover:mb-0 duration-300 group-hover:rotate-180 transition-all `}
+              />
+              <div className="absolute z-10 group-hover:scale-100 scale-0 transition-all origin-top bg-white min-w-[13rem] text-left ease-in-out duration-300 top-11 left-0 p-3 max-h-72 overflow-y-auto custom_scrollbar rounded-2xl shadow-2xl text-textColor space-y-2">
+                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
+                  Chicago
+                </p>
+                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
+                  Chicago
+                </p>
+                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
+                  Chicago
+                </p>
+                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
+                  Chicago
+                </p>
+                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
+                  Chicago
+                </p>
+                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
+                  Chicago
+                </p>
+                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
+                  Chicago
+                </p>
+                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
+                  Chicago
+                </p>
+              </div>
             </div>
           </div>
           |
@@ -189,13 +249,14 @@ const Header = () => {
             <input
               type="text"
               placeholder="Search"
+              autoComplete="off"
               className="outline-none text-black flex-1 bg-gray-100"
             />
             <AiOutlineSearch className="min-h-6 min-w-[1.5rem] xl:flex-1 cursor-pointer ml-auto" />
           </div>
         </div>
         {/* list */}
-        <ul className=" gap-6 items-center hidden xl:flex">
+        <ul className="gap-6 items-center hidden xl:flex">
           <Link to="/">
             <li
               className={`cursor-pointer uppercase text-[16px] navcolor`}
@@ -208,9 +269,46 @@ const Header = () => {
           </Link>
           <div className="group cursor-pointer flex items-center flex-row justify-center gap-1 relative z-10">
             <p>CATEGORIES</p>
-            <p>
-              <FaSortDown className="text-lg text-black mb-2" />
-            </p>
+            <FaSortDown
+              className={`text-black ml-auto min-h-4 min-w-[1rem] mb-2 group-hover:mb-0 duration-300 group-hover:rotate-180 transition-all `}
+            />
+            {/* dropdown */}
+            <div className="absolute overflow-y-auto flex items-start gap-0 z-10 py-2 min-w-[40rem] group-hover:scale-100 scale-0 custom_scrollbar transition-all origin-top  bg-white text-left ease-in-out duration-300 top-9 -left-40 rounded-lg shadow-2xl text-textColor space-y-2">
+              {/* left side */}
+                <ul className="font-semibold max-h-full text-textColor capitalize tracking-wide border-r w-1/2 overflow-y-auto ">
+                  <li className=" w-full flex items-center justify-between text-lg">
+                    <span className="px-7 py-2 whitespace-nowrap">
+                      All Categories
+                    </span>
+                  </li>
+                  {categoires.map((category, index) => (
+                    <li
+                      key={index}
+                      className=" hover:bg-gray-100 tracking-wide w-full flex items-center justify-between"
+                    >
+                      <span className="px-7 py-2 whitespace-nowrap">{category}</span>
+                      <FaChevronRight className="min-h-4 min-w-4 text-gray-400 font-light pr-2" />
+                    </li>
+                  ))}
+                </ul>
+              {/* right side */}
+              <div className="space-y-2 w-1/2">
+                <span className="p-3 whitespace-nowrap font-semibold text-lg text-left">
+                  Restaurant
+                </span>
+                <hr />
+                <ul className="px-3">
+                  {restaurants.map((item, i) => (
+                    <li
+                      key={i}
+                      className="p-2 whitespace-nowrap text-gray-400 font-medium capitalize "
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
           <Link to="/best-offers">
             <li

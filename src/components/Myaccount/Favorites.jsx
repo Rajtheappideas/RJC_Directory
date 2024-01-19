@@ -48,7 +48,7 @@ const Favorites = () => {
   return (
     <div className="lg:space-y-6 space-y-3 overflow-y-auto">
       <p className="font-semibold text-2xl">Favorites</p>
-      <div className="w-full grid custom_scrollbar lg:grid-cols-3 md:grid-cols-2 gap-3 overflow-y-auto max-h-[80vh]">
+      <div className="w-full grid custom_scrollbar py-5 lg:grid-cols-3 md:grid-cols-2 gap-3 overflow-y-auto max-h-[80vh]">
         {listingData.map((item) => (
           <SingleItemBox key={item?.id} data={item} boxType="grid" />
         ))}

@@ -44,14 +44,14 @@ const SingleReview = ({ setShowReviewBox }) => {
                   <p className="whitespace-nowrap w-full text-black">
                     Are you sure you want to delete this review?
                   </p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 ">
                     <button
-                      className="Label"
+                      className="Label hover:bg-blue-100 p-1 transition-all"
                       onClick={() => setShowDeleteBox(false)}
                     >
                       Cancel
                     </button>
-                    <button className="text-red-500 text-opacity-60">
+                    <button className="text-red-500 hover:bg-red-100 transition-all p-1 text-opacity-60">
                       Yes,Delete
                     </button>
                   </div>

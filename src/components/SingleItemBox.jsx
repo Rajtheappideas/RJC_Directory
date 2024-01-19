@@ -13,11 +13,11 @@ const SingleItemBox = ({ data, boxType }) => {
   return (
     <>
       {boxType === "grid" ? (
-        <div className={`w-full relative rounded-lg border select-none bg-bgGray`}>
+        <div className={`w-full relative rounded-2xl border select-none bg-white shadow-[0px_3px_7px_rgba(0,0,0,0.20)]`}>
           {/* heart icon */}
           <div
             onClick={() => setIsFavourite(!isFavourite)}
-            className={`absolute top-3 right-3 ${isFavourite && "bg-red-500"} border border-white rounded-lg p-2 cursor-pointer`}
+            className={`absolute top-3 right-3 ${isFavourite ?"bg-red-500":" border border-white"} rounded-2xl p-2 cursor-pointer`}
           >
             {isFavourite ? (
               <RiHeartFill className="text-white text-3xl" />
@@ -29,15 +29,15 @@ const SingleItemBox = ({ data, boxType }) => {
             <img
               src={require("../assets/images/business_slider/Rectangle 375 (1).png")}
               alt=""
-              className="object-cover w-full h-60 rounded-tl-lg rounded-tr-lg"
+              className="object-cover w-full h-60 rounded-tl-2xl rounded-tr-2xl"
             />
           </Link>
           <div className="space-y-3 p-3">
             <p className="font-semibold text-left text-2xl">TAO Restaurant</p>
-            <p className="font-medium text-left text-xl">
+            <p className="font-medium text-left text-lg text-textColor">
               304 Kent St, New York NSW 2000. USA
             </p>
-            <p className="flex items-center gap-2 font-medium text-xl">
+            <p className="flex items-center gap-2 font-medium text-lg text-textColor">
               <AiFillStar className="text-yellow-400 text-2xl" />
               <span>5.0 (24)</span>
             </p>

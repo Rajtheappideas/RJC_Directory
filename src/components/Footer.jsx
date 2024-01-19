@@ -29,10 +29,10 @@ const Footer = () => {
     <footer
       className={` ${
         !showFooter && "hidden"
-      } lg:py-8 py-5 lg:px-20 px-4 space-y-4 relative w-full text-black`}
+      } lg:py-8 py-5 lg:px-20 space-y-4 relative w-full text-black container mx-auto xl:px-0 px-5`}
     >
       {/* <div className="container"> */}
-      <div className="grid md:grid-cols-2 lg:gap-0 gap-4 lg:grid-cols-5 lg:px-10">
+      <div className="grid md:grid-cols-2 lg:gap-0 gap-4 lg:grid-cols-5 lg:px-10 text-lg">
         <Link to="/">
           <img src={FooterLogo} alt="" className="lg:w-2/5 w-20" />
         </Link>

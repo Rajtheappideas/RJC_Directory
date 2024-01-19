@@ -23,12 +23,9 @@ const BestOffers = () => {
 
   return (
     <div className="w-full">
-      {/* <img src="" alt="" /> */}
-      <div className="px-3">
+      <div className="px-3 relative">
         <Swiper
-          // install Swiper modules
           modules={[Navigation, Autoplay]}
-          className="relative"
           spaceBetween={30}
           slidesPerView={1}
           navigation={{
@@ -61,8 +58,8 @@ const BestOffers = () => {
           }}
           // pagination={{ clickable: true }}
         >
-          {offers.fill(5).map((item) => (
-            <SwiperSlide key={item.id}>
+          {offers.fill(5).map((item, index) => (
+            <SwiperSlide key={index}>
               <img
                 src={require("../assets/images/home_slider_desktop_Web-Banner-bbq-dec 1.png")}
                 alt=""
@@ -71,14 +68,19 @@ const BestOffers = () => {
               {/* <SingleItemBox data={item} boxType="grid" /> */}
             </SwiperSlide>
           ))}
-
-          <div className="swiper-prev-button absolute top-[40%] left-20 bg-white p-2 cursor-pointer shadow-lg rounded-full z-10">
-            <IoIosArrowBack className="text-[#007aff]" />
-          </div>
-          <div className="swiper-next-button absolute top-[40%] right-20 bg-white shadow-lg p-2 cursor-pointer rounded-full z-20">
-            <IoIosArrowForward className="text-[#007aff]" />
-          </div>
         </Swiper>
+        <div
+          ref={prevRef}
+          className="absolute top-[40%] left-20 bg-white p-2 cursor-pointer shadow-lg rounded-full z-10"
+        >
+          <IoIosArrowBack className="text-[#007aff]" />
+        </div>
+        <div
+          ref={nextRef}
+          className=" absolute top-[40%] right-20 bg-white shadow-lg p-2 cursor-pointer rounded-full z-20"
+        >
+          <IoIosArrowForward className="text-[#007aff]" />
+        </div>
       </div>
       <div className="container md:py-10 py-5 w-full mx-auto xl:px-0 md:px-10 px-5 lg:space-y-14 space-y-7">
         <Bestoffer />

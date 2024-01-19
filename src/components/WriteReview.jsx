@@ -5,7 +5,7 @@ import { IoMdClose } from "react-icons/io";
 const WriteReview = ({ setShowReviewBox }) => {
   return (
     <>
-      <div className="fixed w-screen h-screen bg-black/20 backdrop-blur-sm inset-0 z-10"></div>
+      <div onClick={()=>setShowReviewBox(false)} className="fixed w-screen h-screen bg-black/20 backdrop-blur-sm inset-0 z-20"></div>
       <div className="bg-white p-6 rounded-lg  xl:w-1/3 md:w-1/2 w-10/12 flex items-center  justify-center gap-3 flex-col fixed top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
         <div className="w-10 h-10 rounded-full bg-gray-200"></div>
         <IoMdClose

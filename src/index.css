@@ -29,6 +29,10 @@ body::-webkit-scrollbar-thumb {
   border-radius: 10px;
 }
 
+.clip-div {
+  clip-path: polygon(0 0, 0 0, 100% 100%, 0 100%);
+}
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
@@ -116,5 +120,5 @@ body::-webkit-scrollbar-thumb {
 }
 
 .Label {
-  @apply opacity-50 font-light ;
+  @apply opacity-50 font-light;
 }
