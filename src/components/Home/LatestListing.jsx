@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 // import Swiper core and required modules
 import { Navigation } from "swiper/modules";
 import { IoIosArrowBack } from "react-icons/io";
@@ -62,6 +62,11 @@ const listingData = [
 ];
 
 const LatestListing = () => {
+  const [beginAndEnd, setBeginAndEnd] = useState({
+    isEnd: false,
+    isBegin: true,
+  });
+
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   return (
@@ -86,6 +91,12 @@ const LatestListing = () => {
         <Swiper
           // install Swiper modules
           modules={[Navigation]}
+          onSlideChange={(e) => {
+            setBeginAndEnd({
+              isBegin: e.isBeginning,
+              isEnd: e.isEnd,
+            });
+          }}
           className="relative"
           spaceBetween={30}
           slidesPerView={4}
@@ -97,6 +108,19 @@ const LatestListing = () => {
           observer={true}
           parallax={true}
           observeParents={true}
+          onSwiper={(swiper) => {
+            // Delay execution for the refs to be defined
+            setTimeout(() => {
+              // Override prevEl & nextEl now that refs are defined
+              swiper.params.navigation.prevEl = prevRef.current;
+              swiper.params.navigation.nextEl = nextRef.current;
+
+              // Re-init navigation
+              swiper.navigation.destroy();
+              swiper.navigation.init();
+              swiper.navigation.update();
+            });
+          }}
           breakpoints={{
             200: {
               slidesPerView: 1,
@@ -122,18 +146,22 @@ const LatestListing = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div
-          ref={prevRef}
-          className="swiper-prev-button absolute top-[35%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10"
-        >
-          <IoIosArrowBack className="text-[#007aff]" />
-        </div>
-        <div
-          ref={nextRef}
-          className="swiper-next-button absolute top-[35%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10"
-        >
-          <IoIosArrowForward className="text-[#007aff]" />
-        </div>
+        {!beginAndEnd?.isBegin && (
+          <div
+            ref={prevRef}
+            className="swiper-prev-button absolute top-[35%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10"
+          >
+            <IoIosArrowBack className="text-[#007aff]" />
+          </div>
+        )}
+        {!beginAndEnd?.isEnd && (
+          <div
+            ref={nextRef}
+            className="swiper-next-button absolute top-[35%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10"
+          >
+            <IoIosArrowForward className="text-[#007aff]" />
+          </div>
+        )}
       </div>
     </div>
   );

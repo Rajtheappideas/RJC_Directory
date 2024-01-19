@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 // import Swiper core and required modules
 import { Navigation } from "swiper/modules";
 import { IoIosArrowBack } from "react-icons/io";
@@ -56,6 +56,11 @@ const categoryData = [
 ];
 
 const Category = () => {
+  const [beginAndEnd, setBeginAndEnd] = useState({
+    isEnd: false,
+    isBegin: true,
+  });
+
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -74,9 +79,16 @@ const Category = () => {
       <div className="relative">
         <Swiper
           // install Swiper modules
+          onSlideChange={(e) => {
+            setBeginAndEnd({
+              isBegin: e.isBeginning,
+              isEnd: e.isEnd,
+            });
+          }}
           modules={[Navigation]}
           spaceBetween={30}
           slidesPerView={6}
+          direction={"horizontal"}
           navigation={{
             prevEl: prevRef.current,
             nextEl: nextRef.current,
@@ -85,10 +97,21 @@ const Category = () => {
           observer={true}
           parallax={true}
           observeParents={true}
-          pagination={{ clickable: true }}
+          onSwiper={(swiper) => {
+            // Delay execution for the refs to be defined
+            setTimeout(() => {
+              // Override prevEl & nextEl now that refs are defined
+              swiper.params.navigation.prevEl = prevRef.current;
+              swiper.params.navigation.nextEl = nextRef.current;
+              // Re-init navigation
+              swiper.navigation.destroy();
+              swiper.navigation.init();
+              swiper.navigation.update();
+            });
+          }}
           breakpoints={{
             240: {
-              slidesPerView:2,
+              slidesPerView: 2,
               spaceBetween: 10,
             },
             640: {
@@ -112,7 +135,7 @@ const Category = () => {
           {categoryData.map((item) => (
             <SwiperSlide key={item.id}>
               <div className="space-y-2">
-                <img src={item?.image} alt="" className="w-full h-fit"/>
+                <img src={item?.image} alt="" className="w-full h-fit" />
                 <p className="text-textColor font-semibold text-center xl:text-lg text-sm">
                   {item?.title}
                 </p>
@@ -120,18 +143,22 @@ const Category = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div
-          ref={prevRef}
-          className="swiper-prev-button absolute top-[35%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10"
-        >
-          <IoIosArrowBack className="text-[#007aff]" />
-        </div>
-        <div
-          ref={nextRef}
-          className="swiper-next-button absolute top-[35%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10"
-        >
-          <IoIosArrowForward className="text-[#007aff]" />
-        </div>
+        {!beginAndEnd?.isBegin && (
+          <div
+            ref={prevRef}
+            className="swiper-prev-button absolute top-[35%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10"
+          >
+            <IoIosArrowBack className="text-[#007aff]" />
+          </div>
+        )}
+        {!beginAndEnd?.isEnd && (
+          <div
+            ref={nextRef}
+            className="swiper-next-button absolute top-[35%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10"
+          >
+            <IoIosArrowForward className="text-[#007aff]" />
+          </div>
+        )}
       </div>
     </div>
   );

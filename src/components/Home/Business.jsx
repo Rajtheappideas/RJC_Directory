@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 // import Swiper core and required modules
 import { Navigation } from "swiper/modules";
 import { IoIosArrowBack } from "react-icons/io";
@@ -62,6 +62,11 @@ const listingData = [
 ];
 
 const Business = () => {
+  const [beginAndEnd, setBeginAndEnd] = useState({
+    isEnd: false,
+    isBegin: true,
+  });
+
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -87,6 +92,12 @@ const Business = () => {
         <Swiper
           // install Swiper modules
           modules={[Navigation]}
+          onSlideChange={(e) => {
+            setBeginAndEnd({
+              isBegin: e.isBeginning,
+              isEnd: e.isEnd,
+            });
+          }}
           className="relative"
           spaceBetween={30}
           slidesPerView={4}
@@ -124,18 +135,22 @@ const Business = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div
-          ref={prevRef}
-          className="swiper-prev-button absolute top-[35%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10"
-        >
-          <IoIosArrowBack className="text-[#007aff]" />
-        </div>
-        <div
-          ref={nextRef}
-          className="swiper-next-button absolute top-[35%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10"
-        >
-          <IoIosArrowForward className="text-[#007aff]" />
-        </div>
+        {!beginAndEnd?.isBegin && (
+          <div
+            ref={prevRef}
+            className="swiper-prev-button absolute top-[35%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10"
+          >
+            <IoIosArrowBack className="text-[#007aff]" />
+          </div>
+        )}
+        {!beginAndEnd?.isEnd && (
+          <div
+            ref={nextRef}
+            className="swiper-next-button absolute top-[35%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10"
+          >
+            <IoIosArrowForward className="text-[#007aff]" />
+          </div>
+        )}
       </div>
     </div>
   );
