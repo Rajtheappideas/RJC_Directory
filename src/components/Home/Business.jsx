@@ -110,6 +110,19 @@ const Business = () => {
           parallax={true}
           observeParents={true}
           // pagination={{ clickable: true }}
+          onSwiper={(swiper) => {
+            // Delay execution for the refs to be defined
+            setTimeout(() => {
+              // Override prevEl & nextEl now that refs are defined
+              swiper.params.navigation.prevEl = prevRef.current;
+              swiper.params.navigation.nextEl = nextRef.current;
+
+              // Re-init navigation
+              swiper.navigation.destroy();
+              swiper.navigation.init();
+              swiper.navigation.update();
+            });
+          }}
           breakpoints={{
             200: {
               slidesPerView: 1,

@@ -46,7 +46,7 @@ const TestiMonials = () => {
       <div className="space-y-1 text-center">
         <div className=" mx-auto">
           <p className="xl:text-[30px] text-2xl text-center  font-semibold line heading2 capitalize">
-            User’s <span className="text-[#023F86]"> Testimonials</span>
+            User’s <span className="text-[#023F86]">Testimonials</span>
           </p>
         </div>
       </div>
@@ -72,6 +72,19 @@ const TestiMonials = () => {
           parallax={true}
           observeParents={true}
           // pagination={{ clickable: true }}
+          onSwiper={(swiper) => {
+            // Delay execution for the refs to be defined
+            setTimeout(() => {
+              // Override prevEl & nextEl now that refs are defined
+              swiper.params.navigation.prevEl = prevRef.current;
+              swiper.params.navigation.nextEl = nextRef.current;
+
+              // Re-init navigation
+              swiper.navigation.destroy();
+              swiper.navigation.init();
+              swiper.navigation.update();
+            });
+          }}
           breakpoints={{
             320: {
               slidesPerView: 1,
@@ -114,7 +127,7 @@ const TestiMonials = () => {
         {!beginAndEnd?.isBegin && (
           <div
             ref={prevRef}
-            className="swiper-prev-button absolute top-[35%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10"
+            className="swiper-prev-button absolute top-[45%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10"
           >
             <IoIosArrowBack className="text-[#007aff]" />
           </div>
@@ -122,7 +135,7 @@ const TestiMonials = () => {
         {!beginAndEnd?.isEnd && (
           <div
             ref={nextRef}
-            className="swiper-next-button absolute top-[35%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10"
+            className="swiper-next-button absolute top-[45%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10"
           >
             <IoIosArrowForward className="text-[#007aff]" />
           </div>
