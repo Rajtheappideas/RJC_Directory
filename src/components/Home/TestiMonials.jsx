@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Navigation, Parallax } from "swiper/modules";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 
@@ -9,8 +9,6 @@ import { IoIosArrowForward } from "react-icons/io";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
-// import "swiper/css/pagination";
-import "swiper/css/scrollbar";
 
 const testimonialData = [
   {
@@ -53,14 +51,19 @@ const TestiMonials = () => {
       <div className="relative md:px-10">
         <Swiper
           // install Swiper modules
-          modules={[Navigation]}
+          modules={[Navigation, Parallax]}
           onSlideChange={(e) => {
             setBeginAndEnd({
               isBegin: e.isBeginning,
               isEnd: e.isEnd,
             });
           }}
-          className="relative"
+          onInit={(swiper) => {
+            swiper.params.navigation.prevEl = prevRef.current;
+            swiper.params.navigation.nextEl = nextRef.current;
+            swiper.navigation.update();
+          }}
+          direction={"horizontal"}
           spaceBetween={10}
           slidesPerView={1}
           navigation={{
@@ -80,7 +83,7 @@ const TestiMonials = () => {
               swiper.params.navigation.nextEl = nextRef.current;
 
               // Re-init navigation
-              swiper.navigation.destroy();
+              // swiper.navigation.destroy();
               swiper.navigation.init();
               swiper.navigation.update();
             });
@@ -124,22 +127,22 @@ const TestiMonials = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-        {!beginAndEnd?.isBegin && (
-          <div
-            ref={prevRef}
-            className="swiper-prev-button absolute top-[45%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10"
-          >
-            <IoIosArrowBack className="text-[#007aff]" />
-          </div>
-        )}
-        {!beginAndEnd?.isEnd && (
-          <div
-            ref={nextRef}
-            className="swiper-next-button absolute top-[45%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10"
-          >
-            <IoIosArrowForward className="text-[#007aff]" />
-          </div>
-        )}
+        <div
+          ref={prevRef}
+          className={`swiper-prev-button absolute top-[35%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10 ${
+            beginAndEnd?.isBegin && "opacity-0"
+          } `}
+        >
+          <IoIosArrowBack className="text-[#007aff]" />
+        </div>
+        <div
+          ref={nextRef}
+          className={` absolute top-[35%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10 ${
+            beginAndEnd?.isEnd && "opacity-0"
+          } `}
+        >
+          <IoIosArrowForward className="text-[#007aff]" />
+        </div>
       </div>
     </div>
   );

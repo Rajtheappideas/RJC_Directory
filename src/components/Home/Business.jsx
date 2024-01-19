@@ -148,22 +148,22 @@ const Business = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-        {!beginAndEnd?.isBegin && (
-          <div
-            ref={prevRef}
-            className="swiper-prev-button absolute top-[35%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10"
-          >
-            <IoIosArrowBack className="text-[#007aff]" />
-          </div>
-        )}
-        {!beginAndEnd?.isEnd && (
-          <div
-            ref={nextRef}
-            className="swiper-next-button absolute top-[35%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10"
-          >
-            <IoIosArrowForward className="text-[#007aff]" />
-          </div>
-        )}
+        <div
+          ref={prevRef}
+          className={`swiper-prev-button absolute top-[35%] active:-translate-x-1 transition-all -left-4 bg-white p-3 cursor-pointer shadow-lg rounded-full z-10 ${
+            beginAndEnd?.isBegin && "opacity-0"
+          } `}
+        >
+          <IoIosArrowBack className="text-[#007aff]" />
+        </div>
+        <div
+          ref={nextRef}
+          className={` absolute top-[35%] active:translate-x-1 transition-all -right-4 bg-white shadow-xl p-3 cursor-pointer rounded-full z-10 ${
+            beginAndEnd?.isEnd && "opacity-0"
+          } `}
+        >
+          <IoIosArrowForward className="text-[#007aff]" />
+        </div>
       </div>
     </div>
   );

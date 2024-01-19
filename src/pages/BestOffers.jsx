@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Bestoffer from "../components/Bestoffer";
 import Business from "../components/Home/Business";
 import NewLetter from "../components/NewLetter";
@@ -18,6 +18,9 @@ import { GoStarFill } from "react-icons/go";
 
 const BestOffers = () => {
   const offers = new Array(5);
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+
   return (
     <div className="w-full">
       {/* <img src="" alt="" /> */}
@@ -29,8 +32,9 @@ const BestOffers = () => {
           spaceBetween={30}
           slidesPerView={1}
           navigation={{
-            nextEl: ".swiper-next-button",
-            prevEl: ".swiper-prev-button",
+            prevEl: prevRef.current,
+            nextEl: nextRef.current,
+            enabled: true,
           }}
           loop={true}
           speed={1500}
@@ -39,6 +43,21 @@ const BestOffers = () => {
             disableOnInteraction: true,
             pauseOnMouseEnter: true,
             waitForTransition: true,
+          }}
+          observer={true}
+          parallax={true}
+          observeParents={true}
+          onSwiper={(swiper) => {
+            // Delay execution for the refs to be defined
+            setTimeout(() => {
+              // Override prevEl & nextEl now that refs are defined
+              swiper.params.navigation.prevEl = prevRef.current;
+              swiper.params.navigation.nextEl = nextRef.current;
+              // Re-init navigation
+              swiper.navigation.destroy();
+              swiper.navigation.init();
+              swiper.navigation.update();
+            });
           }}
           // pagination={{ clickable: true }}
         >
