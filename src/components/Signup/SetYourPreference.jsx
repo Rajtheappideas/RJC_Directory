@@ -3,19 +3,71 @@ import CategoryModal from "./CategoryModal";
 import RatingsModal from "./RatingsModal";
 import FoodChoiceModal from "./FoodChoiceModal";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import toast from "react-hot-toast";
+import { PostUrl } from "../../BaseUrl";
+import { useSelector } from "react-redux";
 
-const SetYourPreference = () => {
+const SetYourPreference = ({ setShowSuccess }) => {
   const [showOtpBox, setShowOtpBox] = useState(false);
   const [showCategoryMOdal, setShowCategoryMOdal] = useState(false);
   const [ratingModal, setRatingModal] = useState(false);
   const [foodChoiceModal, setFoodChoiceModal] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedRating, setSelectedRating] = useState(null);
+  const [distance, setDistance] = useState(1);
+  const [loading, setLoading] = useState(false);
+
+  const { token } = useSelector((s) => s.root.auth);
+
+  const handleSetPreference = async () => {
+    toast.remove();
+    if (selectedCategories.length === 0 || selectedRating === null) {
+      return toast.error("please select the category & ratings");
+    } else {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("rating", selectedRating);
+      formData.append("distance", distance);
+      selectedCategories.forEach((cat) =>
+        formData.append("categoryIds", cat?._id)
+      );
+
+      try {
+        const { data } = await PostUrl("preference", {
+          data: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: token,
+          },
+        });
+        setLoading(false);
+        if (data?.success) {
+          toast.success(data?.message);
+          setShowSuccess(true);
+        }
+      } catch (error) {
+        toast.error(error?.response?.data?.message);
+        setLoading(false);
+      }
+    }
+  };
 
   return (
     <>
       {showCategoryMOdal && (
-        <CategoryModal setShowCategoryMOdal={setShowCategoryMOdal} />
+        <CategoryModal
+          selectedCategories={selectedCategories}
+          setSelectedCategories={setSelectedCategories}
+          setShowCategoryMOdal={setShowCategoryMOdal}
+        />
       )}
-      {ratingModal && <RatingsModal setRatingModal={setRatingModal} />}
+      {ratingModal && (
+        <RatingsModal
+          setSelectedRating={setSelectedRating}
+          setRatingModal={setRatingModal}
+          selectedRating={selectedRating}
+        />
+      )}
       {foodChoiceModal && (
         <FoodChoiceModal setFoodChoiceModal={setFoodChoiceModal} />
       )}
@@ -62,11 +114,20 @@ const SetYourPreference = () => {
                 <input
                   type="text"
                   readOnly
-                  placeholder="category..."
+                  placeholder={
+                    selectedCategories.length > 0
+                      ? selectedCategories.map((cate) => cate?.name)
+                      : "category..."
+                  }
+                  // defaultValue={
+                  //   selectedCategories.length > 0
+                  //     ? selectedCategories.map((cate) => cate?.name)
+                  //     : "category..."
+                  // }
                   className="input_field cursor-pointer placeholder:text-black"
                   onClick={() => setShowCategoryMOdal(true)}
                 />
-                <MdKeyboardArrowRight className="absolute top-9 right-2 h-6 w-6" />
+                <MdKeyboardArrowRight className="absolute top-9 bg-white right-2 h-6 w-6" />
               </div>
               <div className="space-y-1 w-full relative">
                 <label htmlFor="ratings" className="Label">
@@ -74,14 +135,17 @@ const SetYourPreference = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="ratings..."
+                  placeholder={
+                    selectedRating === null ? "ratings..." : selectedRating
+                  }
+                  value={selectedRating}
                   className="input_field cursor-pointer placeholder:text-black"
                   readOnly
                   onClick={() => setRatingModal(true)}
                 />
-                <MdKeyboardArrowRight className="absolute top-9 right-2 h-6 w-6" />
+                <MdKeyboardArrowRight className="absolute bg-white top-9 right-2 h-6 w-6" />
               </div>
-              <div className="space-y-1 w-full relative">
+              {/* <div className="space-y-1 w-full relative">
                 <label htmlFor="foodchoices" className="Label">
                   Food choices
                 </label>
@@ -93,16 +157,30 @@ const SetYourPreference = () => {
                   onClick={() => setFoodChoiceModal(true)}
                 />
                 <MdKeyboardArrowRight className="absolute top-9 right-2 h-6 w-6" />
-              </div>
+              </div> */}
               <div className="space-y-1">
                 <label htmlFor="Food Choices" className="Label">
                   Distance
                 </label>
-                <input type="range" className="input_field" min="2" max="5" />
+                <input
+                  type="range"
+                  className="input_field"
+                  onChange={(e) => setDistance(e.target.value)}
+                  min="1"
+                  max="5"
+                  defaultValue={1}
+                />
+                <span className="font-semibold">{distance} km</span>
               </div>
               <div className="flex items-center gap-3 justify-between w-full">
                 <button className="blue_button w-1/2">Skip</button>
-                <button className="green_button w-1/2">Submit</button>
+                <button
+                  className="green_button w-1/2"
+                  onClick={handleSetPreference}
+                  disabled={loading}
+                >
+                  {loading ? "submitting..." : "Submit"}
+                </button>
               </div>
             </div>
           </div>

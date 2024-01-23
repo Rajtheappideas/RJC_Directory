@@ -6,22 +6,28 @@ import Business from "../components/Home/Business";
 import Download from "../components/Home/Download";
 import TestiMonials from "../components/Home/TestiMonials";
 import NewLetter from "../components/NewLetter";
+import { Helmet } from "react-helmet";
 
 const Home = () => {
   return (
-    <div className="lg:space-y-24 space-y-10">
-      <Banner />
-      <Category />
-      <div className="bg-bgGray w-full">
-        <LatestListing />
+    <>
+      <Helmet>
+        <title>Home - RJC Directory</title>
+      </Helmet>
+      <div className="lg:space-y-24 space-y-10">
+        <Banner />
+        <Category />
+        <div className="bg-bgGray w-full">
+          <LatestListing />
+        </div>
+        <Business />
+        <div className="bg-bgGray w-full">
+          <Download />
+        </div>
+        <TestiMonials />
+        <NewLetter />
       </div>
-      <Business />
-      <div className="bg-bgGray w-full">
-        <Download />
-      </div>
-      <TestiMonials />
-      <NewLetter />
-    </div>
+    </>
   );
 };
 

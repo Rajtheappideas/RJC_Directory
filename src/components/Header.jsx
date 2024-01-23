@@ -10,11 +10,14 @@ import {
   FaLocationPin,
   FaSortDown,
 } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const [sticky, setSticky] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
+
+  const { user } = useSelector((s) => s.root.auth);
 
   const location = useLocation();
 
@@ -275,22 +278,24 @@ const Header = () => {
             {/* dropdown */}
             <div className="absolute overflow-y-auto flex items-start gap-0 z-10 py-2 min-w-[40rem] group-hover:scale-100 scale-0 custom_scrollbar transition-all origin-top  bg-white text-left ease-in-out duration-300 top-9 -left-40 rounded-lg shadow-2xl text-textColor space-y-2">
               {/* left side */}
-                <ul className="font-semibold max-h-full text-textColor capitalize tracking-wide border-r w-1/2 overflow-y-auto ">
-                  <li className=" w-full flex items-center justify-between text-lg">
+              <ul className="font-semibold max-h-full text-textColor capitalize tracking-wide border-r w-1/2 overflow-y-auto ">
+                <li className=" w-full flex items-center justify-between text-lg">
+                  <span className="px-7 py-2 whitespace-nowrap">
+                    All Categories
+                  </span>
+                </li>
+                {categoires.map((category, index) => (
+                  <li
+                    key={index}
+                    className=" hover:bg-gray-100 tracking-wide w-full flex items-center justify-between"
+                  >
                     <span className="px-7 py-2 whitespace-nowrap">
-                      All Categories
+                      {category}
                     </span>
+                    <FaChevronRight className="min-h-4 min-w-4 text-gray-400 font-light pr-2" />
                   </li>
-                  {categoires.map((category, index) => (
-                    <li
-                      key={index}
-                      className=" hover:bg-gray-100 tracking-wide w-full flex items-center justify-between"
-                    >
-                      <span className="px-7 py-2 whitespace-nowrap">{category}</span>
-                      <FaChevronRight className="min-h-4 min-w-4 text-gray-400 font-light pr-2" />
-                    </li>
-                  ))}
-                </ul>
+                ))}
+              </ul>
               {/* right side */}
               <div className="space-y-2 w-1/2">
                 <span className="p-3 whitespace-nowrap font-semibold text-lg text-left">
@@ -348,8 +353,8 @@ const Header = () => {
         <span className="bg-opacity-40 bg-gray-400 xl:h-4 w-[1px]"></span>
 
         <div className="hidden xl:flex gap-2">
-          <>
-            {/* <Link to="/my-account">
+          {user !== null ? (
+            <Link to="/my-account">
               <button
                 type="button"
                 className={`focus:outline-none uppercase px-8 py-1.5 bg-greenColor text-white rounded-3xl hover:bg-greenColor/60 transition-all`}
@@ -359,34 +364,37 @@ const Header = () => {
               >
                 My Account
               </button>
-            </Link> */}
-            <Link to="/sign-up">
-              <button
-                type="button"
-                className={`focus:outline-none uppercase rounded-3xl px-2 py-1.5 ${
-                  sticky
-                    ? "hover:bg-primary_color hover:text-white"
-                    : "hover:bg-white hover:text-black"
-                } `}
-                onClick={() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-              >
-                Sign Up
-              </button>
             </Link>
-            <Link to="/sign-in">
-              <button
-                type="button"
-                className={`focus:outline-none uppercase px-4 py-1.5 bg-greenColor text-white rounded-3xl hover:bg-greenColor/60 transition-all`}
-                onClick={() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-              >
-                Sign in
-              </button>
-            </Link>
-          </>
+          ) : (
+            <>
+              <Link to="/sign-up">
+                <button
+                  type="button"
+                  className={`focus:outline-none uppercase rounded-3xl px-2 py-1.5 ${
+                    sticky
+                      ? "hover:bg-primary_color hover:text-white"
+                      : "hover:bg-white hover:text-black"
+                  } `}
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                >
+                  Sign Up
+                </button>
+              </Link>
+              <Link to="/sign-in">
+                <button
+                  type="button"
+                  className={`focus:outline-none uppercase px-4 py-1.5 bg-greenColor text-white rounded-3xl hover:bg-greenColor/60 transition-all`}
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                >
+                  Sign in
+                </button>
+              </Link>
+            </>
+          )}
         </div>
         <RiMenu3Line
           onClick={() => setOpenSidebar(true)}

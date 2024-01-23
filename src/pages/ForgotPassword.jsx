@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SuccessModal from "../components/SuccessModal";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const ForgotPassword = () => {
   const [showOtpBox, setShowOtpBox] = useState(false);
@@ -9,6 +10,9 @@ const ForgotPassword = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Forgot password - RJC Directory</title>
+      </Helmet>
       {showSuccessModal && <SuccessModal />}
       <div className="w-screen overflow-y-auto grid lg:grid-cols-2 xl:gap-0 gap-5 place-items-center items-center h-screen">
         {/* images */}

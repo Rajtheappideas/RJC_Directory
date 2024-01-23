@@ -1,8 +1,10 @@
 import React from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 const SuccessModal = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className="fixed w-screen h-screen bg-black/20 backdrop-blur-sm inset-0 z-10"></div>
@@ -12,7 +14,9 @@ const SuccessModal = () => {
         <p className="text-center font-semibold text-2xl">
           Your account has been successfully created
         </p>
-        <button className="green_button">Let's Go</button>
+        <button className="green_button" onClick={() => navigate("/")}>
+          Let's Go
+        </button>
       </div>
     </>
   );

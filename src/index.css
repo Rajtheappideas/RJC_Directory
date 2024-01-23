@@ -122,3 +122,7 @@ body::-webkit-scrollbar-thumb {
 .Label {
   @apply opacity-50 font-light;
 }
+
+.error {
+  @apply text-red-500 font-medium capitalize;
+}

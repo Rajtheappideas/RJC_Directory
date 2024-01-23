@@ -14,10 +14,13 @@ import ItemDetails from "./pages/ItemDetails";
 import BestOffers from "./pages/BestOffers";
 import MyAccount from "./pages/MyAccount";
 import PageNotFound from "./pages/PageNotFound";
+import { Toaster } from "react-hot-toast";
+import PrivateRoute from "./pages/PrivateRoute";
 
 function App() {
   return (
     <BrowserRouter>
+      <Toaster />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -31,7 +34,14 @@ function App() {
         <Route path="/search" element={<SearchResult />} />
         <Route path="/details" element={<ItemDetails />} />
         <Route path="/best-offers" element={<BestOffers />} />
-        <Route path="/my-account" element={<MyAccount />} />
+        <Route
+          path="/my-account"
+          element={
+            <PrivateRoute>
+              <MyAccount />
+            </PrivateRoute>
+          }
+        />
         <Route path="/*" element={<PageNotFound />} />
       </Routes>
       <Footer />
