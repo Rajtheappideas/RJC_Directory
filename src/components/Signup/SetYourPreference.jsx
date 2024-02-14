@@ -6,6 +6,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import toast from "react-hot-toast";
 import { PostUrl } from "../../BaseUrl";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const SetYourPreference = ({ setShowSuccess }) => {
   const [showOtpBox, setShowOtpBox] = useState(false);
@@ -78,31 +79,41 @@ const SetYourPreference = ({ setShowSuccess }) => {
             src={require("../../assets/images/bgImage.png")}
             alt=""
             className="w-full h-full object-cover"
+            loading="lazy"
           />
-          <img
-            src={require("../../assets/images/logoMain.png")}
-            alt=""
-            className="w-40 h-fit object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0"
-          />
-          <img
-            src={require("../../assets/images/logoTitle.png")}
-            alt=""
-            className="w-40 h-fit object-cover absolute top-[63%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0"
-          />
+          <Link
+            to="/"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 space-y-4"
+          >
+            <img
+              src={require("../../assets/images/logoMain.png")}
+              alt=""
+              className="xl:w-40 w-32 h-fit object-cover"
+              loading="lazy"
+            />
+            <img
+              src={require("../../assets/images/logoTitle.png")}
+              alt=""
+              className="xl:w-40 w-32 h-fit object-cover "
+              loading="lazy"
+            />
+          </Link>
         </div>
         {/* form */}
         {!showOtpBox ? (
-          <div className="xl:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">
+          <div className="lg:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">
             <img
               src={require("../../assets/images/bgImage.png")}
               alt=""
               className="w-full h-full fixed lg:hidden -z-10 object-cover  top-0 left-0"
+              loading="lazy"
             />
-            <div className="bg-white text-[#000D23] space-y-4 rounded-lg md:p-10 p-4 shadow-lg relative">
+            <div className="bg-white relative text-[#000D23] space-y-4 lg:mt-0 mt-14 rounded-lg md:p-10 p-4 shadow-lg">
               <img
                 src={require("../../assets/images/Logo.png")}
                 alt=""
                 className="w-fit h-fit object-cover lg:hidden absolute -top-14 left-1/2 -translate-x-1/2 z-10"
+                loading="lazy"
               />
               <p className="font-semibold  text-left text-2xl">
                 Set your preferences
@@ -173,7 +184,9 @@ const SetYourPreference = ({ setShowSuccess }) => {
                 <span className="font-semibold">{distance} km</span>
               </div>
               <div className="flex items-center gap-3 justify-between w-full">
-                <button className="blue_button w-1/2">Skip</button>
+                <Link to="/" className="w-1/2">
+                  <button className="blue_button w-full">Skip</button>
+                </Link>
                 <button
                   className="green_button w-1/2"
                   onClick={handleSetPreference}

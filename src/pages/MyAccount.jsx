@@ -17,6 +17,10 @@ import CategoryModal from "../components/Signup/CategoryModal";
 import RatingsModal from "../components/Signup/RatingsModal";
 import FoodChoiceModal from "../components/Signup/FoodChoiceModal";
 import { AiOutlineDown } from "react-icons/ai";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { handleLogout } from "../redux/AuthSlice";
 
 const MyAccount = () => {
   const [activeTab, setActiveTab] = useState("account");
@@ -25,6 +29,18 @@ const MyAccount = () => {
   const [ratingModal, setRatingModal] = useState(false);
   const [foodChoiceModal, setFoodChoiceModal] = useState(false);
   const [showMenu, setShowMenu] = useState(true);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  function hanldeLogoutFn() {
+    toast.loading("logout...");
+    setTimeout(() => {
+      dispatch(handleLogout());
+      navigate("/sign-in");
+      toast.remove();
+    }, 1000);
+  }
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -50,7 +66,7 @@ const MyAccount = () => {
       <div className="relative md:space-y-10 space-y-5">
         <TItleSection image={bgimage} title="My Account" />
         <div className="xl:w-10/12 w-full flex xl:flex-row flex-col items-start gap-3 container mx-auto xl:px-0 md:px-10 px-5">
-        {/* <div className="xl:w-10/12 w-full absolute z-0 md:top-60 top-48 left-1/2 -translate-x-1/2 flex xl:flex-row flex-col items-start gap-3 container mx-auto xl:px-0 md:px-10 px-5"> */}
+          {/* <div className="xl:w-10/12 w-full absolute z-0 md:top-60 top-48 left-1/2 -translate-x-1/2 flex xl:flex-row flex-col items-start gap-3 container mx-auto xl:px-0 md:px-10 px-5"> */}
           {/* tabs */}
           <div className="xl:w-3/12 w-full bg-white p-5 space-y-3 border shadow-xl">
             <p
@@ -105,6 +121,7 @@ const MyAccount = () => {
                 </li>
                 <li
                   className={`flex items-center transition-all cursor-pointer gap-3 text-red-500 text-lg p-3 hover:bg-red-500/10`}
+                  onClick={() => hanldeLogoutFn()}
                 >
                   <MdLogout className="w-8 h-8" /> Logout
                 </li>

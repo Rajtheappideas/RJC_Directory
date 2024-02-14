@@ -14,6 +14,7 @@ const ItemDetails = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
+  
   return (
     <div className="w-full">
       {showReviewBox && <WriteReview setShowReviewBox={setShowReviewBox} />}
@@ -24,6 +25,7 @@ const ItemDetails = () => {
             src={require("../assets/images/business_slider/Rectangle 375.png")}
             alt=""
             className="w-full h-full rounded-3xl object-cover object-center"
+            loading="lazy"
           />
           <div className="space-y-3 w-full">
             <p className="font-semibold md:text-5xl text-3xl">TAO Restaurant</p>
@@ -137,23 +139,27 @@ const ItemDetails = () => {
           <p className="font-semibold text-3xl">Social media</p>
           <div className="flex items-center gap-2 flex-wrap">
             <img
+              loading="lazy"
               src={require("../assets/images/facebook.png")}
               alt=""
               className="md:w-20 md:h-20 h-10 w-10"
             />
             <img
+              loading="lazy"
               src={require("../assets/images/instagram.png")}
               alt=""
               className="md:w-20 md:h-20 h-10 w-10"
             />
             <div className="bg-black rounded-full flex items-center justify-center md:h-20 md:w-20 w-10 h-10">
               <img
+                loading="lazy"
                 src={require("../assets/images/Vector.png")}
                 alt=""
                 className="md:w-10 h-5 md:h-10 w-5"
               />
             </div>
             <img
+              loading="lazy"
               src={require("../assets/images/youtube.png")}
               alt=""
               className="md:w-20 md:h-20 h-10 w-10"
@@ -166,6 +172,7 @@ const ItemDetails = () => {
           <p className="font-semibold text-3xl lg:block hidden">Gallery</p>
           <div className="w-full h-full bg-gray-200 rounded-2xl">
             <img
+              loading="lazy"
               src={require("../assets/images/map.png")}
               alt=""
               className="w-full h-full rounded-2xl"
@@ -175,31 +182,37 @@ const ItemDetails = () => {
 
           <div className="w-full grid grid-cols-3 gap-2">
             <img
+              loading="lazy"
               src={require("../assets/images/business_slider/Rectangle 375.png")}
               alt=""
               className="w-full h-full rounded-2xl"
             />
             <img
+              loading="lazy"
               src={require("../assets/images/business_slider/Rectangle 375.png")}
               alt=""
               className="w-full h-full rounded-2xl"
             />
             <img
+              loading="lazy"
               src={require("../assets/images/business_slider/Rectangle 375.png")}
               alt=""
               className="w-full h-full rounded-2xl"
             />
             <img
+              loading="lazy"
               src={require("../assets/images/business_slider/Rectangle 375.png")}
               alt=""
               className="w-full h-full rounded-2xl"
             />
             <img
+              loading="lazy"
               src={require("../assets/images/business_slider/Rectangle 375.png")}
               alt=""
               className="w-full h-full rounded-2xl"
             />
             <img
+              loading="lazy"
               src={require("../assets/images/business_slider/Rectangle 375.png")}
               alt=""
               className="w-full h-full rounded-2xl"

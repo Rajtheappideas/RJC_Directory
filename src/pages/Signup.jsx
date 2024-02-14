@@ -17,6 +17,9 @@ import { handleRegister } from "../redux/AuthSlice";
 import PhoneInput from "react-phone-input-2";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { Country, State, City } from "country-state-city";
+import "react-phone-input-2/lib/style.css";
+import moment from "moment";
+// import moment from "moment";
 
 const Signup = () => {
   const [showPreferenceBox, setShowPreferenceBox] = useState(false);
@@ -49,7 +52,6 @@ const Signup = () => {
 
   const onSubmit = (data) => {
     const { phone } = data;
-
     if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
       toast.remove();
       toast.error("phone is invalid");
@@ -80,6 +82,9 @@ const Signup = () => {
 
   useEffect(() => {
     setCountries(Country.getAllCountries());
+    return () => {
+      abortApiCall();
+    };
   }, []);
 
   useEffect(() => {
@@ -92,13 +97,17 @@ const Signup = () => {
     setCities(cities);
   }, [watch("country")]);
 
+  let date = moment().format("L").split("/");
+  let maxDate = date.splice(date.length - 1, 1);
+  maxDate = maxDate.concat(date).join("-");
+
   return (
     <>
       <Helmet>
         <title>Sign up - RJC Directory</title>
       </Helmet>
       {showSuccess && <SuccessModal />}
-      {!showPreferenceBox ? (
+      {showPreferenceBox ? (
         <SetYourPreference setShowSuccess={setShowSuccess} />
       ) : (
         <div className="w-screen overflow-y-auto grid xl:grid-cols-2 xl:gap-0 gap-5 place-items-center items-center h-screen">
@@ -108,6 +117,7 @@ const Signup = () => {
               src={require("../assets/images/bgImage.png")}
               alt=""
               className="w-full h-full object-cover"
+              loading="lazy"
             />
             <Link
               to="/"
@@ -117,20 +127,23 @@ const Signup = () => {
                 src={require("../assets/images/logoMain.png")}
                 alt=""
                 className="w-40 h-fit object-cover"
+                loading="lazy"
               />
               <img
                 src={require("../assets/images/logoTitle.png")}
                 alt=""
                 className="w-40 h-fit object-cover "
+                loading="lazy"
               />
             </Link>
           </div>
           {/* form */}
-          <div className="xl:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">
+          <div className="lg:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">
             <img
               src={require("../assets/images/bgImage.png")}
               alt=""
-              className="w-full h-full fixed xl:hidden -z-10 object-cover  top-0 left-0"
+              className="w-full h-screen fixed lg:hidden -z-10 object-cover"
+              loading="lazy"
             />
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -190,11 +203,10 @@ const Signup = () => {
                       enableSearch={true}
                       inputStyle={{
                         width: "100%",
-                        padding: "22px 0 22px 50px",
+                        padding: "24px 0 24px 50px",
                         borderRadius: "5px",
                         fontSize: "1rem",
                       }}
-                      buttonStyle={{ background: "white" }}
                       dropdownStyle={{
                         background: "white",
                         color: "#13216e",
@@ -214,6 +226,7 @@ const Signup = () => {
                   type="date"
                   {...register("dob")}
                   className="input_field"
+                  max={maxDate}
                 />
                 <span className="error">{errors?.dob?.message}</span>
               </div>
@@ -225,6 +238,7 @@ const Signup = () => {
                   type="date"
                   {...register("anniversary")}
                   className="input_field"
+                  max={maxDate}
                 />
                 <span className="error">{errors?.anniversary?.message}</span>
               </div>
@@ -342,12 +356,15 @@ const Signup = () => {
               )} */}
               {/* social login */}
               <div className="w-full flex items-center justify-center gap-2">
-                <button className="rounded-full w-12 h-12 border text-center">
+                <button
+                  disabled={loading}
+                  className="rounded-full w-12 h-12 border text-center"
+                >
                   <FcGoogle className="text-xl mx-auto" />
                 </button>
-                <button className="rounded-full w-12 h-12 border text-center">
+                {/* <button className="rounded-full w-12 h-12 border text-center">
                   <FaFacebookF className="text-xl mx-auto text-blue-500" />
-                </button>
+                </button> */}
               </div>
               {/* sign up  url */}
               <p className=" text-base text-opacity-50 text-textColor text-center">

@@ -135,7 +135,12 @@ const Category = () => {
           {categoryData.map((item) => (
             <SwiperSlide key={item.id}>
               <div className="space-y-2">
-                <img src={item?.image} alt="" className="w-full h-fit" />
+                <img
+                  src={item?.image}
+                  loading="lazy"
+                  alt=""
+                  className="w-full h-fit"
+                />
                 <p className="text-textColor font-semibold text-center xl:text-lg text-sm">
                   {item?.title}
                 </p>

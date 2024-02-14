@@ -13,11 +13,15 @@ const SingleItemBox = ({ data, boxType }) => {
   return (
     <>
       {boxType === "grid" ? (
-        <div className={`w-full relative rounded-2xl border select-none bg-white shadow-[0px_3px_7px_rgba(0,0,0,0.20)]`}>
+        <div
+          className={`w-full relative rounded-2xl border select-none bg-white shadow-[0px_3px_7px_rgba(0,0,0,0.20)]`}
+        >
           {/* heart icon */}
           <div
             onClick={() => setIsFavourite(!isFavourite)}
-            className={`absolute top-3 right-3 ${isFavourite ?"bg-red-500":" border border-white"} rounded-2xl p-2 cursor-pointer`}
+            className={`absolute top-3 right-3 ${
+              isFavourite ? "bg-red-500" : " border border-white"
+            } rounded-2xl p-2 cursor-pointer`}
           >
             {isFavourite ? (
               <RiHeartFill className="text-white text-3xl" />
@@ -30,6 +34,7 @@ const SingleItemBox = ({ data, boxType }) => {
               src={require("../assets/images/business_slider/Rectangle 375 (1).png")}
               alt=""
               className="object-cover w-full h-60 rounded-tl-2xl rounded-tr-2xl"
+              loading="lazy"
             />
           </Link>
           <div className="space-y-3 p-3">
@@ -53,6 +58,7 @@ const SingleItemBox = ({ data, boxType }) => {
                 src={require("../assets/images/business_slider/Rectangle 375 (1).png")}
                 alt=""
                 className="object-cover md:w-52 md:h-52 w-full h-44 rounded-lg"
+                loading="lazy"
               />
             </Link>
             <div className="space-y-3 p-3">

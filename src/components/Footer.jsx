@@ -34,7 +34,12 @@ const Footer = () => {
       {/* <div className="container"> */}
       <div className="grid md:grid-cols-2 lg:gap-0 gap-4 lg:grid-cols-5 lg:px-10 text-lg">
         <Link to="/">
-          <img src={FooterLogo} alt="" className="lg:w-2/5 w-20" />
+          <img
+            src={FooterLogo}
+            loading="lazy"
+            alt=""
+            className="lg:w-2/5 w-20"
+          />
         </Link>
         <div className="md:space-y-4 space-y-1 text-white">
           <p className="text-primary_color text-base font-normal footer heading">

@@ -47,7 +47,7 @@ const CategoryModal = ({
         onClick={() => setShowCategoryMOdal()}
         className="fixed w-screen h-screen bg-black/20 backdrop-blur-sm inset-0 z-30"
       ></div>
-      <div className="bg-white p-6 rounded-lg h-auto max-h-[80%] flex flex-col overflow-hidden w-1/3 space-y-3 fixed top-1/2 left-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
+      <div className="bg-white p-6 rounded-lg h-auto max-h-[80%] flex flex-col overflow-hidden xl:w-1/3 md:w-1/2 w-11/12 space-y-3 fixed top-1/2 left-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
         <p className="text-left font-semibold text-2xl">Categories</p>
         {loading ? (
           <div className="text-center w-full font-semibold">Loading...</div>

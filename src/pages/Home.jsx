@@ -1,12 +1,13 @@
-import React from "react";
-import Banner from "../components/Home/Banner";
-import Category from "../components/Home/Category";
-import LatestListing from "../components/Home/LatestListing";
-import Business from "../components/Home/Business";
-import Download from "../components/Home/Download";
-import TestiMonials from "../components/Home/TestiMonials";
-import NewLetter from "../components/NewLetter";
+import React, { Suspense, lazy } from "react";
 import { Helmet } from "react-helmet";
+
+const Banner = lazy(() => import("../components/Home/Banner"));
+const Category = lazy(() => import("../components/Home/Category"));
+const Business = lazy(() => import("../components/Home/Business"));
+const LatestListing = lazy(() => import("../components/Home/LatestListing"));
+const Download = lazy(() => import("../components/Home/Download"));
+const TestiMonials = lazy(() => import("../components/Home/TestiMonials"));
+const NewLetter = lazy(() => import("../components/NewLetter"));
 
 const Home = () => {
   return (

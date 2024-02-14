@@ -18,8 +18,8 @@ const Download = () => {
           to find the right businesses tailored to your needs.
         </p>
         <div className="flex gap-3">
-          <img src={require("../../assets/images/playstore.png")} alt="" className="cursor-pointer md:w-auto w-[110px]"/>
-          <img src={require("../../assets/images/appstore2.png")} alt="" className="cursor-pointer md:w-auto w-[110px]"/>
+          <img src={require("../../assets/images/playstore.png")} loading="lazy" alt="" className="cursor-pointer md:w-auto w-[110px]"/>
+          <img src={require("../../assets/images/appstore2.png")} alt=""  loading="lazy" className="cursor-pointer md:w-auto w-[110px]"/>
         </div>
       </div>
     </div>

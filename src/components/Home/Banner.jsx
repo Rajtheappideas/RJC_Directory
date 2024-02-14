@@ -10,6 +10,7 @@ const Banner = () => {
           src={require("../../assets/images/banner.png")}
           alt="banner"
           className="absolute brightness-[.8] object-cover w-full h-full"
+          loading="lazy"
         />
       </div>
       <div className="flex justify-center items-center h-full w-full">

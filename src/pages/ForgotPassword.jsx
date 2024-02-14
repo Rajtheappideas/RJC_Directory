@@ -1,26 +1,92 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SuccessModal from "../components/SuccessModal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import ValidationSchema from "../ValidationSchema";
+import PhoneInput from "react-phone-input-2";
+import { isPossiblePhoneNumber } from "react-phone-number-input";
+import { isValidPhoneNumber } from "react-phone-number-input";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { handleForgotPassword, handleVerifyOtp } from "../redux/AuthSlice";
+import useAbortApiCall from "../hooks/useAbortApiCall";
+import ResetPassword from "../components/ResetPassword";
+import { PostUrl } from "../BaseUrl";
+import VerifyOtp from "../components/VerifyOtp";
+import "react-phone-input-2/lib/style.css";
 
 const ForgotPassword = () => {
   const [showOtpBox, setShowOtpBox] = useState(false);
   const [showResetPasswordBox, setShowResetPasswordBox] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+  const { loading } = useSelector((s) => s.root.auth);
+
+  const { forgotPasswordSchema } = ValidationSchema();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { AbortControllerRef, abortApiCall } = useAbortApiCall();
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    getValues,
+    control,
+    setValue,
+  } = useForm({
+    shouldFocusError: true,
+    resolver: yupResolver(forgotPasswordSchema),
+    defaultValues: { phone: "+912084422881" },
+  });
+
+  const OnSubmitForgotPassword = (data) => {
+    if (
+      !isPossiblePhoneNumber(data?.phone) ||
+      !isValidPhoneNumber(data?.phone)
+    ) {
+      toast.remove();
+      toast.error("phone is invalid");
+      return true;
+    }
+
+    const response = dispatch(
+      handleForgotPassword({ phone: data?.phone, signal: AbortControllerRef })
+    );
+    if (response) {
+      response.then((res) => {
+        if (res?.payload?.success) {
+          toast.success(res?.payload?.message);
+          setShowOtpBox(true);
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      abortApiCall();
+    };
+  }, []);
+
   return (
     <>
       <Helmet>
         <title>Forgot password - RJC Directory</title>
       </Helmet>
-      {showSuccessModal && <SuccessModal />}
+      {showSuccessModal && (
+        <SuccessModal setShowSuccessModal={setShowSuccessModal} />
+      )}
       <div className="w-screen overflow-y-auto grid lg:grid-cols-2 xl:gap-0 gap-5 place-items-center items-center h-screen">
         {/* images */}
         <div className="w-full relative lg:block hidden h-full">
           <img
             src={require("../assets/images/bgImage.png")}
             alt=""
-            className="w-full h-full object-cover"
+            className="w-full h-screen object-cover"
           />
           <Link
             to="/"
@@ -38,10 +104,24 @@ const ForgotPassword = () => {
             />
           </Link>
         </div>
-        {showResetPasswordBox ? (
+        {!showResetPasswordBox ? (
           <>
-            {/* form */}
-            {!showOtpBox && (
+            {/* otp box */}
+            {showOtpBox ? (
+              <div className="lg:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">
+                <img
+                  src={require("../assets/images/bgImage.png")}
+                  alt=""
+                  className="w-full h-screen fixed lg:hidden -z-10 object-cover"
+                />
+                <VerifyOtp
+                  phone={getValues().phone}
+                  setShowResetPasswordBox={setShowResetPasswordBox}
+                  from="forgot_password"
+                  setShowOtpBox={setShowOtpBox}
+                />
+              </div>
+            ) : (
               <div className="lg:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">
                 <img
                   src={require("../assets/images/bgImage.png")}
@@ -49,7 +129,10 @@ const ForgotPassword = () => {
                   className="w-full h-screen fixed lg:hidden -z-10 object-cover"
                 />
 
-                <div className="bg-white relative text-[#000D23] space-y-4 rounded-lg md:p-10 p-4 shadow-lg">
+                <form
+                  onSubmit={handleSubmit(OnSubmitForgotPassword)}
+                  className="bg-white relative text-[#000D23] space-y-4 rounded-lg md:p-10 p-4 shadow-lg"
+                >
                   <img
                     src={require("../assets/images/Logo.png")}
                     alt=""
@@ -63,122 +146,67 @@ const ForgotPassword = () => {
                   </p>
                   <div className="space-y-1">
                     <label htmlFor="PhoneNumber" className="Label">
-                      Phone number or Email id
+                      Phone number
                     </label>
-                    <input type="text" className="input_field" />
+                    {/* <input type="text" className="input_field" /> */}
+                    <Controller
+                      name="phone"
+                      control={control}
+                      rules={{
+                        validate: (value) => isValidPhoneNumber(value),
+                      }}
+                      render={({ field: { onChange, value } }) => (
+                        <PhoneInput
+                          country={"in"}
+                          onChange={(value) => {
+                            onChange((e) => {
+                              setValue("phone", "+".concat(value));
+                            });
+                          }}
+                          value={getValues().phone}
+                          autocompleteSearch={true}
+                          countryCodeEditable={false}
+                          enableSearch={true}
+                          inputStyle={{
+                            width: "100%",
+                            padding: "24px 0 24px 50px",
+                            borderRadius: "5px",
+                            fontSize: "1rem",
+                          }}
+                          dropdownStyle={{
+                            background: "white",
+                            color: "#13216e",
+                            fontWeight: "600",
+                            padding: "0px 0px 0px 10px",
+                          }}
+                        />
+                      )}
+                    />
+                    <span className="error">{errors?.phone?.message}</span>
                   </div>
-
-                  <button className="green_button w-full">Submit</button>
-                </div>
-              </div>
-            )}
-            {/* otp box */}
-            {showOtpBox && (
-              <div className="lg:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">
-                <img
-                  src={require("../assets/images/bgImage.png")}
-                  alt=""
-                  className="w-full h-screen fixed lg:hidden -z-10 object-cover"
-                />
-
-                <div className="bg-white relative text-[#000D23] space-y-4 rounded-lg md:p-10 p-4 shadow-lg md:w-2/3 w-full">
-                  <img
-                    src={require("../assets/images/Logo.png")}
-                    alt=""
-                    className="w-fit h-fit object-cover lg:hidden absolute -top-16 left-1/2 -translate-x-1/2 z-10"
-                  />
-                  <p className="font-semibold  text-left text-2xl">
-                    Continue to your account
-                    <span className="block font-semibold text-base text-textColor text-opacity-50">
-                      Check your email or phone for the OTP
-                    </span>
-                  </p>
-                  <p className="font-medium text-left text-base opacity-50">
-                    Enter the 4-digit code sent to you{" "}
-                  </p>
-                  <div className="flex w-full  items-center gap-2">
-                    <input
-                      type="text"
-                      className="border border-borderColor w-[14%] rounded-lg p-3 outline-none focus:border-green-500"
-                    />
-                    <input
-                      type="text"
-                      className="border border-borderColor w-[14%] rounded-lg p-3 outline-none focus:border-green-500"
-                    />
-                    <input
-                      type="text"
-                      className="border border-borderColor w-[14%] rounded-lg p-3 outline-none focus:border-green-500"
-                    />
-                    <input
-                      type="text"
-                      className="border border-borderColor w-[14%] rounded-lg p-3 outline-none focus:border-green-500"
-                    />
+                  <div className="space-y-2">
+                    <button
+                      disabled={loading}
+                      type="submit"
+                      className="green_button w-full"
+                    >
+                      {loading ? "Submitting..." : "Submit"}
+                    </button>
+                    <button
+                      disabled={loading}
+                      type="button"
+                      className="blue_button w-full"
+                      onClick={() => navigate("/sign-in")}
+                    >
+                      Go to Login
+                    </button>
                   </div>
-
-                  <button className="green_button w-full">
-                    Verify My Number
-                  </button>
-
-                  <div className="text-center">
-                    <p className="text-base text-textColor text-opacity-50">
-                      Resend code 0:57
-                    </p>
-                  </div>
-                </div>
+                </form>
               </div>
             )}
           </>
         ) : (
-          <>
-            {/* form */}
-            <div className="lg:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">
-              <img
-                src={require("../assets/images/bgImage.png")}
-                alt=""
-                className="w-full h-full fixed lg:hidden -z-10 object-cover"
-              />
-              <div className="bg-white relative text-[#000D23] space-y-4 rounded-lg md:p-10 p-4 shadow-lg">
-                <div className="lg:hidden absolute -top-16 left-1/2 -translate-x-1/2 z-10">
-                  <Link to="/">
-                    <img
-                      src={require("../assets/images/Logo.png")}
-                      alt=""
-                      className="w-fit h-fit object-cover "
-                    />
-                  </Link>
-                </div>
-                <p className="font-semibold  text-left text-2xl">
-                  Reset your password
-                </p>
-                <p className="font-semibold  text-left text-base text-textColor text-opacity-50">
-                  Set your new password
-                </p>
-
-                <div className="space-y-1">
-                  <label htmlFor="password" className="Label">
-                    password
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="* * * * * *"
-                    className="input_field"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label htmlFor="confirm_password" className="Label">
-                    re-type password
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="* * * * * *"
-                    className="input_field"
-                  />
-                </div>
-
-                <button className="green_button w-full">Change</button>
-              </div>
-            </div>
-          </>
+          <ResetPassword setShowSuccessModal={setShowSuccessModal} />
         )}
       </div>
     </>

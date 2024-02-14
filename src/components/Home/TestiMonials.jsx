@@ -136,6 +136,7 @@ const TestiMonials = () => {
                         src={BaseUrl.concat(item?.image)}
                         alt=""
                         className="mx-auto h-40 w-40 object-center object-cover rounded-full"
+                        loading="lazy"
                       />
                       <p className="xl:text-xl text-base">{item?.name}</p>
                       <div className="space-y-4">

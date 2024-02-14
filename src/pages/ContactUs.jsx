@@ -225,11 +225,13 @@ const ContactUs = () => {
               src={require("../assets/images/contactus1.png")}
               alt=""
               className="z-0 w-full h-full"
+              loading="lazy"
             />
             <div className="absolute text-white top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-auto flex flex-col items-center gap-3">
               <img
                 src={require("../assets/images/mail.png")}
                 alt=""
+                loading="lazy"
                 className="z-0 md:w-24 w-20 md:h-24 h-20"
               />
               <p className="md:text-3xl text-xl font-semibold whitespace-nowrap">

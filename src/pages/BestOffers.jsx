@@ -69,6 +69,7 @@ const BestOffers = () => {
                   src={require("../assets/images/home_slider_desktop_Web-Banner-bbq-dec 1.png")}
                   alt=""
                   className="w-full h-80 object-cover"
+                  loading="lazy"
                 />
                 {/* <SingleItemBox data={item} boxType="grid" /> */}
               </SwiperSlide>

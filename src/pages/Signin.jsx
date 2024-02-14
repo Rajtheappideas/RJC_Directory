@@ -3,17 +3,90 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import ValidationSchema from "../ValidationSchema";
+import useAbortApiCall from "../hooks/useAbortApiCall";
+import { handleGetSigninOTP, handleSignin } from "../redux/AuthSlice";
+import PhoneInput from "react-phone-input-2";
+import { isPossiblePhoneNumber } from "react-phone-number-input";
+import { isValidPhoneNumber } from "react-phone-number-input";
+import toast from "react-hot-toast";
+import "react-phone-input-2/lib/style.css";
+import VerifyOtp from "../components/VerifyOtp";
 
 const Signin = () => {
-  const [signInWithPassword, setSignInWithPassword] = useState(false);
+  const [signInWithPassword, setSignInWithPassword] = useState(true);
   const [showOtpBox, setShowOtpBox] = useState(false);
 
-  const { user } = useSelector((s) => s.root.auth);
+  const { user, loading } = useSelector((s) => s.root.auth);
+
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const { AbortControllerRef, abortApiCall } = useAbortApiCall();
+
+  const { signInSchema } = ValidationSchema(signInWithPassword);
+
+  const {
+    getValues,
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm({
+    shouldFocusError: true,
+    resolver: yupResolver(signInSchema),
+  });
+
+  const onSubmit = (data) => {
+    const { phone, password } = data;
+    if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
+      toast.remove();
+      toast.error("phone is invalid");
+      return true;
+    }
+    if (!signInWithPassword) {
+      const response = dispatch(
+        handleGetSigninOTP({
+          phone,
+          signal: AbortControllerRef,
+        })
+      );
+      if (response) {
+        response.then((res) => {
+          if (res?.payload?.success) {
+            toast.success(res?.payload?.message);
+            setShowOtpBox(true);
+          }
+        });
+      }
+    } else {
+      const response = dispatch(
+        handleSignin({
+          phone,
+          password,
+          signal: AbortControllerRef,
+        })
+      );
+      if (response) {
+        response.then((res) => {
+          if (res?.payload?.success) {
+            navigate("/");
+          }
+        });
+      }
+    }
+  };
 
   useEffect(() => {
     if (user !== null) navigate("/");
+    return () => {
+      abortApiCall();
+    };
   }, []);
 
   return (
@@ -27,7 +100,8 @@ const Signin = () => {
           <img
             src={require("../assets/images/bgImage.png")}
             alt=""
-            className="w-full h-screen object-cover"
+            className="w-full xl:h-screen h-full object-cover"
+            loading="lazy"
           />
           <Link
             to="/"
@@ -36,12 +110,14 @@ const Signin = () => {
             <img
               src={require("../assets/images/logoMain.png")}
               alt=""
-              className="w-40 h-fit object-cover"
+              className="xl:w-40  w-32 h-fit object-cover"
+              loading="lazy"
             />
             <img
               src={require("../assets/images/logoTitle.png")}
               alt=""
-              className="w-40 h-fit object-cover "
+              className="xl:w-40  w-32 h-fit object-cover "
+              loading="lazy"
             />
           </Link>
         </div>
@@ -51,9 +127,13 @@ const Signin = () => {
             <img
               src={require("../assets/images/bgImage.png")}
               alt=""
-              className="w-full h-screen fixed lg:hidden -z-10 object-cover"
+              className="w-full h-screen -top-2 fixed lg:hidden -z-10 object-cover"
+              loading="lazy"
             />
-            <div className="bg-white relative text-[#000D23] space-y-4 rounded-lg md:p-10 p-4 shadow-lg">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="bg-white relative text-[#000D23] space-y-4 lg:mt-0 mt-14 rounded-lg md:p-10 p-4 shadow-lg xl:w-8/12 lg:w-10/12 md:w-2/3 w-full"
+            >
               <Link to="/">
                 <img
                   src={require("../assets/images/Logo.png")}
@@ -64,57 +144,92 @@ const Signin = () => {
               <p className="font-semibold  text-left text-2xl">Sign In</p>
               <div className="space-y-1">
                 <label htmlFor="PhoneNumber" className="Label">
-                  Phone number or Email id
+                  Phone number
                 </label>
-                <input type="text" className="input_field" />
-              </div>
-              {!signInWithPassword && (
-                <>
-                  <div className="space-y-1">
-                    <div className="w-full flex items-center justify-between">
-                      <label htmlFor="password" className="Label">
-                        Password
-                      </label>
-                      <Link className="Label" to="/forgot-password">
-                        Forgot your password?
-                      </Link>
-                    </div>
-                    <input
-                      type="password"
-                      placeholder="Enter your password"
-                      className="input_field"
+                <Controller
+                  name="phone"
+                  control={control}
+                  rules={{
+                    validate: (value) => isValidPhoneNumber(value),
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                    <PhoneInput
+                      country={"in"}
+                      onChange={(value) => {
+                        onChange((e) => {
+                          setValue("phone", "+".concat(value));
+                        });
+                      }}
+                      value={getValues().phone}
+                      autocompleteSearch={true}
+                      countryCodeEditable={false}
+                      enableSearch={true}
+                      inputStyle={{
+                        width: "100%",
+                        padding: "24px 0 24px 50px",
+                        borderRadius: "5px",
+                        fontSize: "1rem",
+                      }}
+                      dropdownStyle={{
+                        background: "white",
+                        color: "#13216e",
+                        fontWeight: "600",
+                        padding: "0px 0px 0px 10px",
+                      }}
                     />
+                  )}
+                />
+                <span className="error">{errors?.phone?.message}</span>
+              </div>
+              {signInWithPassword && (
+                <div className="space-y-1">
+                  <div className="w-full flex items-center justify-between">
+                    <label htmlFor="password" className="Label">
+                      Password
+                    </label>
+                    <Link className="Label" to="/forgot-password">
+                      Forgot your password?
+                    </Link>
                   </div>
-                  <p className="opacity-50">
-                    8 characters with a mix of letters, numbers & symbols
-                  </p>
-                </>
+                  <input
+                    type="password"
+                    placeholder="Enter your password"
+                    className="input_field"
+                    {...register("password")}
+                  />
+                  <span className="error">{errors?.password?.message}</span>
+                </div>
               )}
 
-              <button className="green_button w-full">Sign in </button>
+              <button disabled={loading} className="green_button w-full">
+                {loading ? "Signing in..." : "Sign in"}
+              </button>
               <p
                 onClick={() => setSignInWithPassword(!signInWithPassword)}
                 className="text-center text-lg cursor-pointer font-semibold"
               >
-                {signInWithPassword
+                {!signInWithPassword
                   ? "Sign In with Password"
                   : " Sign In with OTP"}
               </p>
-              <div className="flex items-center gap-2 opacity-50 w-full">
+              <div className="flex items-center gap-2 opacity-50 w-full whitespace-nowrap">
                 <hr className="flex-1" />
-                <p className=" text-xs flex-1 font-semibold tracking-widest">
+                <p className=" text-[10px] flex-1 font-semibold tracking-widest">
                   OR SIGN-IN WITH
                 </p>
                 <hr className="flex-1" />
               </div>
               {/* social login */}
               <div className="w-full flex items-center justify-center gap-2">
-                <button className="rounded-full w-12 h-12 border text-center">
+                <button
+                  disabled={loading}
+                  className="rounded-full w-12 h-12 border text-center"
+                >
                   <FcGoogle className="text-xl mx-auto" />
                 </button>
-                <button className="rounded-full w-12 h-12 border text-center">
+                {/* <button className="rounded-full w-12 h-12 border text-center">
                   <FaFacebookF className="text-xl mx-auto text-blue-500" />
-                </button>
+                </button> */}
               </div>
               {/* sign up  url */}
               <p className="text-base text-center text-textColor text-opacity-50">
@@ -126,66 +241,14 @@ const Signin = () => {
                   Sign Up
                 </Link>
               </p>
-            </div>
+            </form>
           </div>
         ) : (
-          <div className="lg:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">
-            <img
-              src={require("../assets/images/bgImage.png")}
-              alt=""
-              className="w-full h-full fixed lg:hidden -z-10 object-cover"
-            />
-
-            <div className="bg-white relative text-[#000D23] space-y-4 rounded-lg md:p-10 p-4 shadow-lg md:w-2/3 w-full">
-              <img
-                src={require("../assets/images/Logo.png")}
-                alt=""
-                className="w-fit h-fit object-cover lg:hidden absolute -top-16 left-1/2 -translate-x-1/2 z-10"
-              />
-              <p className="font-semibold  text-left text-2xl">
-                Continue to your account
-                <span className="font-semibold block text-left text-base opacity-50">
-                  Check your email or phone for the OTP
-                </span>
-              </p>
-              <p className="font-medium text-left text-base opacity-50 tracking-wide">
-                Enter the 4-digit code sent to you{" "}
-              </p>
-              <div className="flex w-full  items-center gap-2">
-                <input
-                  type="text"
-                  className="border border-borderColor w-1/6 rounded-lg p-3 outline-none focus:border-green-500"
-                />
-                <input
-                  type="text"
-                  className="border border-borderColor w-1/6 rounded-lg p-3 outline-none focus:border-green-500"
-                />
-                <input
-                  type="text"
-                  className="border border-borderColor w-1/6 rounded-lg p-3 outline-none focus:border-green-500"
-                />
-                <input
-                  type="text"
-                  className="border border-borderColor w-1/6 rounded-lg p-3 outline-none focus:border-green-500"
-                />
-              </div>
-
-              <button className="green_button w-full font-poppins">
-                Verify My Email
-              </button>
-              {/* <p
-              onClick={() => setSignInWithPassword(!signInWithPassword)}
-              className="text-center text-lg cursor-pointer font-semibold"
-            >
-              {signInWithPassword
-                ? "Sign In with Password"
-                : " Sign In with OTP"}
-            </p> */}
-              <div className="text-center">
-                <p className="text-base font-medium">Resend code 0:57</p>
-              </div>
-            </div>
-          </div>
+          <VerifyOtp
+            phone={getValues().phone}
+            setShowOtpBox={setShowOtpBox}
+            from="sign_in"
+          />
         )}
       </div>
     </>
