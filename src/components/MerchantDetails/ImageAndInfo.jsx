@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPhoneAlt } from "react-icons/fa";
-import { IoIosArrowDown } from "react-icons/io";
 import { MdEmail, MdLocationPin } from "react-icons/md";
 import { useSelector } from "react-redux";
 import BaseUrl from "../../BaseUrl";
@@ -9,13 +8,19 @@ import moment from "moment";
 const ImageAndInfo = () => {
   const [showOpenHours, setShowOpenHours] = useState(true);
 
-  const { merchantDetails } = useSelector((s) => s.root.merchant);
-
-  let today = Object.entries(merchantDetails?.openingHours).filter((i) =>
-    i[0]
-      .toLocaleLowerCase()
-      .includes(moment().format("dddd").toLocaleLowerCase())
-  )[0];
+  const { merchantDetails, merchantByIdLoading } = useSelector(
+    (s) => s.root.merchant
+  );
+  let today = [];
+  useEffect(() => {
+    if (!merchantByIdLoading) {
+    }
+    today = Object.entries(merchantDetails?.openingHours).filter((i) =>
+      i[0]
+        .toLocaleLowerCase()
+        .includes(moment().format("dddd").toLocaleLowerCase())
+    )[0];
+  }, [merchantByIdLoading]);
 
   return (
     <div className="w-full transition-all duration-300  ease-in grid xl:grid-cols-2 gap-5 place-items-start items-start">

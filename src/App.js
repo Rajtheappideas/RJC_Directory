@@ -10,6 +10,8 @@ import {
 import { handleGetListOfMerchants } from "./redux/MerchantSlice";
 import { handleGetOfferBanner, handleGetTestimonial } from "./redux/CmsSlice";
 import { GetToken } from "./Firebase/firebase_messaging_sw";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "./components/ErrorFallBack";
 
 const Header = lazy(() => import("./components/Header"));
 const Footer = lazy(() => import("./components/Footer"));
@@ -59,7 +61,7 @@ function App() {
   };
 
   useEffect(() => {
-    handleSetFcmToken()
+    handleSetFcmToken();
     dispatch(handleGetCategories());
     dispatch(handleGetSubCategories());
     dispatch(handleGetCountryAndCityList());
@@ -76,33 +78,35 @@ function App() {
         </div>
       }
     >
-      <BrowserRouter>
-        <Toaster />
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsConditions />} />
-          <Route path="/sign-in" element={<Signin />} />
-          <Route path="/sign-up" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/search" element={<SearchResult />} />
-          <Route path="/details/:id" element={<ItemDetails />} />
-          <Route path="/best-offers" element={<BestOffers />} />
-          <Route
-            path="/my-account"
-            element={
-              <PrivateRoute>
-                <MyAccount />
-              </PrivateRoute>
-            }
-          />
-          <Route path="/*" element={<PageNotFound />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <BrowserRouter>
+          <Toaster />
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsConditions />} />
+            <Route path="/sign-in" element={<Signin />} />
+            <Route path="/sign-up" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/search" element={<SearchResult />} />
+            <Route path="/details/:id" element={<ItemDetails />} />
+            <Route path="/best-offers" element={<BestOffers />} />
+            <Route
+              path="/my-account"
+              element={
+                <PrivateRoute>
+                  <MyAccount />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/*" element={<PageNotFound />} />
+          </Routes>
+          <Footer />
+        </BrowserRouter>
+      </ErrorBoundary>
     </Suspense>
   );
 }

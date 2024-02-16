@@ -26,7 +26,7 @@ const MapAndGallery = () => {
   };
 
   return (
-    <div className="w-full grid lg:grid-cols-2  gap-3">
+    <div className="w-full grid lg:grid-cols-2 gap-3">
       <p className="font-semibold text-3xl">Map</p>
       <p className="font-semibold text-3xl lg:block hidden">Gallery</p>
       {loadError !== undefined && isLoaded ? (
