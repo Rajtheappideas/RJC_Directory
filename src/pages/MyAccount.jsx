@@ -12,28 +12,31 @@ import MyPreferences from "../components/Myaccount/MyPreferences";
 import MyReviews from "../components/Myaccount/MyReviews";
 import Favorites from "../components/Myaccount/Favorites";
 import ChangePassword from "../components/Myaccount/ChangePassword";
-import WriteReview from "../components/WriteReview";
-import CategoryModal from "../components/Signup/CategoryModal";
-import RatingsModal from "../components/Signup/RatingsModal";
-import FoodChoiceModal from "../components/Signup/FoodChoiceModal";
+import WriteReviewModal from "../components/WriteReviewModal";
 import { AiOutlineDown } from "react-icons/ai";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { handleLogout } from "../redux/AuthSlice";
+import { handleGetPreference, handleLogout } from "../redux/AuthSlice";
+import useAbortApiCall from "../hooks/useAbortApiCall";
+import { handleGetReviews } from "../redux/ReviewSlice";
+import { handleGetFavs } from "../redux/MerchantSlice";
 
 const MyAccount = () => {
   const [activeTab, setActiveTab] = useState("account");
   const [reviewBox, setShowReviewBox] = useState(false);
-  const [showCategoryMOdal, setShowCategoryMOdal] = useState(false);
-  const [ratingModal, setRatingModal] = useState(false);
-  const [foodChoiceModal, setFoodChoiceModal] = useState(false);
+
   const [showMenu, setShowMenu] = useState(true);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { token, user } = useSelector((s) => s.root.auth);
+
+  const { abortApiCall } = useAbortApiCall();
+
   function hanldeLogoutFn() {
+    if (!window.confirm("are you sure")) return;
     toast.loading("logout...");
     setTimeout(() => {
       dispatch(handleLogout());
@@ -53,19 +56,24 @@ const MyAccount = () => {
     };
   }, [showMenu]);
 
+  useEffect(() => {
+    if (user !== null) {
+      dispatch(handleGetPreference({ token }));
+      dispatch(handleGetReviews({ token }));
+      dispatch(handleGetFavs({ token }));
+    }
+    return () => {
+      abortApiCall();
+    };
+  }, []);
+
   return (
     <>
-      {reviewBox && <WriteReview setShowReviewBox={setShowReviewBox} />}
-      {showCategoryMOdal && (
-        <CategoryModal setShowCategoryMOdal={setShowCategoryMOdal} />
-      )}
-      {ratingModal && <RatingsModal setRatingModal={setRatingModal} />}
-      {foodChoiceModal && (
-        <FoodChoiceModal setFoodChoiceModal={setFoodChoiceModal} />
-      )}
+      {reviewBox && <WriteReviewModal setShowReviewBox={setShowReviewBox} />}
+
       <div className="relative md:space-y-10 space-y-5">
         <TItleSection image={bgimage} title="My Account" />
-        <div className="xl:w-10/12 w-full flex xl:flex-row flex-col items-start gap-3 container mx-auto xl:px-0 md:px-10 px-5">
+        <div className="xl:w-10/12 w-full h-full flex xl:flex-row flex-col items-start gap-3 container mx-auto xl:px-0 md:px-10 px-5">
           {/* <div className="xl:w-10/12 w-full absolute z-0 md:top-60 top-48 left-1/2 -translate-x-1/2 flex xl:flex-row flex-col items-start gap-3 container mx-auto xl:px-0 md:px-10 px-5"> */}
           {/* tabs */}
           <div className="xl:w-3/12 w-full bg-white p-5 space-y-3 border shadow-xl">
@@ -77,7 +85,7 @@ const MyAccount = () => {
               <AiOutlineDown role="button" className="xl:hidden block" />
             </p>
             {showMenu && (
-              <ul className={`space-y-1 select-none  `}>
+              <ul className={`space-y-1 select-none`}>
                 <li
                   onClick={() => setActiveTab("account")}
                   className={`flex items-center transition-all cursor-pointer gap-3 text-lg p-3 ${
@@ -129,15 +137,9 @@ const MyAccount = () => {
             )}
           </div>
           {/* sections */}
-          <div className="xl:w-9/12 w-full bg-white p-4 border shadow-xl">
+          <div className="xl:w-9/12 w-full h-full bg-white p-4 border shadow-xl">
             {activeTab == "account" && <ManageAccount />}
-            {activeTab == "preference" && (
-              <MyPreferences
-                setFoodChoiceModal={setFoodChoiceModal}
-                setRatingModal={setRatingModal}
-                setShowCategoryMOdal={setShowCategoryMOdal}
-              />
-            )}
+            {activeTab == "preference" && <MyPreferences />}
             {activeTab == "review" && (
               <MyReviews setShowReviewBox={setShowReviewBox} />
             )}

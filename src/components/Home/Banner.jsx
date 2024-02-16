@@ -1,11 +1,10 @@
 import React from "react";
 import FindProduct from "./FindProduct";
-import Header from "../Header";
 
 const Banner = () => {
   return (
     <div className="w-full relative h-[80vh] 2xl:h-[75vh] ">
-      <div className="">
+      <div>
         <img
           src={require("../../assets/images/banner.png")}
           alt="banner"

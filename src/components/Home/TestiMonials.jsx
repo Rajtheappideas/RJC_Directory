@@ -47,12 +47,6 @@ const TestiMonials = () => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(handleGetTestimonial());
-  }, []);
-
   // console.log(data, loading);
 
   return (

@@ -10,16 +10,29 @@ import {
   FaLocationPin,
   FaSortDown,
 } from "react-icons/fa6";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { handleChangeCity } from "../redux/GlobalStates";
 
 const Header = () => {
   const [sticky, setSticky] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
+  const [activeSubcategories, setActiveSubcategories] = useState([]);
 
   const { user } = useSelector((s) => s.root.auth);
+  const {
+    categories,
+    categoryLoading,
+    subCategoryloading,
+    subCategories,
+    countryList,
+    cityList,
+    countryAndCityLoading,
+    selectedCity,
+  } = useSelector((s) => s.root.global);
 
   const location = useLocation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -44,38 +57,10 @@ const Header = () => {
     };
   }, [location]);
 
-  const categoires = [
-    "Agriculture & Farming",
-    "Appliances",
-    "Architecture & Interiors",
-    "Automobile",
-    "Bicycle",
-    "Beauty",
-    "Computers",
-    "Books & Stationery",
-    "Electrical",
-    "Restaurant",
-    "Jewelry",
-    "Machinery",
-    "Healthcare",
-    "Other Services",
-  ];
-
-  const restaurants = [
-    "All",
-    "american restaurant",
-    "asian restaurant",
-    "barbecue restaurant",
-    "breakfast restaurant",
-    "chicken restaurant",
-    "chinese restaurant",
-    "family restaurant",
-    "books & stationery",
-    "fast food restaurant",
-    "french restaurant",
-    "indian restaurant",
-    "italian restaurant",
-  ];
+  useEffect(() => {
+    if (subCategories.length > 0)
+      setActiveSubcategories(subCategories[0]?.subcategories);
+  }, [subCategoryloading]);
 
   return (
     <div
@@ -196,7 +181,8 @@ const Header = () => {
         ></div>
       )}
       {/*----------- mobile header end ------------*/}
-      {/* desk navbar */}
+
+      {/* -----------desk navbar start---------- */}
       <nav className="flex justify-between container mx-auto items-center text-sm">
         <Link
           to="/"
@@ -215,35 +201,25 @@ const Header = () => {
           <div className="w-1/2 relative group flex items-center justify-between cursor-pointer">
             <div className="flex items-center gap-2 w-full">
               <FaLocationDot className="h-6 w-6" />
-              <span className="font-medium capitalize">New York</span>
+              <span className="font-medium capitalize">{selectedCity}</span>
               <FaSortDown
                 className={`text-black ml-auto min-h-4 min-w-[1rem] mb-2 group-hover:mb-0 duration-300 group-hover:rotate-180 transition-all `}
               />
               <div className="absolute z-10 group-hover:scale-100 scale-0 transition-all origin-top bg-white min-w-[13rem] text-left ease-in-out duration-300 top-11 left-0 p-3 max-h-72 overflow-y-auto custom_scrollbar rounded-2xl shadow-2xl text-textColor space-y-2">
-                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
-                  Chicago
-                </p>
-                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
-                  Chicago
-                </p>
-                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
-                  Chicago
-                </p>
-                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
-                  Chicago
-                </p>
-                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
-                  Chicago
-                </p>
-                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
-                  Chicago
-                </p>
-                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
-                  Chicago
-                </p>
-                <p className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all">
-                  Chicago
-                </p>
+                {countryAndCityLoading ? (
+                  <span className="loading ">Loading...</span>
+                ) : (
+                  cityList.length > 0 &&
+                  cityList.map((city) => (
+                    <p
+                      key={city}
+                      className="w-full p-1 hover:bg-gray-100 hover:font-semibold transition-all"
+                      onClick={() => dispatch(handleChangeCity(city))}
+                    >
+                      {city}
+                    </p>
+                  ))
+                )}
               </div>
             </div>
           </div>
@@ -284,17 +260,21 @@ const Header = () => {
                     All Categories
                   </span>
                 </li>
-                {categoires.map((category, index) => (
-                  <li
-                    key={index}
-                    className=" hover:bg-gray-100 tracking-wide w-full flex items-center justify-between"
-                  >
-                    <span className="px-7 py-2 whitespace-nowrap">
-                      {category}
-                    </span>
-                    <FaChevronRight className="min-h-4 min-w-4 text-gray-400 font-light pr-2" />
-                  </li>
-                ))}
+                {subCategories.length > 0 &&
+                  subCategories.map((category, index) => (
+                    <li
+                      key={category?._id}
+                      className=" hover:bg-gray-100 tracking-wide w-full flex items-center justify-between"
+                      onMouseOver={() => {
+                        setActiveSubcategories(category?.subcategories);
+                      }}
+                    >
+                      <span className="px-7 py-2 whitespace-nowrap">
+                        {category?.name}
+                      </span>
+                      <FaChevronRight className="min-h-4 min-w-4 text-gray-400 font-light pr-2" />
+                    </li>
+                  ))}
               </ul>
               {/* right side */}
               <div className="space-y-2 w-1/2">
@@ -303,12 +283,12 @@ const Header = () => {
                 </span>
                 <hr />
                 <ul className="px-3">
-                  {restaurants.map((item, i) => (
+                  {activeSubcategories.map((item, i) => (
                     <li
-                      key={i}
+                      key={item?._id}
                       className="p-2 whitespace-nowrap text-gray-400 font-medium capitalize "
                     >
-                      {item}
+                      {item?.name}
                     </li>
                   ))}
                 </ul>

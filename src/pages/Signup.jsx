@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SetYourPreference from "../components/Signup/SetYourPreference";
 import SuccessModal from "../components/Signup/SuccessModal";
 import { Helmet } from "react-helmet";
@@ -19,7 +19,6 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { Country, State, City } from "country-state-city";
 import "react-phone-input-2/lib/style.css";
 import moment from "moment";
-// import moment from "moment";
 
 const Signup = () => {
   const [showPreferenceBox, setShowPreferenceBox] = useState(false);
@@ -27,10 +26,12 @@ const Signup = () => {
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [states, setStates] = useState([]);
+
+  const { loading, user } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
-
-  const { loading, error } = useSelector((state) => state.root.auth);
+  const navigate = useNavigate();
 
   const { AbortControllerRef, abortApiCall } = useAbortApiCall();
   const { signupSchema } = ValidationSchema();
@@ -80,26 +81,56 @@ const Signup = () => {
     }
   };
 
+  const selectedCountryStates = useCallback(() => {
+    const selectedCountry = Country.getAllCountries().find(
+      (c) => c.name === getValues("country")
+    );
+    const states = State.getAllStates().filter(
+      (state) => state?.countryCode === selectedCountry?.isoCode
+    );
+
+    setStates(states.sort((a, b) => a.name.localeCompare(b.name)));
+  }, []);
+
+  const selectedCountryCities = useCallback(() => {
+    const selectedState = State.getAllStates().find(
+      (c) => c.name === getValues("state")
+    );
+    const cities = City.getAllCities().filter(
+      (city) => city?.stateCode === selectedState?.isoCode
+    );
+    setCities(cities.sort((a, b) => a.name.localeCompare(b.name)));
+  }, []);
+
   useEffect(() => {
-    setCountries(Country.getAllCountries());
+    setCountries(
+      Country.getAllCountries().sort((a, b) => a.name.localeCompare(b.name))
+    );
+
     return () => {
       abortApiCall();
     };
   }, []);
 
   useEffect(() => {
-    const selectedCountry = Country.getAllCountries().find(
-      (c) => c.name === getValues("country")
-    );
-    const cities = City.getAllCities().filter(
-      (city) => city?.countryCode === selectedCountry?.isoCode
-    );
-    setCities(cities);
+    selectedCountryStates();
+    setCities([]);
   }, [watch("country")]);
+
+  useEffect(() => {
+    selectedCountryCities();
+  }, [watch("state")]);
 
   let date = moment().format("L").split("/");
   let maxDate = date.splice(date.length - 1, 1);
   maxDate = maxDate.concat(date).join("-");
+
+  useEffect(() => {
+    if (user !== null) navigate("/");
+    return () => {
+      abortApiCall();
+    };
+  }, []);
 
   return (
     <>
@@ -225,7 +256,7 @@ const Signup = () => {
                 <input
                   type="date"
                   {...register("dob")}
-                  className="input_field"
+                  className="input_field relative"
                   max={maxDate}
                 />
                 <span className="error">{errors?.dob?.message}</span>
@@ -237,30 +268,49 @@ const Signup = () => {
                 <input
                   type="date"
                   {...register("anniversary")}
-                  className="input_field"
+                  className="input_field relative"
                   max={maxDate}
                 />
                 <span className="error">{errors?.anniversary?.message}</span>
               </div>
+              <div className="space-y-1 w-full">
+                <label htmlFor="country" className="Label">
+                  Country
+                </label>
+                <select
+                  {...register("country")}
+                  name="country"
+                  id=""
+                  className="input_field"
+                >
+                  <option label="select country"></option>
+                  {countries.map((country) => (
+                    <option key={country?.name} value={country?.name}>
+                      {country?.name}
+                    </option>
+                  ))}
+                </select>
+                <span className="error">{errors?.country?.message}</span>
+              </div>
               <div className="flex items-center gap-2">
                 <div className="space-y-1 w-1/2">
-                  <label htmlFor="country" className="Label">
-                    Country
+                  <label htmlFor="state" className="Label">
+                    State
                   </label>
                   <select
-                    {...register("country")}
-                    name="country"
+                    {...register("state")}
+                    name="state"
                     id=""
                     className="input_field"
                   >
-                    <option label="select country"></option>
-                    {countries.map((country) => (
-                      <option key={country?.name} value={country?.name}>
-                        {country?.name}
+                    <option label="select state"></option>
+                    {states.map((state) => (
+                      <option key={state?.name} value={state?.name}>
+                        {state?.name}
                       </option>
                     ))}
                   </select>
-                  <span className="error">{errors?.country?.message}</span>
+                  <span className="error">{errors?.state?.message}</span>
                 </div>
                 <div className="space-y-1 w-1/2">
                   <label htmlFor="city" className="Label">
@@ -282,6 +332,7 @@ const Signup = () => {
                   <span className="error">{errors?.city?.message}</span>
                 </div>
               </div>
+
               <div className="space-y-1 relative">
                 <div className="w-full flex items-center justify-between">
                   <label htmlFor="password" className="Label">

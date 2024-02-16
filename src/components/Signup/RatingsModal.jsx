@@ -6,6 +6,7 @@ const RatingsModal = ({
   selectedRating,
 }) => {
   const [tempRating, setTempRating] = useState(null);
+
   return (
     <>
       <div
@@ -34,7 +35,7 @@ const RatingsModal = ({
               className="w-5 h-5 rounded-lg  "
               id="five"
               onChange={(e) => setTempRating("5")}
-              defaultChecked={selectedRating === "5"}
+              defaultChecked={selectedRating == "5"}
             />
           </div>
           <div className="w-full flex items-center justify-between">
@@ -44,7 +45,7 @@ const RatingsModal = ({
               name="rating"
               className="w-5 h-5 rounded-lg  "
               id="four"
-              defaultChecked={selectedRating === "4"}
+              defaultChecked={selectedRating == "4"}
               onChange={(e) => setTempRating("4")}
             />
           </div>
@@ -54,7 +55,7 @@ const RatingsModal = ({
               type="radio"
               name="rating"
               className="w-5 h-5 rounded-lg  "
-              defaultChecked={selectedRating === "3"}
+              defaultChecked={selectedRating == "3"}
               id="three"
               onChange={(e) => setTempRating("3")}
             />
@@ -66,7 +67,7 @@ const RatingsModal = ({
               name="rating"
               className="w-5 h-5 rounded-lg  "
               id="two"
-              defaultChecked={selectedRating === "2"}
+              defaultChecked={selectedRating == "2"}
               onChange={(e) => setTempRating("2")}
             />
           </div>
@@ -77,7 +78,7 @@ const RatingsModal = ({
               name="rating"
               className="w-5 h-5 rounded-lg "
               id="one"
-              defaultChecked={selectedRating === "1"}
+              defaultChecked={selectedRating == "1"}
               onChange={(e) => setTempRating("1")}
             />
           </div>

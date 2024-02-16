@@ -22,3 +22,11 @@ export const GetUrl = axios.create({
 //     "Accept-Language": language,
 //   },
 });
+export const DeleteUrl = axios.create({
+  // baseURL: "http://192.168.29.200:3000/api/",
+  baseURL: "https://rjc-directory-website.onrender.com/api/",
+  method: "DELETE",
+//   headers: {
+//     "Accept-Language": language,
+//   },
+});

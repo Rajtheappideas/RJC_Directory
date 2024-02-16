@@ -7,8 +7,15 @@ const NewLetter = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const emailRegex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!emailRegex.test(email)) {
+      toast.remove()
+      return toast.error("Enter valid email");
+    }
     setLoading(true);
     try {
       const formdata = new FormData();
@@ -18,7 +25,7 @@ const NewLetter = () => {
       setLoading(false);
       setEmail("");
     } catch (error) {
-      toast.error(error?.message);
+      toast.error(error?.response?.data?.message);
       setLoading(false);
       setEmail("");
     }

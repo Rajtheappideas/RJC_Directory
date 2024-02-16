@@ -1,29 +1,27 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleAddAndEditPreference,
+  handleGetPreference,
+} from "../../redux/AuthSlice";
+import useAbortApiCall from "../../hooks/useAbortApiCall";
 import toast from "react-hot-toast";
-import { GetUrl } from "../../BaseUrl";
 
 const CategoryModal = ({
   setShowCategoryMOdal,
   setSelectedCategories,
-  selectedCategories,
+  selectedCategories = [],
+  from,
 }) => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [tempSelectedCategories, setTempSelectedCategories] = useState([]);
 
-  const getCategories = async () => {
-    setLoading(true);
-    try {
-      const { data } = await GetUrl("category");
-      if (data?.success) {
-        setCategories(data?.categories);
-      }
-      setLoading(false);
-    } catch (error) {
-      toast.error(error?.response?.data?.message);
-      setLoading(false);
-    }
-  };
+  const { categories, categoryLoading, subCategoryloading, subCategories } =
+    useSelector((s) => s.root.global);
+
+  const { token, preferencesLoading } = useSelector((s) => s.root.auth);
+
+  const dispatch = useDispatch();
+  const { AbortControllerRef } = useAbortApiCall();
 
   const handleChange = (category) => {
     if (tempSelectedCategories.find((c) => c._id === category?._id)) {
@@ -36,8 +34,41 @@ const CategoryModal = ({
     }
   };
 
+  const handleClickOnCancel = () => {
+    setShowCategoryMOdal(false);
+    setSelectedCategories(selectedCategories);
+    // if (from === "set_your_preference") {
+    // } else {
+    // }
+  };
+
+  const handleClickOnSave = () => {
+    setShowCategoryMOdal(false);
+    setSelectedCategories(tempSelectedCategories);
+    if (from === "set_your_preference") {
+    } else {
+      // const response = dispatch(
+      //   handleAddAndEditPreference({
+      //     token,
+      //     selectedCategories: tempSelectedCategories,
+      //     signal: AbortControllerRef,
+      //   })
+      // );
+      // if (response) {
+      //   response.then((res) => {
+      //     if (res?.payload?.success) {
+      //       setShowCategoryMOdal(false);
+      //       toast.success(res?.payload?.message);
+      //       dispatch(
+      //         handleGetPreference({ token, signal: AbortControllerRef })
+      //       );
+      //     }
+      //   });
+      // }
+    }
+  };
+
   useEffect(() => {
-    getCategories();
     setTempSelectedCategories(selectedCategories);
   }, []);
 
@@ -49,7 +80,7 @@ const CategoryModal = ({
       ></div>
       <div className="bg-white p-6 rounded-lg h-auto max-h-[80%] flex flex-col overflow-hidden xl:w-1/3 md:w-1/2 w-11/12 space-y-3 fixed top-1/2 left-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
         <p className="text-left font-semibold text-2xl">Categories</p>
-        {loading ? (
+        {categoryLoading || subCategoryloading ? (
           <div className="text-center w-full font-semibold">Loading...</div>
         ) : (
           <div className="overflow-y-auto custom_scrollbar space-y-3 max-h-full px-2">
@@ -78,9 +109,9 @@ const CategoryModal = ({
         <div className="flex w-full items-center gap-3 justify-between">
           <button
             onClick={() => {
-              setShowCategoryMOdal(false);
-              setSelectedCategories(selectedCategories);
+              handleClickOnCancel();
             }}
+            disabled={preferencesLoading}
             className="darkGray_button w-1/2"
           >
             Cancel
@@ -88,11 +119,11 @@ const CategoryModal = ({
           <button
             className="green_button w-1/2"
             onClick={() => {
-              setShowCategoryMOdal(false);
-              setSelectedCategories(tempSelectedCategories);
+              handleClickOnSave();
             }}
+            disabled={preferencesLoading}
           >
-            Save
+            {preferencesLoading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>

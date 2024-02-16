@@ -11,6 +11,19 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+}
+
 body::-webkit-scrollbar {
   width: 8px;
   height: 10px;
@@ -134,4 +147,8 @@ body::-webkit-scrollbar-thumb {
 
 .error {
   @apply text-red-500 font-medium capitalize;
+}
+
+.loading{
+  @apply text-center w-full text-2xl flex items-center justify-center font-semibold
 }

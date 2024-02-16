@@ -3,24 +3,22 @@ import Bestoffer from "../components/Bestoffer";
 import Business from "../components/Home/Business";
 import NewLetter from "../components/NewLetter";
 import { Swiper, SwiperSlide } from "swiper/react";
-// import Swiper coBestoffersre and required modules
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
-// import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { Link } from "react-router-dom";
-import SingleItemBox from "../components/SingleItemBox";
 import { Autoplay, Navigation } from "swiper/modules";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { GoStarFill } from "react-icons/go";
 import { Helmet } from "react-helmet";
+import { useSelector } from "react-redux";
+import BaseUrl from "../BaseUrl";
 
 const BestOffers = () => {
-  const offers = new Array(5);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+
+  const {
+    offerBanner: { data, loading },
+  } = useSelector((s) => s.root.cms);
 
   return (
     <>
@@ -50,40 +48,40 @@ const BestOffers = () => {
             parallax={true}
             observeParents={true}
             onSwiper={(swiper) => {
-              // Delay execution for the refs to be defined
               setTimeout(() => {
-                // Override prevEl & nextEl now that refs are defined
                 swiper.params.navigation.prevEl = prevRef.current;
                 swiper.params.navigation.nextEl = nextRef.current;
-                // Re-init navigation
                 swiper.navigation.destroy();
                 swiper.navigation.init();
                 swiper.navigation.update();
               });
             }}
-            // pagination={{ clickable: true }}
           >
-            {offers.fill(5).map((item, index) => (
-              <SwiperSlide key={index}>
-                <img
-                  src={require("../assets/images/home_slider_desktop_Web-Banner-bbq-dec 1.png")}
-                  alt=""
-                  className="w-full h-80 object-cover"
-                  loading="lazy"
-                />
-                {/* <SingleItemBox data={item} boxType="grid" /> */}
-              </SwiperSlide>
-            ))}
+            {loading ? (
+              <div className="loading">Loading....</div>
+            ) : (
+              data.length > 0 &&
+              data.map((item, index) => (
+                <SwiperSlide key={index}>
+                  <img
+                    src={BaseUrl?.concat(item?.image)}
+                    alt={item?.imageAlt}
+                    className="w-screen md:h-[60vh] h-[40vh] object-fill"
+                    loading="lazy"
+                  />
+                </SwiperSlide>
+              ))
+            )}
           </Swiper>
           <div
             ref={prevRef}
-            className="absolute top-[40%] left-20 bg-white p-2 cursor-pointer shadow-lg rounded-full z-10"
+            className="absolute top-1/2 -translate-y-1/2 xl:left-20 lg:left-10 left-5 bg-white p-2 cursor-pointer shadow-lg rounded-full z-10"
           >
             <IoIosArrowBack className="text-[#007aff]" />
           </div>
           <div
             ref={nextRef}
-            className=" absolute top-[40%] right-20 bg-white shadow-lg p-2 cursor-pointer rounded-full z-20"
+            className=" absolute top-1/2 -translate-y-1/2 xl:right-20 lg:right-10 right-5 bg-white shadow-lg p-2 cursor-pointer rounded-full z-20"
           >
             <IoIosArrowForward className="text-[#007aff]" />
           </div>

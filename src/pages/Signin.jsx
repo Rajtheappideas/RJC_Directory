@@ -75,7 +75,8 @@ const Signin = () => {
       if (response) {
         response.then((res) => {
           if (res?.payload?.success) {
-            navigate("/");
+            navigate(-1);
+            window.scrollTo({ top: 0, behavior: "smooth" });
           }
         });
       }

@@ -12,10 +12,11 @@ const ValidationSchema = (isPasswordRequired) => {
         "only contain latin letters"
       ),
     country: yup.string().required("country is required"),
-    city: yup.string().required("country is required"),
+    city: yup.string().required("city is required"),
+    state: yup.string().required("state is required"),
     phone: yup.string().required("phone is required"),
     dob: yup.string().required("dob is required"),
-    anniversary: yup.string().required("anniversary is required"),
+    anniversary: yup.string(),
     email: yup.string().email().required("Email is required"),
     password: yup
       .string()
@@ -58,9 +59,9 @@ const ValidationSchema = (isPasswordRequired) => {
   });
 
   const profileSchema = yup.object({
-    fname: yup
+    name: yup
       .string()
-      .required("FirstName is required")
+      .required("Name is required")
       .trim()
       .max(60, "max character limit reached")
       .min(2, "minimum two character required")
@@ -69,35 +70,13 @@ const ValidationSchema = (isPasswordRequired) => {
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
         "only contain latin letters"
       ),
-    lname: yup
-      .string()
-      .required("LastName is required")
-      .max(60, "max character limit reached")
-      .min(2, "minimum two character required")
-      .typeError("only characters allowed")
-      .matches(
-        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "only contain latin letters"
-      ),
-    address: yup
-      .string()
-      .max(200, "maximum character limit reached")
-      .required("address is required"),
-    company: yup.string().max(200, "maximum character limit reached"),
-    civility: yup
-      .string()
-      .required("civility is required")
-      .max(60, "max character limit reached")
-      .min(2, "minimum two character required")
-      .typeError("only characters allowed"),
-    zipCode: yup
-      .string()
-      .matches(/^(?:[A-Z0-9]+([- ]?[A-Z0-9]+)*)?$/, "enter valid code")
-      .required("zipcode is required"),
+    dob: yup.string().required("Date of birth is required"),
+    photo: yup.string(),
+    anniversary: yup.string().required("Anniversary is required"),
     country: yup.string().required("country is required"),
-    city: yup.string().required("country is required"),
+    state: yup.string().required("state is required"),
+    city: yup.string().required("city is required"),
     phone: yup.string().required("phone is required"),
-    mobile: yup.string(),
   });
 
   const AddressSchema = yup.object({
@@ -116,7 +95,7 @@ const ValidationSchema = (isPasswordRequired) => {
   });
 
   const changePasswordSchema = yup.object({
-    oldPassword: yup.string().required("old password is required").trim(),
+    password: yup.string().required("password is required").trim(),
     newPassword: yup
       .string()
       .required("new password is required")

@@ -8,7 +8,6 @@ const useAbortApiCall = () => {
   const abortApiCall = () => {
     toast.remove();
     AbortControllerRef.current !== null && AbortControllerRef.current.abort();
-    // toast.error("Request Cancelled!!!");
   };
   return {
     AbortControllerRef,

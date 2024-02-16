@@ -1,5 +1,7 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { useDispatch, useSelector } from "react-redux";
+import { handleGetListOfMerchants } from "../redux/MerchantSlice";
 
 const Banner = lazy(() => import("../components/Home/Banner"));
 const Category = lazy(() => import("../components/Home/Category"));
@@ -10,6 +12,10 @@ const TestiMonials = lazy(() => import("../components/Home/TestiMonials"));
 const NewLetter = lazy(() => import("../components/NewLetter"));
 
 const Home = () => {
+  const { token } = useSelector((s) => s.root.auth);
+
+  const dispatch = useDispatch();
+
   return (
     <>
       <Helmet>

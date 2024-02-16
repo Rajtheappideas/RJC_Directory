@@ -1,74 +1,145 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { FaPhoneAlt } from "react-icons/fa";
 import { HiOutlineHeart, HiHeart } from "react-icons/hi";
 import { IoHeartOutline } from "react-icons/io5";
 import { RiHeartFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { handleAddFav, handleRemoveFav } from "../redux/MerchantSlice";
+import useAbortApiCall from "../hooks/useAbortApiCall";
+import toast from "react-hot-toast";
+import BaseUrl from "../BaseUrl";
 
 const SingleItemBox = ({ data, boxType }) => {
-  // console.log(data);
   const [isFavourite, setIsFavourite] = useState(false);
+  const [addFavLoading, setAddFavLoading] = useState(false);
+  const [removeFavLoading, setRemoveFavLoading] = useState(false);
+
+  const { token } = useSelector((s) => s.root.auth);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { AbortControllerRef } = useAbortApiCall();
+
+  const handleAddAndRemoveFav = () => {
+    if (!token) return navigate("/sign-in");
+    if (data?.isFavourite) {
+      if (removeFavLoading) return;
+      setRemoveFavLoading(true);
+      toast.loading(`${data?.name} Removing from favourites. `, {
+        id: "loading",
+      });
+      const response = dispatch(
+        handleRemoveFav({ token, id: data?._id, signal: AbortControllerRef })
+      );
+      if (response) {
+        response.then((res) => {
+          if (res?.payload?.success) {
+            toast.success(`${data?.name} Removed from favourites. `);
+            toast.remove("loading");
+            setIsFavourite((prev) => !prev);
+            setRemoveFavLoading(false);
+          } else {
+            toast.remove("loading");
+            setRemoveFavLoading(false);
+          }
+        });
+      }
+    } else {
+      if (addFavLoading) return;
+      setAddFavLoading(true);
+      toast.loading(`${data?.name} Adding to favourites. `, { id: "loading" });
+      const response = dispatch(
+        handleAddFav({ token, id: data?._id, signal: AbortControllerRef })
+      );
+      if (response) {
+        response.then((res) => {
+          if (res?.payload?.success) {
+            toast.success(`${data?.name} Added to favourites.`);
+            toast.remove("loading");
+            setIsFavourite((prev) => !prev);
+            setAddFavLoading(false);
+          } else {
+            toast.remove("loading");
+            setAddFavLoading(false);
+          }
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (data?.isFavourite) {
+      setIsFavourite(true);
+    }
+  }, []);
 
   return (
     <>
       {boxType === "grid" ? (
         <div
-          className={`w-full relative rounded-2xl border select-none bg-white shadow-[0px_3px_7px_rgba(0,0,0,0.20)]`}
+          className={`w-full relative min-h-[26rem] max-h-[26rem] rounded-2xl border select-none bg-white shadow-[0px_3px_7px_rgba(0,0,0,0.20)]`}
         >
           {/* heart icon */}
           <div
-            onClick={() => setIsFavourite(!isFavourite)}
+            onClick={() => {
+              handleAddAndRemoveFav();
+            }}
             className={`absolute top-3 right-3 ${
               isFavourite ? "bg-red-500" : " border border-white"
             } rounded-2xl p-2 cursor-pointer`}
           >
             {isFavourite ? (
-              <RiHeartFill className="text-white text-3xl" />
+              <RiHeartFill className="text-white text-3xl " />
             ) : (
               <IoHeartOutline className="text-white text-3xl" />
             )}
           </div>
-          <Link to="/details">
+          <Link to={`/details/${data?._id}`}>
             <img
-              src={require("../assets/images/business_slider/Rectangle 375 (1).png")}
+              src={BaseUrl.concat(data?.images[0])}
               alt=""
               className="object-cover w-full h-60 rounded-tl-2xl rounded-tr-2xl"
               loading="lazy"
             />
           </Link>
           <div className="space-y-3 p-3">
-            <p className="font-semibold text-left text-2xl">TAO Restaurant</p>
-            <p className="font-medium text-left text-lg text-textColor">
-              304 Kent St, New York NSW 2000. USA
+            <p className="font-semibold text-left text-2xl">{data?.name}</p>
+            <p className="font-medium text-left text-lg text-textColor line-clamp-2">
+              {data?.address}, {data?.city}. {data?.country}
             </p>
             <p className="flex items-center gap-2 font-medium text-lg text-textColor">
               <AiFillStar className="text-yellow-400 text-2xl" />
-              <span>5.0 (24)</span>
+              <span>
+                {data?.avgRating} ({data?.totalRating})
+              </span>
             </p>
           </div>
         </div>
       ) : (
         <div className="w-full flex md:flex-nowrap flex-wrap gap-3 md:justify-between justify-center items-start rounded-lg border select-none bg-bgGray p-3 md:py-5 py-3">
           {/* heart icon */}
-
           <div className="flex items-start gap-2 flex-wrap">
             <Link to="/details">
               <img
-                src={require("../assets/images/business_slider/Rectangle 375 (1).png")}
+                src={BaseUrl.concat(data?.images[0])}
                 alt=""
                 className="object-cover md:w-52 md:h-52 w-full h-44 rounded-lg"
                 loading="lazy"
               />
             </Link>
             <div className="space-y-3 p-3">
-              <p className="font-semibold text-left text-2xl">TAO Restaurant</p>
+              <p className="font-semibold text-left text-2xl">{data?.name}</p>
               <p className="font-medium text-left text-lg">
-                304 Kent St, New York NSW 2000. USA
+                {data?.address}, {data?.city}. {data?.country}
               </p>
               <p className="flex items-center gap-2 font-medium text-lg">
                 <AiFillStar className="text-yellow-400 text-xl" />
-                <span>5.0 (24)</span>
+                <span>
+                  {data?.avgRating} ({data?.totalRating})
+                </span>
               </p>
             </div>
           </div>
@@ -78,7 +149,7 @@ const SingleItemBox = ({ data, boxType }) => {
               <span>Call</span>
             </p>
             <div
-              onClick={() => setIsFavourite(!isFavourite)}
+              onClick={() => handleAddAndRemoveFav()}
               className="cursor-pointer"
             >
               {isFavourite ? (

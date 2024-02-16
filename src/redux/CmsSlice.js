@@ -15,8 +15,26 @@ export const handleGetTestimonial = createAsyncThunk(
   }
 );
 
+export const handleGetOfferBanner = createAsyncThunk(
+  "cms/handleGetOfferBanner",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await GetUrl("offer/banner");
+      return data;
+    } catch (error) {
+      toast.error(error?.message);
+      return rejectWithValue(error?.message);
+    }
+  }
+);
+
 const initialState = {
   testimonial: {
+    data: [],
+    loading: false,
+    error: null,
+  },
+  offerBanner: {
     data: [],
     loading: false,
     error: null,
@@ -41,6 +59,21 @@ const CmsSlice = createSlice({
       state.testimonial.loading = false;
       state.testimonial.data = [];
       state.testimonial.error = payload || null;
+    });
+
+    // get offer banner
+    builder.addCase(handleGetOfferBanner.pending, (state, { payload }) => {
+      state.offerBanner.loading = true;
+    });
+    builder.addCase(handleGetOfferBanner.fulfilled, (state, { payload }) => {
+      state.offerBanner.loading = false;
+      state.offerBanner.data = payload?.banner || [];
+      state.offerBanner.error = null;
+    });
+    builder.addCase(handleGetOfferBanner.rejected, (state, { payload }) => {
+      state.offerBanner.loading = false;
+      state.offerBanner.data = [];
+      state.offerBanner.error = payload || null;
     });
   },
 });
