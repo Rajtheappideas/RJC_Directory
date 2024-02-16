@@ -43,14 +43,16 @@ const ItemDetails = () => {
       {merchantByIdLoading ? (
         <div className="loading h-screen">Loading...</div>
       ) : (
-        <div className="bg-white p-10 container xl:px-0 md:px-10 px-5 mx-auto lg:space-y-14 space-y-7">
-          <ImageAndInfo />
-          <Offers />
-          <SocialMedia />
-          <MapAndGallery />
-          <Rating setShowReviewBox={setShowReviewBox} />
-          <Business />
-        </div>
+        merchantDetails !== null && (
+          <div className="bg-white p-10 container xl:px-0 md:px-10 px-5 mx-auto lg:space-y-14 space-y-7">
+            <ImageAndInfo />
+            <Offers />
+            <SocialMedia />
+            <MapAndGallery />
+            <Rating setShowReviewBox={setShowReviewBox} />
+            <Business />
+          </div>
+        )
       )}
       <NewLetter />
     </div>
