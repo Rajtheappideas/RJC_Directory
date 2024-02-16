@@ -22,8 +22,8 @@ const ValidationSchema = (isPasswordRequired) => {
       .string()
       .required("Password is required")
       .matches(
-        /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/,
-        "Minimum 8 characters, at least one special character, at least one digit"
+        /^(?=.*[0-9])(?=.*[!@#$%^&*])"[a-zA-Z0-9!@#$%^&*]{8,16}"$/,
+        "Minimum 8 characters, at least one special character (!@#$%^&*), at least one digit"
       ),
     confirmPassword: yup
       .string()
@@ -72,7 +72,7 @@ const ValidationSchema = (isPasswordRequired) => {
       ),
     dob: yup.string().required("Date of birth is required"),
     photo: yup.string(),
-    anniversary: yup.string().required("Anniversary is required"),
+    anniversary: yup.string(),
     country: yup.string().required("country is required"),
     state: yup.string().required("state is required"),
     city: yup.string().required("city is required"),

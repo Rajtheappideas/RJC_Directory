@@ -61,7 +61,7 @@ function App() {
   };
 
   useEffect(() => {
-    handleSetFcmToken();
+    // handleSetFcmToken();
     dispatch(handleGetCategories());
     dispatch(handleGetSubCategories());
     dispatch(handleGetCountryAndCityList());

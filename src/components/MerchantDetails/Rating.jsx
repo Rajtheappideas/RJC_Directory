@@ -88,7 +88,7 @@ const Rating = ({ setShowReviewBox }) => {
                 <img
                   src={BaseUrl.concat(review?.user?.photo)}
                   alt={review?.user?.name}
-                  className="h-10 w-10 rounded-full"
+                  className="h-10 w-10 rounded-full object-cover"
                 ></img>
                 <div className="space-y-1 w-full">
                   <div className="w-full flex items-center gap-2 justify-between">

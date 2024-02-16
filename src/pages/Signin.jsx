@@ -15,10 +15,12 @@ import { isValidPhoneNumber } from "react-phone-number-input";
 import toast from "react-hot-toast";
 import "react-phone-input-2/lib/style.css";
 import VerifyOtp from "../components/VerifyOtp";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 const Signin = () => {
   const [signInWithPassword, setSignInWithPassword] = useState(true);
   const [showOtpBox, setShowOtpBox] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { user, loading } = useSelector((s) => s.root.auth);
 
@@ -183,7 +185,7 @@ const Signin = () => {
                 <span className="error">{errors?.phone?.message}</span>
               </div>
               {signInWithPassword && (
-                <div className="space-y-1">
+                <div className="space-y-1 relative">
                   <div className="w-full flex items-center justify-between">
                     <label htmlFor="password" className="Label">
                       Password
@@ -193,11 +195,22 @@ const Signin = () => {
                     </Link>
                   </div>
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     className="input_field"
                     {...register("password")}
                   />
+                  {showPassword ? (
+                    <IoMdEye
+                      onClick={() => setShowPassword(false)}
+                      className="absolute top-9 right-3 h-6 w-6 cursor-pointer"
+                    />
+                  ) : (
+                    <IoMdEyeOff
+                      onClick={() => setShowPassword(true)}
+                      className="absolute top-9 right-3 h-6 w-6 cursor-pointer"
+                    />
+                  )}
                   <span className="error">{errors?.password?.message}</span>
                 </div>
               )}

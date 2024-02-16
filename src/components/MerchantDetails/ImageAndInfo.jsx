@@ -7,21 +7,22 @@ import moment from "moment";
 
 const ImageAndInfo = () => {
   const [showOpenHours, setShowOpenHours] = useState(true);
+  const [today, setToday] = useState([]);
 
   const { merchantDetails, merchantByIdLoading } = useSelector(
     (s) => s.root.merchant
   );
-  let today = [];
   useEffect(() => {
     if (!merchantByIdLoading && merchantDetails !== null) {
-      today = Object.entries(merchantDetails?.openingHours).filter((i) =>
+      let today = Object.entries(merchantDetails?.openingHours).filter((i) =>
         i[0]
           .toLocaleLowerCase()
           .includes(moment().format("dddd").toLocaleLowerCase())
       )[0];
+      setToday(today);
     }
   }, [merchantByIdLoading]);
-
+  
   return (
     <div className="w-full transition-all duration-300  ease-in grid xl:grid-cols-2 gap-5 place-items-start items-start">
       <img

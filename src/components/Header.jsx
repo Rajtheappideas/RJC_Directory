@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 import { RiMenu3Line } from "react-icons/ri";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import LogoColor from "../assets/images/headerColor.svg";
 import {
   FaChevronDown,
@@ -12,6 +12,9 @@ import {
 } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { handleChangeCity } from "../redux/GlobalStates";
+import { MdLogout } from "react-icons/md";
+import toast from "react-hot-toast";
+import { handleLogout } from "../redux/AuthSlice";
 
 const Header = () => {
   const [sticky, setSticky] = useState(false);
@@ -33,6 +36,17 @@ const Header = () => {
 
   const location = useLocation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  function hanldeLogoutFn() {
+    if (!window.confirm("are you sure")) return;
+    toast.loading("logout...");
+    setTimeout(() => {
+      dispatch(handleLogout());
+      navigate("/sign-in");
+      toast.remove();
+    }, 1000);
+  }
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -334,17 +348,25 @@ const Header = () => {
 
         <div className="hidden xl:flex gap-2">
           {user !== null ? (
-            <Link to="/my-account">
-              <button
-                type="button"
-                className={`focus:outline-none uppercase px-8 py-1.5 bg-greenColor text-white rounded-3xl hover:bg-greenColor/60 transition-all`}
-                onClick={() => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
+            <div className="relative group">
+              <Link to="/my-account">
+                <button
+                  type="button"
+                  className={`focus:outline-none uppercase px-8 py-1.5 bg-greenColor text-white rounded-3xl hover:bg-greenColor/60 transition-all`}
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                >
+                  My Account
+                </button>
+              </Link>
+              <span
+                onClick={() => hanldeLogoutFn()}
+                className="group-hover:scale-100 flex items-center justify-center cursor-pointer rounded-lg p-1 gap-2 scale-0 font-semibold transition-all duration-300 ease-in-out w-full text-center absolute top-10 z-40 left-0 bg-red-200 hover:bg-red-300"
               >
-                My Account
-              </button>
-            </Link>
+                <MdLogout className="w-6 h-6 text-red-600" /> Logout
+              </span>
+            </div>
           ) : (
             <>
               <Link to="/sign-up">
