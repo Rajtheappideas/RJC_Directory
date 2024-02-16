@@ -71,15 +71,20 @@ function App() {
   }, []);
 
   return (
-    <Suspense
-      fallback={
-        <div className="font-semibold text-4xl text-center flex items-center justify-center w-screen h-screen">
-          Loading...
-        </div>
-      }
-    >
-      <ErrorBoundary fallback={<ErrorFallback />}>
-        <BrowserRouter>
+    <BrowserRouter>
+      <Suspense
+        fallback={
+          <div className="font-semibold text-4xl text-center flex items-center justify-center w-screen h-screen">
+            Loading...
+          </div>
+        }
+      >
+        <ErrorBoundary
+          FallbackComponent={ErrorFallback}
+          onReset={() => {
+            window.location.reload();
+          }}
+        >
           <Toaster />
           <Header />
           <Routes>
@@ -105,9 +110,9 @@ function App() {
             <Route path="/*" element={<PageNotFound />} />
           </Routes>
           <Footer />
-        </BrowserRouter>
-      </ErrorBoundary>
-    </Suspense>
+        </ErrorBoundary>
+      </Suspense>
+    </BrowserRouter>
   );
 }
 
