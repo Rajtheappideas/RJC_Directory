@@ -72,7 +72,8 @@ const ImageAndInfo = () => {
         >
           <table className="md:w-2/3 w-full">
             <tbody className="w-full">
-              {!merchantByIdLoading &&
+              {!merchantByIdLoading?
+                merchantDetails?.openingHours &&
                 Object.entries(merchantDetails?.openingHours).map((day) => (
                   <tr
                     key={day[1]?._id}
@@ -91,7 +92,7 @@ const ImageAndInfo = () => {
                         : `${day[1]?.openTime} - ${day[1]?.closeTime}`}
                     </td>
                   </tr>
-                ))}
+                )):<div>Loading...</div>}
             </tbody>
           </table>
         </div>

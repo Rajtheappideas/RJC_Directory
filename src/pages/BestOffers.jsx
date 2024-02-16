@@ -63,7 +63,7 @@ const BestOffers = () => {
                   <img
                     src={BaseUrl?.concat(item?.image)}
                     alt={item?.imageAlt}
-                    className="w-screen md:h-[60vh] h-[40vh] object-fill"
+                    className="w-screen xl:h-[50vh] md:h-[60vh] h-[40vh] object-fill"
                     loading="lazy"
                   />
                 </SwiperSlide>
