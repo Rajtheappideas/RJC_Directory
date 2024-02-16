@@ -179,7 +179,7 @@ const ManageAccount = () => {
             readOnly
             {...register("email")}
             type="email"
-            className="input_field"
+            className="input_field cursor-not-allowed"
           />
           <span className="error">{errors?.email?.message}</span>
         </div>

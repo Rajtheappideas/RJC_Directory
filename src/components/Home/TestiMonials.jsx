@@ -10,29 +10,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { handleGetTestimonial } from "../../redux/CmsSlice";
 import BaseUrl from "../../BaseUrl";
-
-const testimonialData = [
-  {
-    id: 1,
-    image: require("../../assets/images/img.png"),
-    title: "Katerina Petrova",
-    des: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Tellus posuere in leo ipsum ornare hendrerit. Vitaesollicitudin consectetur ultricies nec. Sed faucibus diam,penatibus lectus accumsan pellentesque nunc, nibh. Urnaaliquam tempus faucibus dolor.",
-  },
-  {
-    id: 2,
-    image: require("../../assets/images/img.png"),
-    title: "Katerina Petrova",
-    des: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Tellus posuere in leo ipsum ornare hendrerit. Vitaesollicitudin consectetur ultricies nec. Sed faucibus diam,penatibus lectus accumsan pellentesque nunc, nibh. Urnaaliquam tempus faucibus dolor.",
-  },
-  {
-    id: 3,
-    image: require("../../assets/images/img.png"),
-    title: "Katerina Petrova",
-    des: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Tellus posuere in leo ipsum ornare hendrerit. Vitaesollicitudin consectetur ultricies nec. Sed faucibus diam,penatibus lectus accumsan pellentesque nunc, nibh. Urnaaliquam tempus faucibus dolor.",
-  },
-];
 
 const TestiMonials = () => {
   const [beginAndEnd, setBeginAndEnd] = useState({
@@ -40,14 +18,10 @@ const TestiMonials = () => {
     isBegin: true,
   });
 
-  const {
-    testimonial: { data, loading },
-  } = useSelector((s) => s.root.cms);
+  const { testimonials, testimonialLoading } = useSelector((s) => s.root.cms);
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-
-  // console.log(data, loading);
 
   return (
     <div className="container mx-auto xl:px-2 px-5 space-y-5">
@@ -58,7 +32,7 @@ const TestiMonials = () => {
           </p>
         </div>
       </div>
-      {loading ? (
+      {testimonialLoading ? (
         <div className="w-full text-center font-semibold text-2xl">
           Loading...
         </div>
@@ -121,8 +95,8 @@ const TestiMonials = () => {
               },
             }}
           >
-            {data.length > 0 &&
-              data.map((item) => (
+            {testimonials.length > 0 &&
+              testimonials.map((item) => (
                 <SwiperSlide key={item._id}>
                   <div className="border bottom-2 lg:p-14 p-3 rounded-2xl shadow-lg">
                     <div className="space-y-3 text-center">

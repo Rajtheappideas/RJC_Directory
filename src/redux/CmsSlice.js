@@ -29,16 +29,11 @@ export const handleGetOfferBanner = createAsyncThunk(
 );
 
 const initialState = {
-  testimonial: {
-    data: [],
-    loading: false,
-    error: null,
-  },
-  offerBanner: {
-    data: [],
-    loading: false,
-    error: null,
-  },
+  testimonials: [],
+  testimonialLoading: false,
+  error: null,
+  offerBanners: [],
+  offerBannerLoading: false,
 };
 
 const CmsSlice = createSlice({
@@ -48,32 +43,32 @@ const CmsSlice = createSlice({
   extraReducers: (builder) => {
     // get testimonial
     builder.addCase(handleGetTestimonial.pending, (state, { payload }) => {
-      state.testimonial.loading = true;
+      state.testimonialLoading = true;
     });
     builder.addCase(handleGetTestimonial.fulfilled, (state, { payload }) => {
-      state.testimonial.loading = false;
-      state.testimonial.data = payload?.testimonial || [];
-      state.testimonial.error = null;
+      state.testimonialLoading = false;
+      state.testimonials = payload?.testimonial || [];
+      state.error = null;
     });
     builder.addCase(handleGetTestimonial.rejected, (state, { payload }) => {
-      state.testimonial.loading = false;
-      state.testimonial.data = [];
-      state.testimonial.error = payload || null;
+      state.testimonialLoading = false;
+      state.testimonials = [];
+      state.error = payload || null;
     });
 
     // get offer banner
     builder.addCase(handleGetOfferBanner.pending, (state, { payload }) => {
-      state.offerBanner.loading = true;
+      state.offerBannerLoading = true;
     });
     builder.addCase(handleGetOfferBanner.fulfilled, (state, { payload }) => {
-      state.offerBanner.loading = false;
-      state.offerBanner.data = payload?.banner || [];
-      state.offerBanner.error = null;
+      state.offerBannerLoading = false;
+      state.offerBanners = payload?.banner || [];
+      state.error = null;
     });
     builder.addCase(handleGetOfferBanner.rejected, (state, { payload }) => {
-      state.offerBanner.loading = false;
-      state.offerBanner.data = [];
-      state.offerBanner.error = payload || null;
+      state.offerBannerLoading = false;
+      state.offerBanners = [];
+      state.error = payload || null;
     });
   },
 });

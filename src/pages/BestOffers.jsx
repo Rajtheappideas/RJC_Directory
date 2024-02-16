@@ -16,7 +16,7 @@ const BestOffers = () => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  const { offerBanner } = useSelector((s) => s.root.cms);
+  const { offerBanners, offerBannerLoading } = useSelector((s) => s.root.cms);
 
   return (
     <>
@@ -55,11 +55,10 @@ const BestOffers = () => {
               });
             }}
           >
-            {offerBanner?.loading ? (
+            {offerBannerLoading ? (
               <div className="loading">Loading....</div>
-            ) : (
-              offerBanner?.data.length > 0 &&
-              offerBanner?.data.map((item, index) => (
+            ) : offerBanners.length > 0 ? (
+              offerBanners.map((item, index) => (
                 <SwiperSlide key={index}>
                   <img
                     src={BaseUrl?.concat(item?.image)}
@@ -69,6 +68,8 @@ const BestOffers = () => {
                   />
                 </SwiperSlide>
               ))
+            ) : (
+              <div>NO banners</div>
             )}
           </Swiper>
           <div

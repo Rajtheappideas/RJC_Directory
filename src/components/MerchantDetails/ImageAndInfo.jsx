@@ -72,25 +72,26 @@ const ImageAndInfo = () => {
         >
           <table className="md:w-2/3 w-full">
             <tbody className="w-full">
-              {Object.entries(merchantDetails?.openingHours).map((day) => (
-                <tr
-                  key={day[1]?._id}
-                  className={`w-full ${
-                    day[0]
-                      ?.toLocaleLowerCase()
-                      ?.includes(moment().format("dddd").toLocaleLowerCase())
-                      ? "font-semibold text-black"
-                      : "text-textColor  text-opacity-40"
-                  } capitalize `}
-                >
-                  <td className="w-1/2">{day[0]}</td>
-                  <td>
-                    {day[1]?.isClose
-                      ? "Closed"
-                      : `${day[1]?.openTime} - ${day[1]?.closeTime}`}
-                  </td>
-                </tr>
-              ))}
+              {!merchantByIdLoading &&
+                Object.entries(merchantDetails?.openingHours).map((day) => (
+                  <tr
+                    key={day[1]?._id}
+                    className={`w-full ${
+                      day[0]
+                        ?.toLocaleLowerCase()
+                        ?.includes(moment().format("dddd").toLocaleLowerCase())
+                        ? "font-semibold text-black"
+                        : "text-textColor  text-opacity-40"
+                    } capitalize `}
+                  >
+                    <td className="w-1/2">{day[0]}</td>
+                    <td>
+                      {day[1]?.isClose
+                        ? "Closed"
+                        : `${day[1]?.openTime} - ${day[1]?.closeTime}`}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
