@@ -25,14 +25,14 @@ const LatestListing = () => {
     isBegin: true,
   });
 
-  const { merchants, merchantGetLoading } = useSelector((s) => s.root.merchant);
+  const { latestMerchantList, latestMerchantLoading } = useSelector((s) => s.root.merchant);
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
   return (
     <div className="container mx-auto xl:px-0 px-5 xl:py-20 md:py-10 py-5 space-y-5">
-      {merchantGetLoading ? (
+      {latestMerchantLoading ? (
         <div className="text-center w-screen text-3xl font-semibold">
           Loading...
         </div>
@@ -107,8 +107,8 @@ const LatestListing = () => {
                 },
               }}
             >
-              {merchants.length > 0 &&
-                merchants.slice(0, 10).map((item) => (
+              {latestMerchantList.length > 0 &&
+                latestMerchantList.map((item) => (
                   <SwiperSlide key={item._id} className="py-5 px-1">
                     <SingleItemBox data={item} boxType="grid" />
                   </SwiperSlide>

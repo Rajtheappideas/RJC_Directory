@@ -3,13 +3,19 @@ import toast, { Toaster } from "react-hot-toast";
 import { Suspense, lazy, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  handleChangeCity,
+  handleChangeState,
   handleGetCategories,
   handleGetCountryAndCityList,
   handleGetSubCategories,
 } from "./redux/GlobalStates";
-import { handleGetListOfMerchants } from "./redux/MerchantSlice";
+import {
+  handleGetLatestMerchantList,
+  handleGetListOfMerchants,
+  handleGetNearByBusinessMerchantList,
+} from "./redux/MerchantSlice";
 import { handleGetOfferBanner, handleGetTestimonial } from "./redux/CmsSlice";
-import { GetToken } from "./Firebase/firebase_messaging_sw";
+import { GetToken } from "./Firebase/firebase-messaging-sw";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./components/ErrorFallBack";
 
@@ -67,7 +73,11 @@ function App() {
     dispatch(handleGetCountryAndCityList());
     dispatch(handleGetTestimonial());
     dispatch(handleGetOfferBanner());
-    dispatch(handleGetListOfMerchants({ token }));
+    dispatch(handleGetLatestMerchantList({ token }));
+    dispatch(handleGetNearByBusinessMerchantList({ token }));
+    return () => {
+      dispatch(handleChangeState(""));
+    };
   }, []);
 
   return (

@@ -10,8 +10,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/scrollbar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BaseUrl from "../../BaseUrl";
+import { handleChangeSearchParams } from "../../redux/MerchantSlice";
+import { useNavigate } from "react-router-dom";
 
 const Category = () => {
   const [beginAndEnd, setBeginAndEnd] = useState({
@@ -23,6 +25,9 @@ const Category = () => {
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <div className="container mx-auto xl:px-0 px-5 space-y-5">
@@ -100,7 +105,17 @@ const Category = () => {
             {categories.length > 0 &&
               categories.map((item) => (
                 <SwiperSlide key={item._id}>
-                  <div className="space-y-2 w-full cursor-pointer">
+                  <div
+                    onClick={() => {
+                      dispatch(
+                        handleChangeSearchParams({
+                          category: item?._id,
+                        })
+                      );
+                      navigate("/search");
+                    }}
+                    className="space-y-2 w-full cursor-pointer"
+                  >
                     <img
                       src={BaseUrl.concat(item?.image)}
                       loading="lazy"
@@ -116,7 +131,18 @@ const Category = () => {
             {categories.length > 0 &&
               categories.map((item) => (
                 <SwiperSlide key={item._id}>
-                  <div className="space-y-2 w-full cursor-pointer">
+                  <div
+                    onClick={() => {
+                      dispatch(
+                        handleChangeSearchParams({
+                          category: item?._id,
+                        })
+                      );
+                      navigate("/search");
+                    }}
+                    className="space-y-2 w-full cursor-pointer"
+                  >
+                    {" "}
                     <img
                       src={BaseUrl.concat(item?.image)}
                       loading="lazy"

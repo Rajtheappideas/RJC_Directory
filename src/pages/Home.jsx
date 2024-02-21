@@ -1,7 +1,11 @@
 import React, { Suspense, lazy, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
-import { handleGetListOfMerchants } from "../redux/MerchantSlice";
+import {
+  handleGetLatestMerchantList,
+  handleGetListOfMerchants,
+  handleGetNearByBusinessMerchantList,
+} from "../redux/MerchantSlice";
 
 const Banner = lazy(() => import("../components/Home/Banner"));
 const Category = lazy(() => import("../components/Home/Category"));
@@ -16,12 +20,17 @@ const Home = () => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(handleGetLatestMerchantList({ token }));
+    dispatch(handleGetNearByBusinessMerchantList({ token }));
+  }, []);
+
   return (
     <>
       <Helmet>
         <title>Home - RJC Directory</title>
       </Helmet>
-      <div className="lg:space-y-24 space-y-10">
+      <div className="lg:space-y-24 md:space-y-10 space-y-5">
         <Banner />
         <Category />
         <div className="bg-bgGray w-full">

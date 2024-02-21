@@ -33,7 +33,7 @@ const TermsConditions = () => {
         <>
           <TItleSection image={terms} title={content?.title} />
           <div className="container mx-auto xl:p-0 md:px-10 px-5 w-full lg:space-y-6 space-y-3">
-            <div dangerouslySetInnerHTML={{ __html: content?.content }}></div>
+            <div dangerouslySetInnerHTML={{ __html: content?.content }} className="text-justify"></div>
           </div>
         </>
       )}

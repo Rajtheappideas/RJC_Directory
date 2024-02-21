@@ -8,7 +8,11 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ValidationSchema from "../ValidationSchema";
 import useAbortApiCall from "../hooks/useAbortApiCall";
-import { handleGetSigninOTP, handleSignin } from "../redux/AuthSlice";
+import {
+  handleGetPreference,
+  handleGetSigninOTP,
+  handleSignin,
+} from "../redux/AuthSlice";
 import PhoneInput from "react-phone-input-2";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import { isValidPhoneNumber } from "react-phone-number-input";
@@ -79,6 +83,7 @@ const Signin = () => {
           if (res?.payload?.success) {
             navigate(-1);
             window.scrollTo({ top: 0, behavior: "smooth" });
+            dispatch(handleGetPreference({ token: res?.payload?.token }));
           }
         });
       }

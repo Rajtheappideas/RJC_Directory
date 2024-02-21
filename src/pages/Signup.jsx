@@ -19,14 +19,15 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { Country, State, City } from "country-state-city";
 import "react-phone-input-2/lib/style.css";
 import moment from "moment";
+import useCountryCityState from "../hooks/useCountryCityState";
 
 const Signup = () => {
   const [showPreferenceBox, setShowPreferenceBox] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [countries, setCountries] = useState([]);
-  const [cities, setCities] = useState([]);
+  // const [countries, setCountries] = useState([]);
+  // const [cities, setCities] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [states, setStates] = useState([]);
+  // const [states, setStates] = useState([]);
 
   const { loading, user } = useSelector((state) => state.root.auth);
 
@@ -81,45 +82,50 @@ const Signup = () => {
     }
   };
 
-  const selectedCountryStates = useCallback(() => {
-    const selectedCountry = Country.getAllCountries().find(
-      (c) => c.name === getValues("country")
-    );
-    const states = State.getAllStates().filter(
-      (state) => state?.countryCode === selectedCountry?.isoCode
-    );
+  // const selectedCountryStates = useCallback(() => {
+  //   const selectedCountry = Country.getAllCountries().find(
+  //     (c) => c.name === getValues("country")
+  //   );
+  //   const states = State.getAllStates().filter(
+  //     (state) => state?.countryCode === selectedCountry?.isoCode
+  //   );
 
-    setStates(states.sort((a, b) => a.name.localeCompare(b.name)));
-  }, []);
+  //   setStates(states.sort((a, b) => a.name.localeCompare(b.name)));
+  // }, []);
 
-  const selectedCountryCities = useCallback(() => {
-    const selectedState = State.getAllStates().find(
-      (c) => c.name === getValues("state")
-    );
-    const cities = City.getAllCities().filter(
-      (city) => city?.stateCode === selectedState?.isoCode
-    );
-    setCities(cities.sort((a, b) => a.name.localeCompare(b.name)));
-  }, []);
+  // const selectedCountryCities = useCallback(() => {
+  //   const selectedState = State.getAllStates().find(
+  //     (c) => c.name === getValues("state")
+  //   );
+  //   const cities = City.getAllCities().filter(
+  //     (city) => city?.stateCode === selectedState?.isoCode
+  //   );
+  //   setCities(cities.sort((a, b) => a.name.localeCompare(b.name)));
+  // }, []);
+
+  const { cities, countries, states } = useCountryCityState({
+    selectedCountry: getValues("country"),
+    selectedState: getValues("state"),
+  });
 
   useEffect(() => {
-    setCountries(
-      Country.getAllCountries().sort((a, b) => a.name.localeCompare(b.name))
-    );
+    // setCountries(
+    //   Country.getAllCountries().sort((a, b) => a.name.localeCompare(b.name))
+    // );
 
     return () => {
       abortApiCall();
     };
   }, []);
 
-  useEffect(() => {
-    selectedCountryStates();
-    setCities([]);
-  }, [watch("country")]);
+  // useEffect(() => {
+  //   selectedCountryStates();
+  //   setCities([]);
+  // }, [watch("country")]);
 
-  useEffect(() => {
-    selectedCountryCities();
-  }, [watch("state")]);
+  // useEffect(() => {
+  //   selectedCountryCities();
+  // }, [watch("state")]);
 
   let date = moment().format("L").split("/");
   let maxDate = date.splice(date.length - 1, 1);

@@ -59,8 +59,8 @@ const ChangePassword = () => {
       onSubmit={handleSubmit(handleOnSubmit)}
       className="lg:space-y-6 space-y-3"
     >
-      <p className="font-semibold text-2xl">Change Password</p>
-      <div className="space-y-1 w-1/2 relative">
+      <p className="font-semibold md:text-2xl text-xl">Change Password</p>
+      <div className="space-y-1 lg:w-1/2 relative">
         <label htmlFor="currentPassword" className="Label">
           Current password*
         </label>
@@ -78,7 +78,7 @@ const ChangePassword = () => {
         </span>
         <span className="error">{errors?.password?.message}</span>
       </div>
-      <div className="space-y-1 w-1/2 relative">
+      <div className="space-y-1 lg:w-1/2 relative">
         <label htmlFor="newPassword" className="Label">
           new password*
         </label>
@@ -97,7 +97,7 @@ const ChangePassword = () => {
         <span className="error">{errors?.newPassword?.message}</span>
       </div>
 
-      <div className="space-y-1 w-1/2 relative">
+      <div className="space-y-1 lg:w-1/2 relative">
         <label htmlFor="confirmPassword" className="Label">
           confirm password*
         </label>

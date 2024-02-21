@@ -27,8 +27,8 @@ const MapAndGallery = () => {
 
   return (
     <div className="w-full grid lg:grid-cols-2 gap-3">
-      <p className="font-semibold text-3xl">Map</p>
-      <p className="font-semibold text-3xl lg:block hidden">Gallery</p>
+      <p className="font-semibold md:text-3xl text-xl">Map</p>
+      <p className="font-semibold md:text-3xl text-xl lg:block hidden">Gallery</p>
       {loadError !== undefined && isLoaded ? (
         <div className="w-full text-center text-2xl font-semibold p-4 mx-auto text-red-500">
           {loadError.message}
@@ -76,7 +76,7 @@ const MapAndGallery = () => {
           className="w-full h-full rounded-2xl"
         />
       </div> */}
-      <p className="font-semibold text-3xl lg:hidden">Gallery</p>
+      <p className="font-semibold md:text-3xl text-xl lg:hidden">Gallery</p>
       <div
         className={`w-full h-full grid lg:grid-rows-2 grid-rows-${
           merchantDetails?.images?.length >= 4 ? "2" : "1"

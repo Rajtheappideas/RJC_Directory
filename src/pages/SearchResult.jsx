@@ -1,5 +1,10 @@
 import React, { lazy, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleChangeSearchParams,
+  handleGetListOfMerchants,
+} from "../redux/MerchantSlice";
+import { useNavigate } from "react-router-dom";
 
 const Filters = lazy(() => import("../components/Search/Filters"));
 const Results = lazy(() => import("../components/Search/Results"));
@@ -9,35 +14,54 @@ const Business = lazy(() => import("../components/Home/Business"));
 const SearchResult = () => {
   const [boxType, setBoxType] = useState("grid");
 
-  const { allData, loading } = useSelector((s) => s.root.merchant);
+  const { allData, merchants, loading, searchParams } = useSelector(
+    (s) => s.root.merchant
+  );
+
+  const { user, token } = useSelector((s) => s.root.auth);
   // console.log(allData);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  function handleSearchMerchants() {
+    dispatch(handleGetListOfMerchants({ ...searchParams, token }));
+  }
+
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    handleSearchMerchants();
+    // window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [searchParams]);
+
+  useEffect(() => {
+    dispatch(
+      handleChangeSearchParams({
+        page: 1,
+      })
+    );
+    return () => dispatch(handleChangeSearchParams({ state: "", name: "" }));
   }, []);
 
   return (
-    <div>
+    <div className="w-full">
       <div className="bg-white container xl:px-0 md:px-10 px-5 mx-auto lg:space-y-8 space-y-5">
         <div>
-          <p className="font-bold text-blue-800 text-2xl">
+          {/* <p className="font-bold text-blue-800 text-2xl">
             Search result “Restaurant in New York”
-          </p>
+          </p> */}
           <p className="text-textColor text-lg font-medium opacity-50">
-            45 results found
+            {allData?.totalMerchantCount} results found
           </p>
         </div>
-        <div className="flex w-full xl:flex-row flex-col items-start gap-5">
-          {/* filters */}
+        <div className="flex w-full h-full xl:flex-row flex-col items-start gap-5">
           <Filters />
-          {/* results */}
           <Results setBoxType={setBoxType} boxType={boxType} />
         </div>
         <div className="pt-10">
           <Business />
         </div>
       </div>
-      <div className="pt-10">
+      <div className="md:pt-10 pt-3">
         <NewLetter />
       </div>
     </div>

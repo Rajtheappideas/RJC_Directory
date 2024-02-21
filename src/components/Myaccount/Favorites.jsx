@@ -5,8 +5,8 @@ import { useSelector } from "react-redux";
 const Favorites = () => {
   const { favourites, favGetloading } = useSelector((s) => s.root.merchant);
   return (
-    <div className="lg:space-y-6 space-y-3 ">
-      <p className="font-semibold text-2xl">Favorites</p>
+    <div className="lg:space-y-6 space-y-3">
+      <p className="font-semibold md:text-2xl text-xl">Favorites</p>
       <div className="w-full grid custom_scrollbar py-5 lg:grid-cols-3 md:grid-cols-2 gap-3 ">
         {favGetloading ? (
           <div className="loading">Loading...</div>

@@ -15,7 +15,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 // import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import SingleItemBox from "../SingleItemBox";
 import { useSelector } from "react-redux";
 
@@ -68,14 +68,20 @@ const Business = () => {
     isBegin: true,
   });
 
-  const { merchants, merchantGetLoading } = useSelector((s) => s.root.merchant);
+  const { nearByBusinessMerchantList, nearByBusinessMerchantLoading } =
+    useSelector((s) => s.root.merchant);
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
+  const { pathname } = useLocation();
   return (
-    <div className="container mx-auto space-y-5 xl:px-0 px-5 lg:py-10 ">
-      {merchantGetLoading ? (
+    <div
+      className={`container mx-auto space-y-5 xl:px-0 ${
+        pathname.split("/")[1] === "" && "px-5"
+      } lg:py-10`}
+    >
+      {nearByBusinessMerchantLoading ? (
         <div className="text-center w-screen text-3xl font-semibold">
           Loading...
         </div>
@@ -151,8 +157,8 @@ const Business = () => {
                 },
               }}
             >
-              {merchants.length > 0 &&
-                merchants.slice(0, 10).map((item) => (
+              {nearByBusinessMerchantList.length > 0 &&
+                nearByBusinessMerchantList.slice(0, 10).map((item) => (
                   <SwiperSlide key={item._id} className="py-5 px-1">
                     <SingleItemBox data={item} boxType="grid" />
                   </SwiperSlide>

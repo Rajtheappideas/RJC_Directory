@@ -79,7 +79,7 @@ const MyAccount = () => {
           <div className="xl:w-3/12 w-full bg-white p-5 space-y-3 border shadow-xl">
             <p
               onClick={() => setShowMenu(!showMenu)}
-              className="font-semibold text-2xl w-full flex items-center justify-between"
+              className="font-semibold md:text-2xl w-full flex items-center justify-between"
             >
               <span>Main menu</span>
               <AiOutlineDown role="button" className="xl:hidden block" />
@@ -88,50 +88,50 @@ const MyAccount = () => {
               <ul className={`space-y-1 select-none`}>
                 <li
                   onClick={() => setActiveTab("account")}
-                  className={`flex items-center transition-all cursor-pointer gap-3 text-lg p-3 ${
-                    activeTab === "account" && "bg-blueColor/10"
-                  } hover:bg-blueColor/10`}
+                  className={`flex items-center transition-all cursor-pointer gap-3 md:text-lg md:p-3 p-1 ${
+                    activeTab === "account" && "bg-blueColor/10 font-semibold"
+                  } hover:bg-blueColor/10 hover:font-semibold`}
                 >
-                  <LiaUserCircleSolid className="w-10 h-10" /> Manage Account
+                  <LiaUserCircleSolid className="md:w-10 md:h-10 h-7 w-7" /> Manage Account
                 </li>
                 <li
                   onClick={() => setActiveTab("preference")}
-                  className={`flex items-center transition-all cursor-pointer gap-3 text-lg p-3 ${
-                    activeTab === "preference" && "bg-blueColor/10"
-                  } hover:bg-blueColor/10`}
+                  className={`flex items-center transition-all cursor-pointer gap-3 md:text-lg md:p-3 p-1 ${
+                    activeTab === "preference" && "bg-blueColor/10 font-semibold"
+                  } hover:bg-blueColor/10 hover:font-semibold`}
                 >
-                  <GiSettingsKnobs className="w-8 h-8 rotate-90" /> My
+                  <GiSettingsKnobs className="md:w-8 md:h-8 h-6 w-6 rotate-90" /> My
                   Preferences
                 </li>
                 <li
                   onClick={() => setActiveTab("review")}
-                  className={`flex items-center transition-all cursor-pointer gap-3 text-lg p-3 ${
-                    activeTab === "review" && "bg-blueColor/10"
-                  } hover:bg-blueColor/10`}
+                  className={`flex items-center transition-all cursor-pointer gap-3 md:text-lg md:p-3 p-1 ${
+                    activeTab === "review" && "bg-blueColor/10 font-semibold"
+                  } hover:bg-blueColor/10 hover:font-semibold`}
                 >
-                  <PiChatCenteredDotsThin className="w-8 h-8" /> My Reviews
+                  <PiChatCenteredDotsThin className="md:w-8 w-6 md:h-8 h-6" /> My Reviews
                 </li>
                 <li
                   onClick={() => setActiveTab("favorite")}
-                  className={`flex items-center transition-all cursor-pointer gap-3 text-lg p-3 ${
-                    activeTab === "favorite" && "bg-blueColor/10"
-                  } hover:bg-blueColor/10`}
+                  className={`flex items-center transition-all cursor-pointer gap-3 md:text-lg md:p-3 p-1 ${
+                    activeTab === "favorite" && "bg-blueColor/10 font-semibold"
+                  } hover:bg-blueColor/10 hover:font-semibold`}
                 >
-                  <PiHeartStraightThin className="w-8 h-8" /> Favorites
+                  <PiHeartStraightThin className="md:w-8 w-6 md:h-8 h-6" /> Favorites
                 </li>
                 <li
                   onClick={() => setActiveTab("password")}
-                  className={`flex items-center transition-all cursor-pointer gap-3 text-lg p-3 ${
-                    activeTab === "password" && "bg-blueColor/10"
-                  } hover:bg-blueColor/10`}
+                  className={`flex items-center transition-all cursor-pointer gap-3 md:text-lg md:p-3 p-1 ${
+                    activeTab === "password" && "bg-blueColor/10 font-semibold"
+                  } hover:bg-blueColor/10 hover:font-semibold`}
                 >
-                  <CiLock className="w-8 h-8" /> Change Password
+                  <CiLock className="md:w-8 w-6 md:h-8 h-6" /> Change Password
                 </li>
                 <li
-                  className={`flex items-center transition-all cursor-pointer gap-3 text-red-500 text-lg p-3 hover:bg-red-500/10`}
+                  className={`flex items-center transition-all cursor-pointer gap-3 text-red-500 md:text-lg md:p-3 p-1 hover:bg-red-500/10`}
                   onClick={() => hanldeLogoutFn()}
                 >
-                  <MdLogout className="w-8 h-8" /> Logout
+                  <MdLogout className="md:w-8 w-6 md:h-8 h-6" /> Logout
                 </li>
               </ul>
             )}

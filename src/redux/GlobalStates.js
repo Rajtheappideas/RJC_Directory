@@ -30,7 +30,20 @@ export const handleGetCountryAndCityList = createAsyncThunk(
   "global/handleGetCountryAndCityList",
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await GetUrl("city");
+      const { data } = await GetUrl("country");
+      return data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const handleGetAutocompleteName = createAsyncThunk(
+  "global/handleGetAutocompleteName",
+  async ({ query }, { rejectWithValue }) => {
+    try {
+      const { data } = await GetUrl(`autocomplete?name=${query}`);
       return data;
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -47,8 +60,12 @@ const initialState = {
   error: null,
   countryList: [],
   cityList: [],
+  stateList: [],
   countryAndCityLoading: false,
   selectedCity: "",
+  selectedState: "",
+  merchantName: [],
+  autoCompleteLoading: false,
 };
 
 const GlobalStates = createSlice({
@@ -57,6 +74,12 @@ const GlobalStates = createSlice({
   reducers: {
     handleChangeCity: (state, { payload }) => {
       state.selectedCity = payload ?? "";
+    },
+    handleChangeState: (state, { payload }) => {
+      state.selectedState = payload ?? "";
+    },
+    handleClearMerchantName: (state, { payload }) => {
+      state.merchantName = payload;
     },
   },
   extraReducers: (builder) => {
@@ -99,21 +122,43 @@ const GlobalStates = createSlice({
       })
       .addCase(handleGetCountryAndCityList.fulfilled, (state, { payload }) => {
         state.countryAndCityLoading = false;
-        state.countryList = payload?.countryList ?? [];
-        state.cityList = payload?.cityList ?? [];
-        state.selectedCity = payload?.cityList[0] ?? "";
+        state.countryList = payload?.data ?? [];
+        for (const key in payload?.data) {
+          payload?.data[key].states.map((s) => state.cityList.push(s.cities));
+        }
+        for (const key in payload?.data) {
+          payload?.data[key].states.map((s) => state.stateList.push(s.state));
+        }
         state.error = null;
       })
       .addCase(handleGetCountryAndCityList.rejected, (state, { payload }) => {
         state.countryAndCityLoading = false;
         state.countryList = [];
         state.cityList = [];
+        state.stateList = [];
         state.selectedCity = "";
+        state.error = payload ?? null;
+      });
+
+    // get auto complete merchant name
+    builder
+      .addCase(handleGetAutocompleteName.pending, (state, { payload }) => {
+        state.autoCompleteLoading = true;
+      })
+      .addCase(handleGetAutocompleteName.fulfilled, (state, { payload }) => {
+        state.autoCompleteLoading = false;
+        state.merchantName = payload?.merchantName ?? [];
+        state.error = null;
+      })
+      .addCase(handleGetAutocompleteName.rejected, (state, { payload }) => {
+        state.autoCompleteLoading = false;
+        state.merchantName = [];
         state.error = payload ?? null;
       });
   },
 });
 
-export const { handleChangeCity } = GlobalStates.actions;
+export const { handleChangeCity, handleChangeState, handleClearMerchantName } =
+  GlobalStates.actions;
 
 export default GlobalStates.reducer;

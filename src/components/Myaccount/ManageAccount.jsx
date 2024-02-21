@@ -34,9 +34,11 @@ const ManageAccount = () => {
     setValue,
     control,
     watch,
+    setError,
     formState: { errors },
   } = useForm({
     shouldFocusError: true,
+    // reValidateMode: "onChange" || "onSubmit" || "onBlur",
     resolver: yupResolver(profileSchema),
     defaultValues: {
       name: user?.name,
@@ -52,15 +54,15 @@ const ManageAccount = () => {
   });
 
   const handleOnSubmit = (data) => {
-    const { dob, anniversary, country, city, name } = data;
+    const { dob, anniversary, state, country, city, name } = data;
 
     const response = dispatch(
       handleEditProfile({
         dob,
         anniversary,
-        country,
         city,
         name,
+        state,
         image: profileImage,
         token,
         signal: AbortControllerRef,
@@ -86,33 +88,48 @@ const ManageAccount = () => {
     setStates(states.sort((a, b) => a.name.localeCompare(b.name)));
   }, []);
 
-  const selectedCountryCities = useCallback(() => {
+  const selectedStateCities = useCallback(() => {
     const selectedState = State.getAllStates().find(
       (c) => c.name === getValues("state")
     );
     const cities = City.getAllCities().filter(
       (city) => city?.stateCode === selectedState?.isoCode
     );
+    if (user?.state === getValues("state")) {
+      setValue("city", user?.city, {
+        shouldDirty: false,
+        shouldTouch: false,
+        shouldValidate: false,
+      });
+      setError("city", { type: "validate" });
+    } else {
+      setValue("city", "", {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      });
+    }
     setCities(cities.sort((a, b) => a.name.localeCompare(b.name)));
   }, []);
 
   useEffect(() => {
-    setCountries(
-      Country.getAllCountries().sort((a, b) => a.name.localeCompare(b.name))
-    );
+    // setCountries(
+    //   Country.getAllCountries().sort((a, b) => a.name.localeCompare(b.name))
+    // );
+    
+    selectedCountryStates();
 
     return () => {
       abortApiCall();
     };
   }, []);
 
-  useEffect(() => {
-    selectedCountryStates();
-    setCities([]);
-  }, [watch("country")]);
+  // useEffect(() => {
+  //   selectedCountryStates();
+  // }, [watch("country")]);
 
   useEffect(() => {
-    selectedCountryCities();
+    selectedStateCities();
   }, [watch("state")]);
 
   let date = moment().format("L").split("/");
@@ -125,9 +142,11 @@ const ManageAccount = () => {
     new Blob(binaryData, { type: "application/zip" })
   );
 
+  // console.log(cities)
+
   return (
     <div className="lg:space-y-6 space-y-3">
-      <p className="font-semibold text-2xl">Manage Account</p>
+      <p className="font-semibold md:text-2xl text-xl">Manage Account</p>
       <form
         onSubmit={handleSubmit(handleOnSubmit)}
         className="w-full grid lg:grid-cols-2 gap-3"
@@ -253,7 +272,14 @@ const ManageAccount = () => {
           <label htmlFor="country" className="Label">
             country
           </label>
-          <select
+          <input
+            type="text"
+            disabled
+            readOnly
+            className="input_field cursor-not-allowed"
+            value={getValues("country")}
+          />
+          {/* <select
             {...register("country")}
             name="country"
             id=""
@@ -269,7 +295,7 @@ const ManageAccount = () => {
                 {country?.name}
               </option>
             ))}
-          </select>
+          </select> */}
           <span className="error">{errors?.country?.message}</span>
         </div>
         <div className="w-full ">

@@ -54,11 +54,11 @@ const Rating = ({ setShowReviewBox }) => {
 
   return (
     <div className="space-y-3 w-full overflow-y-auto">
-      <p className="font-semibold text-3xl">Rating and reviews</p>
+      <p className="font-semibold md:text-3xl text-xl">Rating and reviews</p>
 
       <div className="w-full items-center flex justify-between">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-5xl">
+          <span className="font-semibold md:text-5xl text-2xl">
             {merchantDetails?.avgRating}
           </span>
           <AiFillStar className="text-yellow-500  text-3xl" />
@@ -88,7 +88,7 @@ const Rating = ({ setShowReviewBox }) => {
                 <img
                   src={BaseUrl.concat(review?.user?.photo)}
                   alt={review?.user?.name}
-                  className="h-10 w-10 rounded-full object-cover"
+                  className="md:h-10 h-6 md:w-10 w-6 rounded-full object-cover"
                 ></img>
                 <div className="space-y-1 w-full">
                   <div className="w-full flex items-center gap-2 justify-between">
@@ -100,7 +100,8 @@ const Rating = ({ setShowReviewBox }) => {
                         {moment(review?.createdAt).fromNow()}
                       </p>
                     </div>
-                    <div className="flex items-center flex-wrap gap-2 flex-initial">
+                  
+                    <div className="flex items-center flex-wrap md:gap-2 gap-1 flex-initial">
                       {new Array(review?.rating).fill("").map((rate, i) => (
                         <AiFillStar
                           key={i}

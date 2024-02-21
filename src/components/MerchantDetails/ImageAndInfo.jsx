@@ -24,7 +24,7 @@ const ImageAndInfo = () => {
   }, [merchantByIdLoading]);
   
   return (
-    <div className="w-full transition-all duration-300  ease-in grid xl:grid-cols-2 gap-5 place-items-start items-start">
+    <div className="w-full transition-all duration-300  ease-in grid xl:grid-cols-2 md:gap-5 gap-3 place-items-start items-start">
       <img
         src={BaseUrl.concat(merchantDetails?.images[0])}
         alt=""
@@ -32,7 +32,7 @@ const ImageAndInfo = () => {
         loading="lazy"
       />
       <div className="space-y-3 w-full">
-        <p className="font-semibold md:text-5xl text-3xl">
+        <p className="font-semibold md:text-5xl text-2xl">
           {merchantDetails?.name}
         </p>
         <p className="text-blueColor flex flex-wrap items-center text-left text-lg">

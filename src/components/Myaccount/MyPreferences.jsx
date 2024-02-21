@@ -78,7 +78,7 @@ const MyPreferences = ({}) => {
         <div className="loading">Loading...</div>
       ) : (
         <div className="lg:space-y-6 space-y-3 overflow-y-auto">
-          <p className="font-semibold text-2xl ">My Preferences</p>
+          <p className="font-semibold md:text-2xl text-xl">My Preferences</p>
           <div className="w-full grid lg:grid-cols-2 gap-5">
             <div className="space-y-1 w-full relative">
               <label htmlFor="category" className="Label">

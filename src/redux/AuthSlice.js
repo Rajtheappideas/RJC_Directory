@@ -39,7 +39,7 @@ export const handleSignin = createAsyncThunk(
 
     formData.append("phone", phone);
     formData.append("password", password);
-    formData.append("fcm", "test");
+    formData.append("fcmToken", "test");
 
     try {
       const { data } = await PostUrl("login", {
@@ -197,7 +197,7 @@ export const handleResetPassword = createAsyncThunk(
 export const handleEditProfile = createAsyncThunk(
   "auth/handleEditProfile",
   async (
-    { token, dob, anniversary, country, city, name, image, signal },
+    { token, dob, anniversary, state,city, name, image, signal },
     { rejectWithValue }
   ) => {
     signal.current = new AbortController();
@@ -205,8 +205,8 @@ export const handleEditProfile = createAsyncThunk(
 
     formData.append("dob", dob);
     formData.append("anniversary", anniversary);
-    formData.append("country", country);
     formData.append("city", city);
+    formData.append("state", state);
     formData.append("name", name);
     formData.append("photo", image);
 

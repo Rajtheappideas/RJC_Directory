@@ -10,7 +10,7 @@ import MerchantSlice from "./MerchantSlice";
 const rootPersistConfig = {
   key: "root",
   storage,
-  blacklist: ["auth"],
+  whitelist: [""],
 };
 const authPersistConfig = {
   key: "auth",

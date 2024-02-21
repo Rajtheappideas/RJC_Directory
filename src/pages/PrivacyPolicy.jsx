@@ -36,7 +36,7 @@ const PrivacyPolicy = () => {
             <p className="text-2xl font-semibold capitalize">
               {content?.title}
             </p>
-            <div dangerouslySetInnerHTML={{ __html: content?.content }}></div>
+            <div dangerouslySetInnerHTML={{ __html: content?.content }} className="text-justify"></div>
             {/* <p className="text-textColor tracking-wide">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum esse
           nostrum a eaque consequatur, nulla provident libero. Repellendus

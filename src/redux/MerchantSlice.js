@@ -11,25 +11,30 @@ export const handleGetListOfMerchants = createAsyncThunk(
       limit,
       name,
       city,
-      coutry,
+      country,
       category,
+      state,
       subcategory,
       MyPreferences,
       sortBy,
+      rating,
     },
     { rejectWithValue }
   ) => {
     const formData = new FormData();
 
-    formData.append("page", 1);
-    formData.append("limit", 25);
-    //     formData.append("name", name);
-    //     formData.append("city", city);
-    //     formData.append("category", category);
-    //     formData.append("coutry", coutry);
-    //     formData.append("subcategory", subcategory);
-    formData.append("MyPreferences", "off");
-    //     formData.append("sortBy", "ratingHighToLow");
+    formData.append("rating", JSON.stringify(rating));
+    formData.append("page", page ?? 1);
+    formData.append("limit", limit ?? 10);
+    formData.append("name", name ?? "");
+    formData.append("city", city === "All" ? " " : city ?? "");
+    formData.append("category", category ?? "");
+    formData.append("country", country ?? "");
+    formData.append("state", state ?? "");
+    formData.append("subcategory", subcategory ?? "");
+    formData.append("MyPreferences", MyPreferences ?? "off");
+    formData.append("sortBy", sortBy ?? "newest");
+
     try {
       const { data } = await PostUrl("merchant", {
         data: formData,
@@ -38,6 +43,38 @@ export const handleGetListOfMerchants = createAsyncThunk(
           "Content-Type": "multipart/form-data",
         },
       });
+      return data;
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message);
+      }
+      rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const handleGetNearByBusinessMerchantList = createAsyncThunk(
+  "merchant/handleGetNearByBusinessMerchantList",
+  async ({ token }, { rejectWithValue }) => {
+    try {
+      const { data } = await GetUrl(`business/merchant`, {
+        headers: { Authorization: token },
+      });
+      return data;
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message);
+      }
+      rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const handleGetLatestMerchantList = createAsyncThunk(
+  "merchant/handleGetLatestMerchantList",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await GetUrl(`latest/merchant`);
       return data;
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -149,12 +186,41 @@ const initialState = {
   favourites: [],
   merchantDetails: null,
   merchantByIdLoading: false,
+  latestMerchantList: [],
+  nearByBusinessMerchantList: [],
+  latestMerchantLoading: false,
+  nearByBusinessMerchantLoading: false,
+  searchParams: {
+    name: "",
+    page: "1",
+    limit: "10",
+    city: "",
+    country: "",
+    state: "",
+    category: "",
+    subcategory: "",
+    MyPreferences: "off",
+    sortBy: "ratingHighToLow",
+    rating: [],
+  },
 };
 
 const MerchantSlice = createSlice({
   name: "merchant",
   initialState,
-  reducers: {},
+  reducers: {
+    handleChangeSearchParams: (state, { payload }) => {
+      let params = {};
+      for (const key in state.searchParams) {
+        if (Object.keys(payload).includes(key)) {
+          params[key] = payload[key];
+        } else {
+          params[key] = state.searchParams[key];
+        }
+      }
+      state.searchParams = params;
+    },
+  },
   extraReducers: (builder) => {
     // get merchats list
     builder
@@ -171,6 +237,38 @@ const MerchantSlice = createSlice({
         state.merchantGetLoading = false;
         state.merchants = [];
         state.allData = null;
+        state.error = payload ?? null;
+      });
+
+    // get near by business merchats list
+    builder
+      .addCase(handleGetNearByBusinessMerchantList.pending, (state, { payload }) => {
+        state.nearByBusinessMerchantLoading = true;
+      })
+      .addCase(handleGetNearByBusinessMerchantList.fulfilled, (state, { payload }) => {
+        state.nearByBusinessMerchantLoading = false;
+        state.nearByBusinessMerchantList = payload?.merchants ?? [];
+        state.error = null;
+      })
+      .addCase(handleGetNearByBusinessMerchantList.rejected, (state, { payload }) => {
+        state.nearByBusinessMerchantLoading = false;
+        state.nearByBusinessMerchantList = [];
+        state.error = payload ?? null;
+      });
+
+    // get latest merchats list
+    builder
+      .addCase(handleGetLatestMerchantList.pending, (state, { payload }) => {
+        state.latestMerchantLoading = true;
+      })
+      .addCase(handleGetLatestMerchantList.fulfilled, (state, { payload }) => {
+        state.latestMerchantLoading = false;
+        state.latestMerchantList = payload?.merchants ?? [];
+        state.error = null;
+      })
+      .addCase(handleGetLatestMerchantList.rejected, (state, { payload }) => {
+        state.latestMerchantLoading = false;
+        state.merchants = [];
         state.error = payload ?? null;
       });
 
@@ -295,6 +393,6 @@ const MerchantSlice = createSlice({
   },
 });
 
-export const {} = MerchantSlice.actions;
+export const { handleChangeSearchParams } = MerchantSlice.actions;
 
 export default MerchantSlice.reducer;

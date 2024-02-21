@@ -85,7 +85,7 @@ const BestOffers = () => {
             <IoIosArrowForward className="text-[#007aff]" />
           </div>
         </div>
-        <div className="container md:py-10 py-5 w-full mx-auto xl:px-0 md:px-10 px-5 lg:space-y-14 space-y-7">
+        <div className="container md:py-10 py-5 w-full mx-auto xl:px-0 md:px-10 px-5 lg:space-y-14 md:space-y-7 space-y-4">
           <Bestoffer />
           <Business />
         </div>

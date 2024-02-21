@@ -37,7 +37,7 @@ const Bestoffer = () => {
   }, []);
 
   return (
-    <div className="container mx-auto space-y-5 xl:px-0 px-5 lg:py-10 ">
+    <div className="container mx-auto space-y-5 xl:px-0 md:px-5 lg:py-10 ">
       {bestOfferLoading ? (
         <div className="text-center w-screen text-3xl font-semibold">
           Loading...

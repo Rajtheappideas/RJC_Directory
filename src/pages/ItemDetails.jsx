@@ -44,7 +44,7 @@ const ItemDetails = () => {
         <div className="loading h-screen">Loading...</div>
       ) : (
         merchantDetails !== null && (
-          <div className="bg-white p-10 container xl:px-0 md:px-10 px-5 mx-auto lg:space-y-14 space-y-7">
+          <div className="bg-white md:p-10 p-5 container xl:px-0 md:px-10 px-3 mx-auto lg:space-y-14 md:space-y-7 space-y-5">
             <ImageAndInfo />
             <Offers />
             <SocialMedia />

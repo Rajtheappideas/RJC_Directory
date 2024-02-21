@@ -80,7 +80,7 @@ const SingleItemBox = ({ data, boxType }) => {
     <>
       {boxType === "grid" ? (
         <div
-          className={`w-full relative min-h-[26rem] max-h-[26rem] rounded-2xl border select-none bg-white shadow-[0px_3px_7px_rgba(0,0,0,0.20)]`}
+          className={`w-full relative md:min-h-[27rem] md:max-h-[27rem] rounded-2xl border select-none bg-white shadow-[0px_3px_7px_rgba(0,0,0,0.20)]`}
         >
           {/* heart icon */}
           <div
@@ -105,12 +105,12 @@ const SingleItemBox = ({ data, boxType }) => {
               loading="lazy"
             />
           </Link>
-          <div className="space-y-3 p-3">
-            <p className="font-semibold text-left text-2xl">{data?.name}</p>
+          <div className="md:space-y-3 space-y-2 md:p-3 p-2">
+            <p className="font-semibold text-left md:text-2xl text-xl">{data?.name}</p>
             <p className="font-medium text-left text-lg text-textColor line-clamp-2">
               {data?.address}, {data?.city}. {data?.country}
             </p>
-            <p className="flex items-center gap-2 font-medium text-lg text-textColor">
+            <p className="flex items-center gap-2 font-medium md:text-lg text-textColor">
               <AiFillStar className="text-yellow-400 text-2xl" />
               <span>
                 {data?.avgRating} ({data?.totalRating})
@@ -130,8 +130,8 @@ const SingleItemBox = ({ data, boxType }) => {
                 loading="lazy"
               />
             </Link>
-            <div className="space-y-3 p-3">
-              <p className="font-semibold text-left text-2xl">{data?.name}</p>
+            <div className="space-y-3 md:p-3 p-2">
+              <p className="font-semibold text-left md:text-2xl text-lg">{data?.name}</p>
               <p className="font-medium text-left text-lg">
                 {data?.address}, {data?.city}. {data?.country}
               </p>

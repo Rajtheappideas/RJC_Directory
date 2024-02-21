@@ -7,7 +7,7 @@ const MyReviews = ({ setShowReviewBox }) => {
 
   return (
     <div className="lg:space-y-6 space-y-3">
-      <p className="font-semibold text-2xl ">My Reviews</p>
+      <p className="font-semibold md:text-2xl text-xl">My Reviews</p>
       {loading ? (
         <div className="loading">Loading...</div>
       ) : (

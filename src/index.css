@@ -150,5 +150,5 @@ body::-webkit-scrollbar-thumb {
 }
 
 .loading{
-  @apply text-center w-full text-2xl flex items-center justify-center font-semibold
+  @apply text-center w-full md:text-2xl text-lg flex items-center justify-center font-semibold
 }

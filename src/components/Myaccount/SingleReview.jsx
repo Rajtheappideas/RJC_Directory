@@ -53,28 +53,28 @@ const SingleReview = ({ setShowReviewBox, review }) => {
 
   return (
     <div className="space-y-2">
-      <div className="w-full flex items-start gap-3">
-        <Link to={`/details/${review?.merchant?._id}`}>
+      <div className="w-full flex md:flex-row flex-col items-start gap-3">
+        <Link to={`/details/${review?.merchant?._id}`} className="md:w-auto w-full">
           <img
             src={BaseUrl.concat(review?.merchant?.images[0])}
             alt=""
-            className="w-32 h-32 object-cover rounded-2xl"
+            className="lg:min-w-[8rem] lg:max-w-[8rem] md:min-w-[10rem] md:max-w-[10rem] lg:min-h-32 md:min-h-40 h-fit w-full object-cover rounded-2xl"
           />
         </Link>
-        <div className="space-y-1 ">
-          <p className="font-semibold text-xl">{review?.merchant?.name}</p>
-          <div className="w-full flex items-center gap-2">
+        <div className="space-y-1">
+          <p className="font-semibold md:text-xl">{review?.merchant?.name}</p>
+          <div className="w-full flex items-center md:gap-2 gap-1">
             {new Array(review?.rating).fill("").map((rate, i) => (
               <AiFillStar key={i} className="text-yellow-500 w-6 h-6" />
             ))}
           </div>
-          <p className="text-lg text-opacity-50 tracking-wide">
+          <p className="md:text-lg text-opacity-50 tracking-wide">
             {review?.comment}
           </p>
           <p className="text-sm text-textColor text-opacity-50">
             {moment(review?.updatedAt).format("LL")}
           </p>
-          <div className="flex text-blueColor font-semibold text-lg items-center gap-5">
+          <div className="flex text-blueColor font-semibold md:text-lg items-center md:gap-5 gap-3">
             <p className="cursor-pointer" onClick={() => handleOnclickEdit()}>
               Edit
             </p>
@@ -84,14 +84,15 @@ const SingleReview = ({ setShowReviewBox, review }) => {
                   setShowDeleteBox(true);
                   dispatch(handleChangeSelectedReview(review));
                 }}
+                className="text-red-500"
               >
                 Delete
               </button>
               {/* delete box */}
               {selectedReview?._id === review?._id && showDeleteBox && (
-                <div className="absolute w-auto z-10 space-y-2 top-6 left-0 shadow-2xl bg-white  rounded-lg p-3 font-semibold text-lg">
+                <div className="absolute w-auto z-10 space-y-2 top-6 md:left-0 -left-10 shadow-2xl bg-white  rounded-lg md:p-3 p-2 font-semibold md:text-lg">
                   <span className="absolute top-4 left-0"></span>
-                  <p className="whitespace-nowrap w-full text-black">
+                  <p className="md:whitespace-nowrap md:min-w-full min-w-[70vw] w-full text-black">
                     Are you sure you want to delete this review?
                   </p>
                   <div className="flex items-center gap-2 ">

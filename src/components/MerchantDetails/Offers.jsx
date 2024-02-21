@@ -6,7 +6,7 @@ const Offers = () => {
 
   return (
     <div className="w-full space-y-2">
-      <p className="font-semibold text-3xl">Offers</p>
+      <p className="font-semibold md:text-3xl text-xl">Offers</p>
       <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4">
         {merchantDetails?.offers.length > 0 ? (
           merchantDetails?.offers.map((offer) => (

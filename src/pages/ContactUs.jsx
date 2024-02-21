@@ -110,11 +110,11 @@ const ContactUs = () => {
       <Helmet>
         <title>Contact us - RJC Directory</title>
       </Helmet>
-      <div className="w-full lg:space-y-14 space-y-7">
+      <div className="w-full lg:space-y-14 md:space-y-7 space-y-4">
         <TItleSection image={contactus} title="contact us" />
-        <div className="lg:space-y-14 space-y-7 container mx-auto xl:px-0 md:px-10 px-5 w-full">
+        <div className="lg:space-y-14 md:space-y-7 space-y-4 container mx-auto xl:px-0 md:px-10 px-5 w-full">
           <div className="rounded-lg border md:space-y-6 space-y-3 xl:w-1/2 md:w-3/4 w-full mx-auto shadow-lg md:p-5 p-3">
-            <p className="font-semibold text-3xl">Get in touch</p>
+            <p className="font-semibold md:text-3xl text-xl">Get in touch</p>
             <hr />
             <form
               onSubmit={handleSubmit(onSubmit)}

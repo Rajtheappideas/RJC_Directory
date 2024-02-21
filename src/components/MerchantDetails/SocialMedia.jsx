@@ -7,7 +7,7 @@ const SocialMedia = () => {
 
   return (
     <div className="space-y-2">
-      <p className="font-semibold text-3xl">Social media</p>
+      <p className="font-semibold md:text-3xl text-xl">Social media</p>
       <div className="flex items-center gap-2 flex-wrap">
         <Link to={`${merchantDetails?.facebook}`} target="_blank">
           <img
