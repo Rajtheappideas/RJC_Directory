@@ -347,7 +347,7 @@ const Header = () => {
               onChange={(e) => setQuery(e.target.value)}
               value={query}
             />
-            {merchantName.length > 0 && showSearchSuggestion && (
+            {merchantName?.length > 0 && showSearchSuggestion && (
               <>
                 <span className="absolute z-30 top-10 clip-div border shadow-lg left-10 rotate-[135deg] bg-white h-6 w-6"></span>
                 <div className="absolute z-20 transition-all border origin-top bg-white min-w-[20vw] text-left ease-in-out duration-300 top-12 left-0 p-3 max-h-72 overflow-y-auto custom_scrollbar rounded-2xl shadow-2xl text-textColor space-y-2">

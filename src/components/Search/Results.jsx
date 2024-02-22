@@ -126,7 +126,7 @@ const Results = memo(({ setBoxType, boxType }) => {
         }  gap-4 md:pb-10 pb-5`}
       >
         {merchantGetLoading ? (
-          new Array(parseInt(searchParams?.limit))
+          new Array(9)
             .fill(0)
             .map((load, i) => (
               <div

@@ -32,11 +32,19 @@ const LatestListing = () => {
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-
+  
   return (
     <div className="container mx-auto xl:px-0 px-5 xl:py-20 md:py-10 py-5 space-y-5">
       {!latestMerchantLoading ? (
-        <SkeletonLoading width={380} height={350} count={4} />
+        window.document.body.clientWidth < 600 ? (
+          <SkeletonLoading
+            width={window.document.body.clientWidth - 50}
+            height={350}
+            count={1}
+          />
+        ) : (
+          <SkeletonLoading width={380} height={350} count={4} />
+        )
       ) : (
         <>
           <div className="space-y-3">

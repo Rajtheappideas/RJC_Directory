@@ -39,9 +39,17 @@ const Business = () => {
         pathname.split("/")[1] === "" && "px-5"
       } lg:py-10`}
     >
-      {!nearByBusinessMerchantLoading ? (
-        <SkeletonLoading width={380} height={350} count={4} />
+      {nearByBusinessMerchantLoading ? (
+        window.document.body.clientWidth < 600 ? (
+          <SkeletonLoading
+            width={window.document.body.clientWidth - 50}
+            height={350}
+            count={1}
+          />
         ) : (
+          <SkeletonLoading width={380} height={350} count={4} />
+        )
+      ) : (
         <>
           <div className="space-y-3">
             <div className="flex justify-between items-center">

@@ -42,7 +42,7 @@ const Category = () => {
           and reviews for quick and informed decision-making.
         </p>
       </div>
-      {!categoryLoading ? (
+      {categoryLoading ? (
         <SkeletonLoading height={200} width={230} count={6} />
       ) : (
         <div className="relative">

@@ -279,7 +279,7 @@ const Filters = memo(() => {
 
   useEffect(() => {
     window.addEventListener("resize", () => {
-      if (window.screen.width > 1279) {
+      if (window.document.body.clientWidth > 1279) {
         setShowIcon(false);
         setShowFilters(true);
       } else {
@@ -290,7 +290,7 @@ const Filters = memo(() => {
     return () => {
       window.removeEventListener("resize", () => {});
     };
-  }, [window.screen.width]);
+  }, [window.document.body.clientWidth]);
 
   return (
     <div className="xl:w-3/12 w-full  border border-gray-200 rounded-lg md:p-3 p-2 md:space-y-3 space-y-2">
