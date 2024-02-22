@@ -36,7 +36,7 @@ const LatestListing = () => {
   return (
     <div className="container mx-auto xl:px-0 px-5 xl:py-20 md:py-10 py-5 space-y-5">
       {!latestMerchantLoading ? (
-        <SkeletonLoading width={380} height={450} count={4} />
+        <SkeletonLoading width={380} height={350} count={4} />
       ) : (
         <>
           <div className="space-y-3">
