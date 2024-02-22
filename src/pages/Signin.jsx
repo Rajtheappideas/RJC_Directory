@@ -26,7 +26,7 @@ const Signin = () => {
   const [showOtpBox, setShowOtpBox] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { user, loading } = useSelector((s) => s.root.auth);
+  const { user, loading, fcmToken } = useSelector((s) => s.root.auth);
 
   const navigate = useNavigate();
 
@@ -75,6 +75,7 @@ const Signin = () => {
         handleSignin({
           phone,
           password,
+          fcmToken,
           signal: AbortControllerRef,
         })
       );

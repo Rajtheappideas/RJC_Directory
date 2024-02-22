@@ -22,7 +22,8 @@ const ValidationSchema = (isPasswordRequired) => {
       .string()
       .required("Password is required")
       .matches(
-        /^(?=.*[0-9])(?=.*[!@#$%^&*])"[a-zA-Z0-9!@#$%^&*]{8,16}"$/,
+        // /^(?=.*[0-9])(?=.*[!@#$%^&*])"[a-zA-Z0-9!@#$%^&*]{8,16}"$/,
+        /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/,
         "Minimum 8 characters, at least one special character (!@#$%^&*), at least one digit"
       ),
     confirmPassword: yup

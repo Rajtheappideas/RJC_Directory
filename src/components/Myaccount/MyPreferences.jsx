@@ -25,7 +25,6 @@ const MyPreferences = ({}) => {
   const dispatch = useDispatch();
 
   const handleClickOnSave = () => {
-    console.log(selectedRating);
     const response = dispatch(
       handleAddAndEditPreference({
         token,
@@ -53,10 +52,10 @@ const MyPreferences = ({}) => {
       setSelectedRating(
         preferences?.rating === " " ? "all" : preferences?.rating
       );
-      // setDistance(preferences?.distance);
+      setDistance(preferences?.distance);
     }
   }, [preferencesLoading, preferenceGetLoading]);
-  
+
   return (
     <>
       {showCategoryMOdal && (
@@ -135,7 +134,7 @@ const MyPreferences = ({}) => {
                 onChange={(e) => setDistance(e.target.value)}
                 min="1"
                 max="50"
-                defaultValue={1}
+                value={distance}
               />
               <span className="font-semibold">{distance} km</span>
             </div>

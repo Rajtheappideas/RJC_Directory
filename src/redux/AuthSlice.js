@@ -4,13 +4,14 @@ import toast from "react-hot-toast";
 
 export const handleRegister = createAsyncThunk(
   "auth/handleRegister",
-  async ({ data, signal }, { rejectWithValue }) => {
+  async ({ data,fcmToken, signal }, { rejectWithValue }) => {
     signal.current = new AbortController();
     const formData = new FormData();
 
     for (const key in data) {
       formData.append(key, data[key]);
     }
+    formData.append("fcmToken", fcmToken);
 
     try {
       const { data } = await PostUrl("register", {
@@ -32,14 +33,14 @@ export const handleRegister = createAsyncThunk(
 
 export const handleSignin = createAsyncThunk(
   "auth/handleSignin",
-  async ({ phone, password, signal }, { rejectWithValue }) => {
+  async ({ phone, password, fcmToken, signal }, { rejectWithValue }) => {
     signal.current = new AbortController();
 
     const formData = new FormData();
 
     formData.append("phone", phone);
     formData.append("password", password);
-    formData.append("fcmToken", "test");
+    formData.append("fcmToken", fcmToken);
 
     try {
       const { data } = await PostUrl("login", {
@@ -88,13 +89,14 @@ export const handleGetSigninOTP = createAsyncThunk(
 
 export const handleVerifySigninOTP = createAsyncThunk(
   "auth/handleVerifySigninOTP",
-  async ({ phone, otp, signal }, { rejectWithValue }) => {
+  async ({ phone, otp, fcmToken, signal }, { rejectWithValue }) => {
     signal.current = new AbortController();
 
     const formData = new FormData();
 
     formData.append("phone", phone);
     formData.append("otp", otp);
+    formData.append("fcmToken", fcmToken);
 
     try {
       const { data } = await PostUrl("verify-otp", {
@@ -197,7 +199,7 @@ export const handleResetPassword = createAsyncThunk(
 export const handleEditProfile = createAsyncThunk(
   "auth/handleEditProfile",
   async (
-    { token, dob, anniversary, state,city, name, image, signal },
+    { token, dob, anniversary, state, city, name, image, signal },
     { rejectWithValue }
   ) => {
     signal.current = new AbortController();
@@ -290,7 +292,6 @@ export const handleAddAndEditPreference = createAsyncThunk(
   ) => {
     signal.current = new AbortController();
     try {
-      console.log(selectedRating, distance, selectedCategories);
       const formData = new FormData();
       if (selectedRating) {
         formData.append("rating", selectedRating);
@@ -330,6 +331,7 @@ const initialState = {
   preferences: null,
   preferencesLoading: false,
   preferenceGetLoading: false,
+  fcmToken: null,
 };
 
 const AuthSlice = createSlice({
@@ -341,7 +343,11 @@ const AuthSlice = createSlice({
       state.user = null;
       state.token = null;
       state.error = null;
+      // state.fcmToken = null;
       state.loading = false;
+    },
+    handleChangeFcmToken: (state, { payload }) => {
+      state.fcmToken = payload;
     },
   },
   extraReducers: (builder) => {
@@ -529,6 +535,6 @@ const AuthSlice = createSlice({
   },
 });
 
-export const { handleLogout } = AuthSlice.actions;
+export const { handleLogout, handleChangeFcmToken } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

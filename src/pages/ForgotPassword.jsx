@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleForgotPassword, handleVerifyOtp } from "../redux/AuthSlice";
 import useAbortApiCall from "../hooks/useAbortApiCall";
 import ResetPassword from "../components/ResetPassword";
-import { PostUrl } from "../BaseUrl";
 import VerifyOtp from "../components/VerifyOtp";
 import "react-phone-input-2/lib/style.css";
 
@@ -22,7 +21,7 @@ const ForgotPassword = () => {
   const [showResetPasswordBox, setShowResetPasswordBox] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const { loading } = useSelector((s) => s.root.auth);
+  const { loading, user } = useSelector((s) => s.root.auth);
 
   const { forgotPasswordSchema } = ValidationSchema();
 
@@ -67,6 +66,8 @@ const ForgotPassword = () => {
   };
 
   useEffect(() => {
+    if (user !== null) navigate("/");
+
     return () => {
       abortApiCall();
     };

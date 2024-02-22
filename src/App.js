@@ -20,6 +20,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./components/ErrorFallBack";
 import Lottie from "lottie-react";
 import loader from "./assets/animations/rjc_loader.json";
+import { handleChangeFcmToken } from "./redux/AuthSlice";
+import { getMessaging, onMessage } from "firebase/messaging";
 
 const Header = lazy(() => import("./components/Header"));
 const Footer = lazy(() => import("./components/Footer"));
@@ -42,34 +44,38 @@ function App() {
   const [fcmToken, setFcmToken] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // console.log(fcmToken);
   const dispatch = useDispatch();
 
-  const { token, user } = useSelector((s) => s.root.auth);
+  const { token, user, fcmToken: FCM } = useSelector((s) => s.root.auth);
 
   const handleSetFcmToken = () => {
-    // if (globalState.fcmToken !== null) {
-    //   return;
-    // } else if (fcmToken !== null && globalState.fcmToken === null) {
-    //   // return dispatch(handleChangeFcmToken(fcmToken));
-    //   return setFcmToken(fcmToken);
-    // }
-    // if (window.Notification.permission !== "granted") {
-    //   toast.remove();
-    //   toast.error("Please allowed notificaitons.");
-    //   window.Notification.requestPermission();
-    // }
-    // if (
-    //   fcmToken === null ||
-    //   (error !== null && error?.message === "fcmToken is required.")
-    // ) {
-    // window.localStorage.clear();
-    return GetToken(setFcmToken, setLoading);
-    // }
+    if (FCM !== null) {
+      return;
+    } else if (fcmToken !== null && FCM === null) {
+      return dispatch(handleChangeFcmToken(fcmToken));
+      // return setFcmToken(fcmToken);
+    }
+    if (window.Notification.permission !== "granted") {
+      toast.remove();
+      window.Notification.requestPermission();
+    }
+    if (fcmToken === null) {
+      return GetToken(setFcmToken, setLoading);
+    }
   };
 
+  const messaging = getMessaging();
+  onMessage(messaging, (payload) => {
+    console.log("Message received. ", payload.notification.title);
+    toast(payload.notification.title);
+    // ...
+  });
+
   useEffect(() => {
-    // handleSetFcmToken();
+    handleSetFcmToken();
+  }, [loading]);
+
+  useEffect(() => {
     dispatch(handleGetCategories());
     dispatch(handleGetSubCategories());
     dispatch(handleGetCountryAndCityList());

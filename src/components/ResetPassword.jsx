@@ -1,8 +1,8 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { handleResetPassword } from "../redux/AuthSlice";
 import toast from "react-hot-toast";
 import useAbortApiCall from "../hooks/useAbortApiCall";
@@ -11,13 +11,14 @@ import ValidationSchema from "../ValidationSchema";
 const ResetPassword = ({ setShowSuccessModal }) => {
   const [showNewPassword, setShowNewPassword] = useState(false);
 
-  const { loading, token } = useSelector((s) => s.root.auth);
+  const { loading, token, user } = useSelector((s) => s.root.auth);
 
   const { ResetPasswordSchema } = ValidationSchema();
 
-  const { AbortControllerRef } = useAbortApiCall();
+  const { AbortControllerRef, abortApiCall } = useAbortApiCall();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     formState: { errors },
@@ -48,6 +49,13 @@ const ResetPassword = ({ setShowSuccessModal }) => {
       });
     }
   };
+
+  useEffect(() => {
+    if (user !== null) navigate("/");
+    return () => {
+      abortApiCall();
+    };
+  }, []);
 
   return (
     <div className="lg:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">

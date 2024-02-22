@@ -19,7 +19,7 @@ const VerifyOtp = ({ phone, setShowResetPasswordBox, from, setShowOtpBox }) => {
   });
   const [resentOtpLoading, setResentOtpLoading] = useState(false);
 
-  const { loading } = useSelector((s) => s.root.auth);
+  const { loading, fcmToken } = useSelector((s) => s.root.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -73,6 +73,7 @@ const VerifyOtp = ({ phone, setShowResetPasswordBox, from, setShowOtpBox }) => {
     if (from === "sign_in") {
       const response = dispatch(
         handleVerifySigninOTP({
+          fcmToken,
           phone,
           otp: Object.values(numberField).join(""),
           signal: AbortControllerRef,

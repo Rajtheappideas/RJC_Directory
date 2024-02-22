@@ -24,12 +24,12 @@ import useCountryCityState from "../hooks/useCountryCityState";
 const Signup = () => {
   const [showPreferenceBox, setShowPreferenceBox] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  // const [countries, setCountries] = useState([]);
-  // const [cities, setCities] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [cities, setCities] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
-  // const [states, setStates] = useState([]);
+  const [states, setStates] = useState([]);
 
-  const { loading, user } = useSelector((state) => state.root.auth);
+  const { loading, user, fcmToken } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ const Signup = () => {
   } = useForm({
     shouldFocusError: true,
     resolver: yupResolver(signupSchema),
-    defaultValues: { fcmToken: "test" },
+    // defaultValues: { fcmToken: fcmToken },
   });
 
   const onSubmit = (data) => {
@@ -70,6 +70,7 @@ const Signup = () => {
     const response = dispatch(
       handleRegister({
         data,
+        fcmToken,
         signal: AbortControllerRef,
       })
     );
@@ -82,50 +83,50 @@ const Signup = () => {
     }
   };
 
-  // const selectedCountryStates = useCallback(() => {
-  //   const selectedCountry = Country.getAllCountries().find(
-  //     (c) => c.name === getValues("country")
-  //   );
-  //   const states = State.getAllStates().filter(
-  //     (state) => state?.countryCode === selectedCountry?.isoCode
-  //   );
+  const selectedCountryStates = useCallback(() => {
+    const selectedCountry = Country.getAllCountries().find(
+      (c) => c.name === getValues("country")
+    );
+    const states = State.getAllStates().filter(
+      (state) => state?.countryCode === selectedCountry?.isoCode
+    );
 
-  //   setStates(states.sort((a, b) => a.name.localeCompare(b.name)));
-  // }, []);
+    setStates(states.sort((a, b) => a.name.localeCompare(b.name)));
+  }, []);
 
-  // const selectedCountryCities = useCallback(() => {
-  //   const selectedState = State.getAllStates().find(
-  //     (c) => c.name === getValues("state")
-  //   );
-  //   const cities = City.getAllCities().filter(
-  //     (city) => city?.stateCode === selectedState?.isoCode
-  //   );
-  //   setCities(cities.sort((a, b) => a.name.localeCompare(b.name)));
-  // }, []);
+  const selectedCountryCities = useCallback(() => {
+    const selectedState = State.getAllStates().find(
+      (c) => c.name === getValues("state")
+    );
+    const cities = City.getAllCities().filter(
+      (city) => city?.stateCode === selectedState?.isoCode
+    );
+    setCities(cities.sort((a, b) => a.name.localeCompare(b.name)));
+  }, []);
 
-  const { cities, countries, states } = useCountryCityState({
-    selectedCountry: getValues("country"),
-    selectedState: getValues("state"),
-  });
+  // const { cities, countries, states } = useCountryCityState({
+  //   selectedCountry: getValues("country"),
+  //   selectedState: getValues("state"),
+  // });
 
   useEffect(() => {
-    // setCountries(
-    //   Country.getAllCountries().sort((a, b) => a.name.localeCompare(b.name))
-    // );
+    setCountries(
+      Country.getAllCountries().sort((a, b) => a.name.localeCompare(b.name))
+    );
 
     return () => {
       abortApiCall();
     };
   }, []);
 
-  // useEffect(() => {
-  //   selectedCountryStates();
-  //   setCities([]);
-  // }, [watch("country")]);
+  useEffect(() => {
+    selectedCountryStates();
+    setCities([]);
+  }, [watch("country")]);
 
-  // useEffect(() => {
-  //   selectedCountryCities();
-  // }, [watch("state")]);
+  useEffect(() => {
+    selectedCountryCities();
+  }, [watch("state")]);
 
   let date = moment().format("L").split("/");
   let maxDate = date.splice(date.length - 1, 1);
