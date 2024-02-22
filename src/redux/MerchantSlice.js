@@ -23,7 +23,7 @@ export const handleGetListOfMerchants = createAsyncThunk(
   ) => {
     const formData = new FormData();
 
-    formData.append("rating", JSON.stringify(rating));
+    formData.append("rating", rating);
     formData.append("page", page ?? 1);
     formData.append("limit", limit ?? 10);
     formData.append("name", name ?? "");
@@ -201,7 +201,7 @@ const initialState = {
     subcategory: "",
     MyPreferences: "off",
     sortBy: "ratingHighToLow",
-    rating: [],
+    rating: 0,
   },
 };
 
@@ -242,19 +242,28 @@ const MerchantSlice = createSlice({
 
     // get near by business merchats list
     builder
-      .addCase(handleGetNearByBusinessMerchantList.pending, (state, { payload }) => {
-        state.nearByBusinessMerchantLoading = true;
-      })
-      .addCase(handleGetNearByBusinessMerchantList.fulfilled, (state, { payload }) => {
-        state.nearByBusinessMerchantLoading = false;
-        state.nearByBusinessMerchantList = payload?.merchants ?? [];
-        state.error = null;
-      })
-      .addCase(handleGetNearByBusinessMerchantList.rejected, (state, { payload }) => {
-        state.nearByBusinessMerchantLoading = false;
-        state.nearByBusinessMerchantList = [];
-        state.error = payload ?? null;
-      });
+      .addCase(
+        handleGetNearByBusinessMerchantList.pending,
+        (state, { payload }) => {
+          state.nearByBusinessMerchantLoading = true;
+        }
+      )
+      .addCase(
+        handleGetNearByBusinessMerchantList.fulfilled,
+        (state, { payload }) => {
+          state.nearByBusinessMerchantLoading = false;
+          state.nearByBusinessMerchantList = payload?.merchants ?? [];
+          state.error = null;
+        }
+      )
+      .addCase(
+        handleGetNearByBusinessMerchantList.rejected,
+        (state, { payload }) => {
+          state.nearByBusinessMerchantLoading = false;
+          state.nearByBusinessMerchantList = [];
+          state.error = payload ?? null;
+        }
+      );
 
     // get latest merchats list
     builder

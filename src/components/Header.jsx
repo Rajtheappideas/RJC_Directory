@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  handleCatgegoryAndSubcategoryFromHeader,
   handleChangeCity,
   handleChangeState,
   handleClearMerchantName,
@@ -416,9 +417,9 @@ const Header = () => {
                         setActiveSubcategories(category?.subcategories);
                       }}
                       onClick={() => {
-                        dispatch(handleChangeSearchParams({ category: "" }));
+                        dispatch(handleCatgegoryAndSubcategoryFromHeader(true));
                         dispatch(
-                          handleChangeSearchParams({ category: category?._id })
+                          handleChangeSearchParams({ category: category?._id,subcategory:"" })
                         );
                         navigate("/search");
                       }}
@@ -444,7 +445,9 @@ const Header = () => {
                         searchParams?.subcategory === item?._id && "bg-gray-100"
                       } p-2 whitespace-nowrap text-gray-400 font-medium capitalize hover:bg-gray-50`}
                       onClick={() => {
-                        dispatch(handleChangeSearchParams({ subcategory: "" }));
+                        // dispatch(handleChangeSearchParams({ subcategory: "" }));
+                        dispatch(handleCatgegoryAndSubcategoryFromHeader(true));
+
                         dispatch(
                           handleChangeSearchParams({ subcategory: item?._id })
                         );

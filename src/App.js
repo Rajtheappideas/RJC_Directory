@@ -18,6 +18,8 @@ import { handleGetOfferBanner, handleGetTestimonial } from "./redux/CmsSlice";
 import { GetToken } from "./Firebase/firebase-messaging-sw";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./components/ErrorFallBack";
+import Lottie from "lottie-react";
+import loader from "./assets/animations/rjc_loader.json";
 
 const Header = lazy(() => import("./components/Header"));
 const Footer = lazy(() => import("./components/Footer"));
@@ -84,8 +86,17 @@ function App() {
     <BrowserRouter>
       <Suspense
         fallback={
-          <div className="font-semibold text-4xl text-center flex items-center justify-center w-screen h-screen">
-            Loading...
+          <div className="relative top-0 left-0 w-screen h-screen">
+            <Lottie
+              style={{
+                pointerEvents: "none",
+                height: "300px",
+                width: "300px",
+              }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-full"
+              animationData={loader}
+              loop
+            />
           </div>
         }
       >

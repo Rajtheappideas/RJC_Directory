@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import {
   AiFillStar,
   AiOutlineClose,
@@ -8,7 +8,10 @@ import {
 import { IoIosArrowDown } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { handleChangeSearchParams } from "../../redux/MerchantSlice";
-import { handleChangeState } from "../../redux/GlobalStates";
+import {
+  handleCatgegoryAndSubcategoryFromHeader,
+  handleChangeState,
+} from "../../redux/GlobalStates";
 
 const Filters = memo(() => {
   const [activeSubcategories, setActiveSubcategories] = useState(null);
@@ -25,47 +28,21 @@ const Filters = memo(() => {
   const { searchParams } = useSelector((s) => s.root.merchant);
   const { user } = useSelector((s) => s.root.auth);
 
-  const { categories, subCategories, countryList, selectedState } = useSelector(
-    (s) => s.root.global
-  );
+  const {
+    categories,
+    categoryAndSubcategoryfromHeader,
+    subCategories,
+    countryList,
+    selectedState,
+  } = useSelector((s) => s.root.global);
 
   const dispatch = useDispatch();
 
-   function handleUpdateAppliedFilters(filter, from) {
+  function handleUpdateAppliedFilters(filter, from) {
     const findAlreadyfilters = appliedFilters.filter(
       (fil) => fil?.name == filter?.name && filter?.filterType !== "rating"
     );
     if (findAlreadyfilters.length > 0) return;
-    if (filter.filterType === "rating") {
-      const findRating = appliedFilters.find((fil) => fil.name === filter.name);
-      if (findRating && filter?.name !== "all") {
-        return setAppliedFilters(
-          appliedFilters.filter(
-            (fil) => fil.name !== filter.name && fil?.name !== "all"
-          )
-        );
-      } else if (filter?.name !== "all") {
-        return setAppliedFilters([...appliedFilters, filter]);
-      } else if (filter?.name === "all" && findRating?.name !== "all") {
-        const AllRatings = ["1", "2", "3", "4", "5"].map((n) => {
-          return { name: n, filterType: "rating" };
-        });
-        const removeRatings = appliedFilters.filter(
-          (fil) => fil.filterType !== "rating"
-        );
-        return setAppliedFilters([...removeRatings, ...AllRatings, filter]);
-      } else if (filter?.name === "all" && findRating?.name === "all") {
-        return setAppliedFilters(
-          appliedFilters.filter((fil) => fil.filterType !== "rating")
-        );
-      } else {
-        return setAppliedFilters(
-          appliedFilters.filter(
-            (fil) => fil.name !== filter?.name && fil.name !== "all"
-          )
-        );
-      }
-    }
 
     if (filter.filterType === "country") {
       return setAppliedFilters((prev) => [
@@ -140,14 +117,9 @@ const Filters = memo(() => {
       setAppliedFilters(
         appliedFilters.filter((fil) => fil.name !== filter.name)
       );
-
-      const remainingRatings = appliedFilters
-        .filter((fil) => fil.name !== filter.name)
-        .filter((fil) => fil.filterType === "rating")
-        .map((rate) => parseInt(rate.name));
       dispatch(
         handleChangeSearchParams({
-          rating: remainingRatings.length > 0 ? remainingRatings : [" "],
+          rating: 0,
         })
       );
       return;
@@ -181,67 +153,89 @@ const Filters = memo(() => {
         subcategory: "",
         MyPreferences: "off",
         sortBy: "ratingHighToLow",
-        rating: [],
+        rating: 0,
       })
     );
   }
 
+  function handleOnclickCategory(category) {
+    dispatch(
+      handleChangeSearchParams({
+        category: category?._id,
+      })
+    );
+    handleUpdateAppliedFilters({
+      name: category?.name,
+      filterType: "category",
+    });
+    setActiveSubcategories(
+      subCategories.find((sub) => sub?.name === category?.name)
+    );
+    dispatch(handleCatgegoryAndSubcategoryFromHeader(false));
+  }
+
   function handleSetDefaultValues() {
-    if (searchParams?.category !== "") {
-      setActiveSubcategories(
-        subCategories.find((sub) => sub?._id === searchParams?.category)
-      );
+    if (categoryAndSubcategoryfromHeader) {
       const findCategory = subCategories.find(
         (s) => s._id === searchParams?.category
       );
-      if (findCategory) {
-        handleUpdateAppliedFilters({
-          name: findCategory?.name,
-          filterType: "category",
-        });
-      }
-    }
-    if (searchParams?.subcategory !== "") {
-      let findSubcategory = null;
-      let findCategory = null;
-      findCategory = subCategories.filter((sub) =>
-        sub?.subcategories.find((s) => s?._id === searchParams?.subcategory)
-      );
 
-      if (findCategory) {
-        findSubcategory = subCategories
-          .find((s) => s._id === findCategory[0]?._id)
-          ?.subcategories.find((sub) => sub?._id === searchParams?.subcategory);
-
+      if (searchParams?.category && searchParams?.subcategory === "") {
         setActiveSubcategories(
-          subCategories.find((sub) => sub?._id === findCategory[0]?._id)
+          subCategories.find((sub) => sub?._id === searchParams?.category)
         );
-        handleUpdateAppliedFilters(
-          {
-            name: findCategory[0]?.name,
-            filterType: "category",
-          },
-          "default"
-        );
+        return setAppliedFilters([
+          ...appliedFilters.filter(
+            (fil) =>
+              fil?.filterType !== "category" && fil.filterType !== "subcategory"
+          ),
+          { name: findCategory?.name, filterType: "category" },
+        ]);
+      }
+      if (searchParams?.subcategory && searchParams?.category) {
+        const findSubcategory = subCategories
+          .find((s) => s._id === findCategory?._id)
+          ?.subcategories.find((sub) => sub?._id === searchParams?.subcategory);
         if (findSubcategory) {
-          handleUpdateAppliedFilters(
+          return setAppliedFilters([
+            ...appliedFilters.filter(
+              (fil) => fil?.filterType !== "subcategory"
+            ),
+            { name: findSubcategory?.name, filterType: "subcategory" },
+          ]);
+        } else {
+          const findCategoryBySubcategory = subCategories.find((sub) =>
+            sub?.subcategories.find((s) => s?._id === searchParams?.subcategory)
+          );
+          const findSubCategoryOvercategory = subCategories
+            .find((s) => s._id === findCategoryBySubcategory?._id)
+            ?.subcategories.find(
+              (sub) => sub?._id === searchParams?.subcategory
+            );
+          const removeCategoryAndSubCategory = appliedFilters.filter(
+            (fil) =>
+              fil.filterType !== "category" && fil.filterType !== "subcategory"
+          );
+          let finalArr = [
+            ...removeCategoryAndSubCategory,
+            { name: findCategoryBySubcategory?.name, filterType: "category" },
             {
-              name: findSubcategory?.name,
+              name: findSubCategoryOvercategory?.name,
               filterType: "subcategory",
             },
-            "default"
+          ];
+          dispatch(
+            handleChangeSearchParams({
+              category: findCategoryBySubcategory?._id,
+            })
           );
-          return;
+          setActiveSubcategories(
+            subCategories.find(
+              (sub) => sub?._id === findCategoryBySubcategory?._id
+            )
+          );
+          return setAppliedFilters(finalArr);
         }
-      }
-      findSubcategory = subCategories
-        .find((s) => s._id === searchParams?.category)
-        ?.subcategories.find((sub) => sub?._id === searchParams?.subcategory);
-      if (findSubcategory) {
-        handleUpdateAppliedFilters({
-          name: findSubcategory?.name,
-          filterType: "subcategory",
-        });
       }
     }
     if (selectedState !== "") {
@@ -275,7 +269,13 @@ const Filters = memo(() => {
 
   useEffect(() => {
     handleSetDefaultValues();
-  }, [selectedState, searchParams?.name, searchParams?.subcategory]);
+  }, [
+    selectedState,
+    searchParams?.name,
+    categoryAndSubcategoryfromHeader,
+    searchParams?.category,
+    searchParams?.subcategory,
+  ]);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -291,9 +291,6 @@ const Filters = memo(() => {
       window.removeEventListener("resize", () => {});
     };
   }, [window.screen.width]);
-
-  // console.log("run filter");
-  // console.log(appliedFilters);
 
   return (
     <div className="xl:w-3/12 w-full  border border-gray-200 rounded-lg md:p-3 p-2 md:space-y-3 space-y-2">
@@ -326,20 +323,28 @@ const Filters = memo(() => {
       {/* choosen filtes */}
       <div className="w-full h-full flex flex-wrap gap-2 items-center">
         {appliedFilters.length > 0 &&
-          appliedFilters
-            .filter((fil) => fil.name !== "all")
-            .map((filter, i) => (
-              <p
-                key={i}
-                className="w-auto p-2 flex items-center gap-2 cursor-pointer bg-gray-200 text-textColor opacity-80"
-              >
-                {filter?.name}{" "}
-                {filter?.filterType === "rating" && (
+          appliedFilters.map((filter, i) => (
+            <p
+              key={i}
+              className="w-auto p-2 flex items-center gap-2 cursor-pointer bg-gray-200 text-textColor opacity-80"
+            >
+              {filter?.name !== 0 && filter?.name}
+              {filter?.filterType === "rating" && filter?.name === 0 ? (
+                <>
+                  All
                   <AiOutlineStar className="text-gray-600" />
-                )}
-                <AiOutlineClose onClick={() => handleRemoveFilter(filter)} />
-              </p>
-            ))}
+                </>
+              ) : (
+                filter?.filterType === "rating" && (
+                  <>
+                    &nbsp;& above
+                    <AiOutlineStar className="text-gray-600" />
+                  </>
+                )
+              )}
+              <AiOutlineClose onClick={() => handleRemoveFilter(filter)} />
+            </p>
+          ))}
       </div>
       {showFilters && (
         <>
@@ -397,22 +402,7 @@ const Filters = memo(() => {
                     className={` ${
                       searchParams?.category === category?._id && "bg-gray-200"
                     } cursor-pointer hover:bg-gray-100 transition-all w-full p-1`}
-                    onClick={() => {
-                      dispatch(
-                        handleChangeSearchParams({
-                          category: category?._id,
-                        })
-                      );
-                      handleUpdateAppliedFilters({
-                        name: category?.name,
-                        filterType: "category",
-                      });
-                      setActiveSubcategories(
-                        subCategories.find(
-                          (sub) => sub?.name === category?.name
-                        )
-                      );
-                    }}
+                    onClick={() => handleOnclickCategory(category)}
                   >
                     {category?.name}
                   </p>
@@ -723,7 +713,7 @@ const Filters = memo(() => {
                   ))}
             </div>
           ))} */}
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
                   className="w-5 h-5 accent-green-400 border "
@@ -896,7 +886,184 @@ const Filters = memo(() => {
                   1
                   <AiFillStar className="text-yellow-400 text-xl" />
                 </label>
+              </div> */}
+              {new Array(5).fill(0).map((rate, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    className="w-5 h-5"
+                    id={i}
+                    name="rate"
+                    onChange={(e) => {
+                      console.log(i);
+                      dispatch(
+                        handleChangeSearchParams({
+                          rating: i,
+                        })
+                      );
+
+                      handleUpdateAppliedFilters({
+                        name: i,
+                        filterType: "rating",
+                      });
+                    }}
+                    checked={searchParams?.rating === i}
+                  />
+                  <label className="text-textColor" htmlFor={i}>
+                    {i === 0 ? "All" : i} {i !== 0 && `& Above`}
+                  </label>
+                </div>
+              ))}
+              {/* <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={searchParams?.rating.includes(5)}
+                  id="5"
+                  className="w-5 h-5 accent-green-400 border "
+                  onChange={(e) => {
+                    dispatch(
+                      handleChangeSearchParams({
+                        rating: !e.target.checked
+                          ? searchParams?.rating.filter((rate) => rate !== 5)
+                          : [...searchParams?.rating, 5],
+                      })
+                    );
+                    handleUpdateAppliedFilters({
+                      name: "5",
+                      filterType: "rating",
+                    });
+                  }}
+                />
+                <label
+                  className="text-textColor flex items-center gap-2"
+                  htmlFor="5"
+                >
+                  5
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                </label>
               </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={searchParams?.rating.includes(4)}
+                  id="4"
+                  className="w-5 h-5 accent-green-400 border "
+                  onChange={(e) => {
+                    dispatch(
+                      handleChangeSearchParams({
+                        rating: !e.target.checked
+                          ? searchParams?.rating.filter((rate) => rate !== 4)
+                          : [...searchParams?.rating, 4],
+                      })
+                    );
+                    handleUpdateAppliedFilters({
+                      name: "4",
+                      filterType: "rating",
+                    });
+                  }}
+                />
+                <label
+                  htmlFor="4"
+                  className="text-textColor flex items-center gap-2"
+                >
+                  4
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                </label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={searchParams?.rating.includes(3)}
+                  className="w-5 h-5 accent-green-400 border "
+                  id="3"
+                  onChange={(e) => {
+                    dispatch(
+                      handleChangeSearchParams({
+                        rating: !e.target.checked
+                          ? searchParams?.rating.filter((rate) => rate !== 3)
+                          : [...searchParams?.rating, 3],
+                      })
+                    );
+                    handleUpdateAppliedFilters({
+                      name: "3",
+                      filterType: "rating",
+                    });
+                  }}
+                />
+                <label
+                  htmlFor="3"
+                  className="text-textColor flex items-center gap-2"
+                >
+                  3
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                </label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={searchParams?.rating.includes(2)}
+                  className="w-5 h-5 accent-green-400 border "
+                  id="2"
+                  onChange={(e) => {
+                    dispatch(
+                      handleChangeSearchParams({
+                        rating: !e.target.checked
+                          ? searchParams?.rating.filter((rate) => rate !== 2)
+                          : [...searchParams?.rating, 2],
+                      })
+                    );
+                    handleUpdateAppliedFilters({
+                      name: "2",
+                      filterType: "rating",
+                    });
+                  }}
+                />
+                <label
+                  htmlFor="2"
+                  className="text-textColor flex items-center gap-2"
+                >
+                  2
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                </label>
+                <AiFillStar className="text-yellow-400 text-xl" />
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  className="w-5 h-5 accent-green-400 border "
+                  id="1"
+                  checked={searchParams?.rating.includes(1)}
+                  onChange={(e) => {
+                    dispatch(
+                      handleChangeSearchParams({
+                        rating: !e.target.checked
+                          ? searchParams?.rating.filter((rate) => rate !== 1)
+                          : [...searchParams?.rating, 1],
+                      })
+                    );
+                    handleUpdateAppliedFilters({
+                      name: "1",
+                      filterType: "rating",
+                    });
+                  }}
+                />
+                <label
+                  htmlFor="1"
+                  className="text-textColor flex items-center gap-2"
+                >
+                  1
+                  <AiFillStar className="text-yellow-400 text-xl" />
+                </label>
+              </div> */}
             </div>
           </div>
         </>

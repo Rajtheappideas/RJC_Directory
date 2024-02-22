@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import SingleItemBox from "../components/SingleItemBox";
 import { useDispatch, useSelector } from "react-redux";
 import { handleGetBestOffers } from "../redux/MerchantSlice";
+import SkeletonLoading from "./SkeletonLoading";
 
 const Bestoffer = () => {
   const [beginAndEnd, setBeginAndEnd] = useState({
@@ -39,10 +40,8 @@ const Bestoffer = () => {
   return (
     <div className="container mx-auto space-y-5 xl:px-0 md:px-5 lg:py-10 ">
       {bestOfferLoading ? (
-        <div className="text-center w-screen text-3xl font-semibold">
-          Loading...
-        </div>
-      ) : (
+        <SkeletonLoading width={380} height={350} count={4} />
+        ) : (
         <>
           <div className="space-y-3">
             <div className="flex justify-between items-center">

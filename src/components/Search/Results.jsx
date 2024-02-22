@@ -126,7 +126,14 @@ const Results = memo(({ setBoxType, boxType }) => {
         }  gap-4 md:pb-10 pb-5`}
       >
         {merchantGetLoading ? (
-          <div className="loading col-span-full">Loading...</div>
+          new Array(parseInt(searchParams?.limit))
+            .fill(0)
+            .map((load, i) => (
+              <div
+                key={i}
+                className="w-full animate-pulse h-[50vh] rounded-lg bg-gray-200"
+              ></div>
+            ))
         ) : merchants.length > 0 ? (
           merchants.map((merchant) => (
             <SingleItemBox

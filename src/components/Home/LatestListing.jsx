@@ -18,6 +18,7 @@ import "swiper/css/scrollbar";
 import { Link } from "react-router-dom";
 import SingleItemBox from "../SingleItemBox";
 import { useSelector } from "react-redux";
+import SkeletonLoading from "../SkeletonLoading";
 
 const LatestListing = () => {
   const [beginAndEnd, setBeginAndEnd] = useState({
@@ -25,17 +26,17 @@ const LatestListing = () => {
     isBegin: true,
   });
 
-  const { latestMerchantList, latestMerchantLoading } = useSelector((s) => s.root.merchant);
+  const { latestMerchantList, latestMerchantLoading } = useSelector(
+    (s) => s.root.merchant
+  );
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
   return (
     <div className="container mx-auto xl:px-0 px-5 xl:py-20 md:py-10 py-5 space-y-5">
-      {latestMerchantLoading ? (
-        <div className="text-center w-screen text-3xl font-semibold">
-          Loading...
-        </div>
+      {!latestMerchantLoading ? (
+        <SkeletonLoading width={380} height={450} count={4} />
       ) : (
         <>
           <div className="space-y-3">

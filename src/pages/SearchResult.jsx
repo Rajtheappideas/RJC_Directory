@@ -57,7 +57,7 @@ const SearchResult = () => {
           <Filters />
           <Results setBoxType={setBoxType} boxType={boxType} />
         </div>
-        <div className="pt-10">
+        <div className="md:pt-10 p-3">
           <Business />
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { memo, useRef, useState } from "react";
 // import Swiper core and required modules
 import { Navigation } from "swiper/modules";
 import { IoIosArrowBack } from "react-icons/io";
@@ -18,49 +18,7 @@ import "swiper/css/scrollbar";
 import { Link, useLocation } from "react-router-dom";
 import SingleItemBox from "../SingleItemBox";
 import { useSelector } from "react-redux";
-
-const listingData = [
-  {
-    id: 1,
-    image: require("../../assets/images/latest_slider/Rectangle 375.png"),
-    title: "Home appliances repair",
-    des: "304 Kent St, Sydney NSW 2000.Austrakia",
-    review: <GoStarFill />,
-    rating: "4.0 (58)",
-  },
-  {
-    id: 2,
-    image: require("../../assets/images/latest_slider/Rectangle 375 (1).png"),
-    title: "Furniture dealer",
-    des: "304 Kent St, Sydney NSW 2000.Austrakia",
-    review: <GoStarFill />,
-    rating: "2.0 (16)",
-  },
-  {
-    id: 3,
-    image: require("../../assets/images/latest_slider/Rectangle 375 (2).png"),
-    title: "Pest control service",
-    des: "304 Kent St, Sydney NSW 2000.Austrakia",
-    review: <GoStarFill />,
-    rating: "4.0 (116)",
-  },
-  {
-    id: 4,
-    image: require("../../assets/images/latest_slider/Rectangle 375 (3).png"),
-    title: "Home appliances repair",
-    des: "304 Kent St, Sydney NSW 2000.Austrakia",
-    review: <GoStarFill />,
-    rating: "3.0 (14)",
-  },
-  {
-    id: 5,
-    image: require("../../assets/images/latest_slider/Rectangle 375.png"),
-    title: "Furniture dealer",
-    des: "304 Kent St, Sydney NSW 2000.Austrakia",
-    review: <GoStarFill />,
-    rating: "4.0 (58)",
-  },
-];
+import SkeletonLoading from "../SkeletonLoading";
 
 const Business = () => {
   const [beginAndEnd, setBeginAndEnd] = useState({
@@ -82,10 +40,8 @@ const Business = () => {
       } lg:py-10`}
     >
       {nearByBusinessMerchantLoading ? (
-        <div className="text-center w-screen text-3xl font-semibold">
-          Loading...
-        </div>
-      ) : (
+        <SkeletonLoading width={380} height={450} count={4} />
+        ) : (
         <>
           <div className="space-y-3">
             <div className="flex justify-between items-center">
@@ -187,4 +143,4 @@ const Business = () => {
   );
 };
 
-export default Business;
+export default memo(Business);

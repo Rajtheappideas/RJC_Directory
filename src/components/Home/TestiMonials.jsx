@@ -11,6 +11,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import BaseUrl from "../../BaseUrl";
+import SkeletonLoading from "../SkeletonLoading";
 
 const TestiMonials = () => {
   const [beginAndEnd, setBeginAndEnd] = useState({
@@ -23,6 +24,11 @@ const TestiMonials = () => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
+  useEffect(() => {
+    window.addEventListener("resize", () => {});
+    return () => window.removeEventListener("resize", () => {});
+  }, [window.document.body.clientWidth]);
+
   return (
     <div className="container mx-auto xl:px-2 px-5 space-y-5">
       <div className="space-y-1 text-center">
@@ -33,9 +39,15 @@ const TestiMonials = () => {
         </div>
       </div>
       {testimonialLoading ? (
-        <div className="w-full text-center font-semibold text-2xl">
-          Loading...
-        </div>
+        <SkeletonLoading
+          height={200}
+          width={
+            window.screen.width > window.document.body.clientWidth
+              ? window.document.body.clientWidth -100
+              : window.screen.width
+          }
+          count={1}
+        />
       ) : (
         <div className="relative md:px-10">
           <Swiper

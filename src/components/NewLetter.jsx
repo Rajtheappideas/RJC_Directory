@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import toast from "react-hot-toast";
 import { CiMail } from "react-icons/ci";
 import { PostUrl } from "../BaseUrl";
@@ -79,4 +79,4 @@ const NewLetter = () => {
   );
 };
 
-export default NewLetter;
+export default memo(NewLetter);

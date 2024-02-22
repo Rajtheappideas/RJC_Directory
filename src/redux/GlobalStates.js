@@ -66,6 +66,7 @@ const initialState = {
   selectedState: "",
   merchantName: [],
   autoCompleteLoading: false,
+  categoryAndSubcategoryfromHeader: false,
 };
 
 const GlobalStates = createSlice({
@@ -80,6 +81,9 @@ const GlobalStates = createSlice({
     },
     handleClearMerchantName: (state, { payload }) => {
       state.merchantName = payload;
+    },
+    handleCatgegoryAndSubcategoryFromHeader: (state, { payload }) => {
+      state.categoryAndSubcategoryfromHeader = payload;
     },
   },
   extraReducers: (builder) => {
@@ -158,7 +162,11 @@ const GlobalStates = createSlice({
   },
 });
 
-export const { handleChangeCity, handleChangeState, handleClearMerchantName } =
-  GlobalStates.actions;
+export const {
+  handleChangeCity,
+  handleChangeState,
+  handleClearMerchantName,
+  handleCatgegoryAndSubcategoryFromHeader,
+} = GlobalStates.actions;
 
 export default GlobalStates.reducer;

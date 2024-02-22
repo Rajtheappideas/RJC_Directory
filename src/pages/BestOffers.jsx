@@ -11,6 +11,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { Helmet } from "react-helmet";
 import { useSelector } from "react-redux";
 import BaseUrl from "../BaseUrl";
+import SkeletonLoading from "../components/SkeletonLoading";
 
 const BestOffers = () => {
   const prevRef = useRef(null);
@@ -56,7 +57,11 @@ const BestOffers = () => {
             }}
           >
             {offerBannerLoading ? (
-              <div className="loading">Loading....</div>
+              <SkeletonLoading
+                width={window.document.body.clientWidth - 50}
+                height={350}
+                count={1}
+              />
             ) : offerBanners.length > 0 ? (
               offerBanners.map((item, index) => (
                 <SwiperSlide key={index}>

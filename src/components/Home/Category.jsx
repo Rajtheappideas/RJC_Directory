@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import BaseUrl from "../../BaseUrl";
 import { handleChangeSearchParams } from "../../redux/MerchantSlice";
 import { useNavigate } from "react-router-dom";
+import SkeletonLoading from "../SkeletonLoading";
 
 const Category = () => {
   const [beginAndEnd, setBeginAndEnd] = useState({
@@ -41,10 +42,8 @@ const Category = () => {
           and reviews for quick and informed decision-making.
         </p>
       </div>
-      {categoryLoading ? (
-        <div className="font-semibold text-center text-3xl w-screen">
-          Loading...
-        </div>
+      {!categoryLoading ? (
+        <SkeletonLoading height={200} width={230} count={6} />
       ) : (
         <div className="relative">
           <Swiper
