@@ -89,7 +89,35 @@ export function GetToken(setToken, setLoading) {
               // console.log(
               //   "Just now activated. now we can subscribe for push notification"
               // );
-              subscribeForNotification(setToken, setLoading)
+              // subscribeForNotification(setToken, setLoading)
+              window.Notification.requestPermission().then((permission) => {
+                if (permission === "granted") {
+                  toast.remove();
+                  toast.loading("Loading...");
+                  setLoading(true);
+
+                  getToken(messaging, {
+                    vapidKey: process.env.REACT_APP_CLOUD_MESSAGING_KEY,
+                  })
+                    .then((currentToken) => {
+                      toast.remove();
+                      setToken(currentToken);
+                      setLoading(false);
+                    })
+                    .catch((err) => {
+                      toast.remove();
+                      console.error(err);
+                      setLoading(false);
+                      setToken(null);
+                    })
+                    .finally(() => {
+                      setLoading(false);
+                    });
+                } else {
+                  setLoading(false);
+                  // toast("please allowed notifications.");
+                }
+              });
             }
           });
         }
@@ -101,7 +129,7 @@ export function GetToken(setToken, setLoading) {
           err
         );
       }
-    )
+    );
 }
 
 // const messaging = getMessaging();
