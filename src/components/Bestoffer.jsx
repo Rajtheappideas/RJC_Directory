@@ -116,7 +116,7 @@ const Bestoffer = () => {
               {bestOffers.length > 0 &&
                 bestOffers.slice(0, 10).map((item) => (
                   <SwiperSlide key={item._id} className="py-5 px-1">
-                    <SingleItemBox data={item} boxType="grid" />
+                    <SingleItemBox from="offer" data={item} boxType="grid" />
                   </SwiperSlide>
                 ))}
             </Swiper>

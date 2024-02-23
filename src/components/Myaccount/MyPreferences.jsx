@@ -16,6 +16,10 @@ const MyPreferences = ({}) => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null);
   const [distance, setDistance] = useState(1);
+  const [userLatAndLong, setUserLatAndLong] = useState({
+    latitude: "",
+    longitude: "",
+  });
 
   const { preferences, token, preferencesLoading, preferenceGetLoading } =
     useSelector((s) => s.root.auth);
@@ -30,6 +34,8 @@ const MyPreferences = ({}) => {
         token,
         selectedCategories,
         distance,
+        latitude: userLatAndLong?.latitude,
+        longitude: userLatAndLong?.longitude,
         selectedRating:
           selectedRating === "all" ? " ".toString() : selectedRating,
         signal: AbortControllerRef,
@@ -46,8 +52,24 @@ const MyPreferences = ({}) => {
     }
   };
 
+  const getCityLangAndLat = () => {
+    if (!navigator.geolocation) return console.log("not support");
+    function succes(data) {
+      const { latitude, longitude } = data?.coords;
+      setUserLatAndLong({ latitude, longitude });
+      return;
+    }
+    function error(err) {
+      if (err?.message === "User denied Geolocation") {
+        return toast("Allow location for get better search results");
+      }
+      return;
+    }
+    window.navigator.geolocation.getCurrentPosition(succes, error);
+  };
+
   useEffect(() => {
-    if (!preferencesLoading && !preferenceGetLoading) {
+    if (!preferencesLoading && !preferenceGetLoading && preferences) {
       setSelectedCategories(preferences?.categories ?? []);
       setSelectedRating(
         preferences?.rating === " " ? "all" : preferences?.rating
@@ -55,6 +77,10 @@ const MyPreferences = ({}) => {
       setDistance(preferences?.distance);
     }
   }, [preferencesLoading, preferenceGetLoading]);
+
+  useEffect(() => {
+    getCityLangAndLat();
+  }, []);
 
   return (
     <>

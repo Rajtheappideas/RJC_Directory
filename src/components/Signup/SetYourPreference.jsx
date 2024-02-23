@@ -16,6 +16,10 @@ const SetYourPreference = ({ setShowSuccess }) => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null);
   const [distance, setDistance] = useState(1);
+  const [userLatAndLong, setUserLatAndLong] = useState({
+    latitude: "",
+    longitude: "",
+  });
 
   const { token, preferencesLoading, preferenceGetLoading } = useSelector(
     (s) => s.root.auth
@@ -35,6 +39,8 @@ const SetYourPreference = ({ setShowSuccess }) => {
           selectedRating: selectedRating === "all" ? "" : selectedRating,
           distance,
           selectedCategories,
+          latitude: userLatAndLong?.latitude,
+          longitude: userLatAndLong?.longitude,
           signal: AbortControllerRef,
         })
       );
@@ -47,6 +53,26 @@ const SetYourPreference = ({ setShowSuccess }) => {
       }
     }
   };
+
+  const getCityLangAndLat = () => {
+    if (!navigator.geolocation) return console.log("not support");
+    function succes(data) {
+      const { latitude, longitude } = data?.coords;
+      setUserLatAndLong({ latitude, longitude });
+      return;
+    }
+    function error(err) {
+      if (err?.message === "User denied Geolocation") {
+        return toast("Allow location for get better search results");
+      }
+      return;
+    }
+    window.navigator.geolocation.getCurrentPosition(succes, error);
+  };
+  
+  useEffect(() => {
+    getCityLangAndLat();
+  }, []);
 
   return (
     <>

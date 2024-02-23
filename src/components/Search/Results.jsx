@@ -140,6 +140,7 @@ const Results = memo(({ setBoxType, boxType }) => {
               key={merchant?._id}
               data={merchant}
               boxType={boxType}
+              from="merchantlist"
             />
           ))
         ) : (

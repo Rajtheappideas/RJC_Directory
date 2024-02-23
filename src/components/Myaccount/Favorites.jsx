@@ -12,7 +12,7 @@ const Favorites = () => {
           <div className="loading">Loading...</div>
         ) : favourites.length > 0 ? (
           favourites.map((item) => (
-            <SingleItemBox key={item?._id} data={item} boxType="grid" />
+            <SingleItemBox from="favourite" key={item?._id} data={item} boxType="grid" />
           ))
         ) : (
           <div className="loading">No Favourites here.</div>

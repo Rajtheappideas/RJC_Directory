@@ -11,12 +11,15 @@ import useAbortApiCall from "../hooks/useAbortApiCall";
 import toast from "react-hot-toast";
 import BaseUrl from "../BaseUrl";
 
-const SingleItemBox = ({ data, boxType }) => {
+const SingleItemBox = ({ data, boxType, from }) => {
   const [isFavourite, setIsFavourite] = useState(false);
   const [addFavLoading, setAddFavLoading] = useState(false);
   const [removeFavLoading, setRemoveFavLoading] = useState(false);
 
   const { token } = useSelector((s) => s.root.auth);
+  const { favRemoveLoading, favAddLoading } = useSelector(
+    (s) => s.root.merchant
+  );
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,14 +35,20 @@ const SingleItemBox = ({ data, boxType }) => {
         id: "loading",
       });
       const response = dispatch(
-        handleRemoveFav({ token, id: data?._id, signal: AbortControllerRef })
+        handleRemoveFav({
+          token,
+          id: data?._id,
+          from,
+          signal: AbortControllerRef,
+        })
       );
       if (response) {
         response.then((res) => {
           if (res?.payload?.success) {
             toast.success(`${data?.name} Removed from favourites. `);
             toast.remove("loading");
-            setIsFavourite((prev) => !prev);
+            // setIsFavourite((prev) => !prev);
+            // setIsFavourite(false);
             setRemoveFavLoading(false);
           } else {
             toast.remove("loading");
@@ -52,14 +61,14 @@ const SingleItemBox = ({ data, boxType }) => {
       setAddFavLoading(true);
       toast.loading(`${data?.name} Adding to favourites. `, { id: "loading" });
       const response = dispatch(
-        handleAddFav({ token, id: data?._id, signal: AbortControllerRef })
+        handleAddFav({ token, id: data?._id, from, signal: AbortControllerRef })
       );
       if (response) {
         response.then((res) => {
           if (res?.payload?.success) {
             toast.success(`${data?.name} Added to favourites.`);
             toast.remove("loading");
-            setIsFavourite((prev) => !prev);
+            // setIsFavourite(true);
             setAddFavLoading(false);
           } else {
             toast.remove("loading");
@@ -69,12 +78,15 @@ const SingleItemBox = ({ data, boxType }) => {
       }
     }
   };
+  // console.log(favRemoveLoading, data?._id, favAddLoading);
 
   useEffect(() => {
     if (data?.isFavourite) {
       setIsFavourite(true);
+    } else {
+      setIsFavourite(false);
     }
-  }, []);
+  }, [favRemoveLoading, favAddLoading]);
 
   return (
     <>
@@ -106,7 +118,9 @@ const SingleItemBox = ({ data, boxType }) => {
             />
           </Link>
           <div className="md:space-y-3 space-y-2 md:p-3 p-2">
-            <p className="font-semibold text-left md:text-2xl text-xl">{data?.name}</p>
+            <p className="font-semibold text-left md:text-2xl text-xl">
+              {data?.name}
+            </p>
             <p className="font-medium text-left text-lg text-textColor line-clamp-2">
               {data?.address}, {data?.city}. {data?.country}
             </p>
@@ -131,7 +145,9 @@ const SingleItemBox = ({ data, boxType }) => {
               />
             </Link>
             <div className="space-y-3 md:p-3 p-2">
-              <p className="font-semibold text-left md:text-2xl text-lg">{data?.name}</p>
+              <p className="font-semibold text-left md:text-2xl text-lg">
+                {data?.name}
+              </p>
               <p className="font-medium text-left text-lg">
                 {data?.address}, {data?.city}. {data?.country}
               </p>

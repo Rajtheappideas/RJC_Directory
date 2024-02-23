@@ -53,7 +53,6 @@ function App() {
       return;
     } else if (fcmToken !== null && FCM === null) {
       return dispatch(handleChangeFcmToken(fcmToken));
-      // return setFcmToken(fcmToken);
     }
     if (window.Notification.permission !== "granted") {
       toast.remove();
@@ -67,7 +66,7 @@ function App() {
   const messaging = getMessaging();
   onMessage(messaging, (payload) => {
     console.log("Message received. ", payload.notification.title);
-    toast(payload.notification.title);
+    // toast(payload.notification.title);
     // ...
   });
 
@@ -112,7 +111,7 @@ function App() {
             window.location.reload();
           }}
         >
-          <Toaster />
+          <Toaster gutter={10} />
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />

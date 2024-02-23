@@ -19,7 +19,7 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { Country, State, City } from "country-state-city";
 import "react-phone-input-2/lib/style.css";
 import moment from "moment";
-import useCountryCityState from "../hooks/useCountryCityState";
+import { fromAddress, setDefaults, setKey } from "react-geocode";
 
 const Signup = () => {
   const [showPreferenceBox, setShowPreferenceBox] = useState(false);
@@ -49,7 +49,7 @@ const Signup = () => {
   } = useForm({
     shouldFocusError: true,
     resolver: yupResolver(signupSchema),
-    // defaultValues: { fcmToken: fcmToken },
+    defaultValues: { cityLatitude: "", cityLongitude: "" },
   });
 
   const onSubmit = (data) => {
@@ -104,15 +104,24 @@ const Signup = () => {
     setCities(cities.sort((a, b) => a.name.localeCompare(b.name)));
   }, []);
 
-  // const { cities, countries, states } = useCountryCityState({
-  //   selectedCountry: getValues("country"),
-  //   selectedState: getValues("state"),
-  // });
+  // const getCityLangAndLat = useCallback(() => {
+  //   if (watch("city") === "") return;
+  //   fromAddress(getValues("city")).then((res) => {
+  //     const city = { ...res?.results[0] };
+  //     if (city) {
+  //       setValue("cityLatitude", city?.geometry?.location?.lat);
+  //       setValue("cityLongitude", city?.geometry?.location?.lng);
+  //     }
+  //   });
+  // }, []);
 
   useEffect(() => {
     setCountries(
       Country.getAllCountries().sort((a, b) => a.name.localeCompare(b.name))
     );
+
+    // setDefaults({ key: process.env.REACT_APP_GOOGLE_API_KEY, language: "en" });
+    // setKey(process.env.REACT_APP_GOOGLE_API_KEY);
 
     return () => {
       abortApiCall();
@@ -122,11 +131,16 @@ const Signup = () => {
   useEffect(() => {
     selectedCountryStates();
     setCities([]);
+    setValue("city", "");
   }, [watch("country")]);
 
   useEffect(() => {
     selectedCountryCities();
   }, [watch("state")]);
+
+  // useEffect(() => {
+  //   getCityLangAndLat();
+  // }, [watch("city"), cities]);
 
   let date = moment().format("L").split("/");
   let maxDate = date.splice(date.length - 1, 1);

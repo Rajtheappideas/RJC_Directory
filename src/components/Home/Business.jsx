@@ -124,7 +124,7 @@ const Business = () => {
               {nearByBusinessMerchantList.length > 0 &&
                 nearByBusinessMerchantList.slice(0, 10).map((item) => (
                   <SwiperSlide key={item._id} className="py-5 px-1">
-                    <SingleItemBox data={item} boxType="grid" />
+                    <SingleItemBox from="near" data={item} boxType="grid" />
                   </SwiperSlide>
                 ))}
             </Swiper>

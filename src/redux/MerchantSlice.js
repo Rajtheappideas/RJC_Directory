@@ -72,9 +72,11 @@ export const handleGetNearByBusinessMerchantList = createAsyncThunk(
 
 export const handleGetLatestMerchantList = createAsyncThunk(
   "merchant/handleGetLatestMerchantList",
-  async (_, { rejectWithValue }) => {
+  async ({ token }, { rejectWithValue }) => {
     try {
-      const { data } = await GetUrl(`latest/merchant`);
+      const { data } = await GetUrl(`latest/merchant`, {
+        headers: { Authorization: token },
+      });
       return data;
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -336,7 +338,6 @@ const MerchantSlice = createSlice({
         state.favAddLoading = true;
       })
       .addCase(handleAddFav.fulfilled, (state, { payload, meta }) => {
-        state.favAddLoading = false;
         state.merchants = state.merchants.map((merchant) => {
           if (merchant?._id === meta.arg?.id) {
             return { ...merchant, isFavourite: true };
@@ -358,7 +359,23 @@ const MerchantSlice = createSlice({
             return offer;
           }
         });
-
+        state.latestMerchantList = state.latestMerchantList.map((latest) => {
+          if (latest?._id === meta.arg?.id) {
+            return { ...latest, isFavourite: true };
+          } else {
+            return latest;
+          }
+        });
+        state.nearByBusinessMerchantList = state.nearByBusinessMerchantList.map(
+          (near) => {
+            if (near?._id === meta.arg?.id) {
+              return { ...near, isFavourite: true };
+            } else {
+              return near;
+            }
+          }
+        );
+        state.favAddLoading = false;
         state.error = null;
       })
       .addCase(handleAddFav.rejected, (state, { payload }) => {
@@ -373,7 +390,6 @@ const MerchantSlice = createSlice({
         state.favRemoveLoading = true;
       })
       .addCase(handleRemoveFav.fulfilled, (state, { payload, meta }) => {
-        state.favRemoveLoading = false;
         state.merchants = state.merchants.map((merchant) => {
           if (merchant?._id === meta.arg?.id) {
             return { ...merchant, isFavourite: false };
@@ -388,10 +404,26 @@ const MerchantSlice = createSlice({
             return offer;
           }
         });
+        state.latestMerchantList = state.latestMerchantList.map((latest) => {
+          if (latest?._id === meta.arg?.id) {
+            return { ...latest, isFavourite: false };
+          } else {
+            return latest;
+          }
+        });
+        state.nearByBusinessMerchantList = state.nearByBusinessMerchantList.map(
+          (near) => {
+            if (near?._id === meta.arg?.id) {
+              return { ...near, isFavourite: false };
+            } else {
+              return near;
+            }
+          }
+        );
         state.favourites = state.favourites.filter((favourite) => {
           return favourite?._id !== meta.arg?.id;
         });
-
+        state.favRemoveLoading = false;
         state.error = null;
       })
       .addCase(handleRemoveFav.rejected, (state, { payload }) => {

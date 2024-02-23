@@ -119,7 +119,7 @@ const LatestListing = () => {
               {latestMerchantList.length > 0 &&
                 latestMerchantList.map((item) => (
                   <SwiperSlide key={item._id} className="py-5 px-1">
-                    <SingleItemBox data={item} boxType="grid" />
+                    <SingleItemBox from="latest" data={item} boxType="grid" />
                   </SwiperSlide>
                 ))}
             </Swiper>

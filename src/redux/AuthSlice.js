@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 export const handleRegister = createAsyncThunk(
   "auth/handleRegister",
-  async ({ data,fcmToken, signal }, { rejectWithValue }) => {
+  async ({ data, fcmToken, signal }, { rejectWithValue }) => {
     signal.current = new AbortController();
     const formData = new FormData();
 
@@ -276,9 +276,9 @@ export const handleGetPreference = createAsyncThunk(
       });
       return data;
     } catch (error) {
-      if (error?.response?.data?.message) {
-        toast.error(error?.response?.data?.message);
-      }
+      // if (error?.response?.data?.message) {
+      //   toast.error(error?.response?.data?.message);
+      // }
       return rejectWithValue(error?.response?.data);
     }
   }
@@ -287,7 +287,15 @@ export const handleGetPreference = createAsyncThunk(
 export const handleAddAndEditPreference = createAsyncThunk(
   "auth/handleAddAndEditPreference",
   async (
-    { token, selectedRating, distance, selectedCategories, signal },
+    {
+      token,
+      selectedRating,
+      latitude,
+      longitude,
+      distance,
+      selectedCategories,
+      signal,
+    },
     { rejectWithValue }
   ) => {
     signal.current = new AbortController();
@@ -298,6 +306,10 @@ export const handleAddAndEditPreference = createAsyncThunk(
       }
       if (distance) {
         formData.append("distance", distance);
+      }
+      if (longitude !== "" && latitude !== "") {
+        formData.append("longitude", longitude);
+        formData.append("latitude", latitude);
       }
       if (selectedCategories.length > 0) {
         selectedCategories.forEach((cat) =>
@@ -343,7 +355,7 @@ const AuthSlice = createSlice({
       state.user = null;
       state.token = null;
       state.error = null;
-      // state.fcmToken = null;
+      state.fcmToken = null;
       state.loading = false;
     },
     handleChangeFcmToken: (state, { payload }) => {
