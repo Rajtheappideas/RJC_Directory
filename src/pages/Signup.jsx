@@ -13,7 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import toast from "react-hot-toast";
-import { handleRegister } from "../redux/AuthSlice";
+import { handleChangeFcmToken, handleRegister } from "../redux/AuthSlice";
 import PhoneInput from "react-phone-input-2";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { Country, State, City } from "country-state-city";
@@ -28,8 +28,14 @@ const Signup = () => {
   const [cities, setCities] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [states, setStates] = useState([]);
+  const [fcmToken, setFcmToken] = useState(null);
+  const [fcmLoading, setFcmLoading] = useState(false);
 
-  const { loading, user, fcmToken } = useSelector((state) => state.root.auth);
+  const {
+    loading,
+    user,
+    fcmToken: FCM,
+  } = useSelector((state) => state.root.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -70,7 +76,7 @@ const Signup = () => {
     const response = dispatch(
       handleRegister({
         data,
-        fcmToken,
+        fcmToken: FCM,
         signal: AbortControllerRef,
       })
     );
@@ -103,6 +109,25 @@ const Signup = () => {
     );
     setCities(cities.sort((a, b) => a.name.localeCompare(b.name)));
   }, []);
+
+  const handleSetFcmToken = () => {
+    if (FCM !== null) {
+      return;
+    } else if (fcmToken !== null && FCM === null) {
+      return dispatch(handleChangeFcmToken(fcmToken));
+    }
+    if (window.Notification.permission !== "granted") {
+      toast.remove();
+      window.Notification.requestPermission();
+    }
+    if (fcmToken === null) {
+      return GetToken(setFcmToken, setFcmLoading);
+    }
+  };
+
+  useEffect(() => {
+    handleSetFcmToken();
+  }, [fcmLoading]);
 
   // const getCityLangAndLat = useCallback(() => {
   //   if (watch("city") === "") return;

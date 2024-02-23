@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import ValidationSchema from "../ValidationSchema";
 import useAbortApiCall from "../hooks/useAbortApiCall";
 import {
+  handleChangeFcmToken,
   handleGetPreference,
   handleGetSigninOTP,
   handleSignin,
@@ -25,8 +26,10 @@ const Signin = () => {
   const [signInWithPassword, setSignInWithPassword] = useState(true);
   const [showOtpBox, setShowOtpBox] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [fcmToken, setFcmToken] = useState(null);
+  const [fcmLoading, setFcmLoading] = useState(false);
 
-  const { user, loading, fcmToken } = useSelector((s) => s.root.auth);
+  const { user, loading, fcmToken: FCM } = useSelector((s) => s.root.auth);
 
   const navigate = useNavigate();
 
@@ -75,7 +78,7 @@ const Signin = () => {
         handleSignin({
           phone,
           password,
-          fcmToken,
+          fcmToken: FCM,
           signal: AbortControllerRef,
         })
       );
@@ -90,6 +93,25 @@ const Signin = () => {
       }
     }
   };
+
+  const handleSetFcmToken = () => {
+    if (FCM !== null) {
+      return;
+    } else if (fcmToken !== null && FCM === null) {
+      return dispatch(handleChangeFcmToken(fcmToken));
+    }
+    if (window.Notification.permission !== "granted") {
+      toast.remove();
+      window.Notification.requestPermission();
+    }
+    if (fcmToken === null) {
+      return GetToken(setFcmToken, setFcmLoading);
+    }
+  };
+
+  useEffect(() => {
+    handleSetFcmToken();
+  }, [fcmLoading]);
 
   useEffect(() => {
     if (user !== null) navigate("/");
