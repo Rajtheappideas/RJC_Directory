@@ -381,7 +381,7 @@ const Header = () => {
         <ul className="gap-6 items-center hidden xl:flex">
           <Link to="/">
             <li
-              className={`cursor-pointer uppercase text-[16px] navcolor`}
+              className={`cursor-pointer uppercase navcolor`}
               onClick={() => {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
