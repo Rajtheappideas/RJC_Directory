@@ -54,11 +54,11 @@ const Signin = () => {
 
   const onSubmit = (data) => {
     const { phone, password } = data;
-    if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
-      toast.remove();
-      toast.error("phone is invalid");
-      return true;
-    }
+    // if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
+    //   toast.remove();
+    //   toast.error("phone is invalid");
+    //   return true;
+    // }
     if (!signInWithPassword) {
       const response = dispatch(
         handleGetSigninOTP({
@@ -126,40 +126,40 @@ const Signin = () => {
       <Helmet>
         <title>Sign in - RJC Directory</title>
       </Helmet>
-      <div className="w-screen overflow-y-auto grid lg:grid-cols-2 xl:gap-0 gap-5 place-items-center items-center h-screen">
+      <div className="grid items-center w-screen h-screen gap-5 overflow-y-auto lg:grid-cols-2 xl:gap-0 place-items-center">
         {/* images */}
-        <div className="w-full relative lg:block hidden">
+        <div className="relative hidden w-full lg:block">
           <img
             src={require("../assets/images/bgImage.png")}
             alt=""
-            className="w-full xl:h-screen h-full object-cover"
+            className="object-cover w-full h-full xl:h-screen"
             loading="lazy"
           />
           <Link
             to="/"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 space-y-4"
+            className="absolute z-10 space-y-4 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
           >
             <img
               src={require("../assets/images/logoMain.png")}
               alt=""
-              className="xl:w-40  w-32 h-fit object-cover"
+              className="object-cover w-32 xl:w-40 h-fit"
               loading="lazy"
             />
             <img
               src={require("../assets/images/logoTitle.png")}
               alt=""
-              className="xl:w-40  w-32 h-fit object-cover "
+              className="object-cover w-32 xl:w-40 h-fit "
               loading="lazy"
             />
           </Link>
         </div>
         {/* form */}
         {!showOtpBox ? (
-          <div className="lg:w-full w-screen bg-bgGray h-full p-3 flex items-center justify-center relative z-0">
+          <div className="relative z-0 flex items-center justify-center w-screen h-full p-3 lg:w-full bg-bgGray">
             <img
               src={require("../assets/images/bgImage.png")}
               alt=""
-              className="w-full h-screen -top-2 fixed lg:hidden -z-10 object-cover"
+              className="fixed object-cover w-full h-screen -top-2 lg:hidden -z-10"
               loading="lazy"
             />
             <form
@@ -170,15 +170,15 @@ const Signin = () => {
                 <img
                   src={require("../assets/images/Logo.png")}
                   alt=""
-                  className="w-fit h-fit object-cover lg:hidden absolute -top-16 left-1/2 -translate-x-1/2 z-10"
+                  className="absolute z-10 object-cover -translate-x-1/2 w-fit h-fit lg:hidden -top-16 left-1/2"
                 />
               </Link>
-              <p className="font-semibold  text-left text-2xl">Sign In</p>
+              <p className="text-2xl font-semibold text-left">Sign In</p>
               <div className="space-y-1">
                 <label htmlFor="PhoneNumber" className="Label">
                   Phone number
                 </label>
-                <Controller
+                {/* <Controller
                   name="phone"
                   control={control}
                   rules={{
@@ -210,12 +210,18 @@ const Signin = () => {
                       }}
                     />
                   )}
+                /> */}
+                <input
+                  type="number"
+                  {...register("phone")}
+                  className="input_field"
+                  placeholder="Enter your Phone number"
                 />
                 <span className="error">{errors?.phone?.message}</span>
               </div>
               {signInWithPassword && (
-                <div className="space-y-1 relative">
-                  <div className="w-full flex items-center justify-between">
+                <div className="relative space-y-1">
+                  <div className="flex items-center justify-between w-full">
                     <label htmlFor="password" className="Label">
                       Password
                     </label>
@@ -232,30 +238,30 @@ const Signin = () => {
                   {showPassword ? (
                     <IoMdEye
                       onClick={() => setShowPassword(false)}
-                      className="absolute top-9 right-3 h-6 w-6 cursor-pointer"
+                      className="absolute w-6 h-6 cursor-pointer top-9 right-3"
                     />
                   ) : (
                     <IoMdEyeOff
                       onClick={() => setShowPassword(true)}
-                      className="absolute top-9 right-3 h-6 w-6 cursor-pointer"
+                      className="absolute w-6 h-6 cursor-pointer top-9 right-3"
                     />
                   )}
                   <span className="error">{errors?.password?.message}</span>
                 </div>
               )}
 
-              <button disabled={loading} className="green_button w-full">
+              <button disabled={loading} className="w-full green_button">
                 {loading ? "Signing in..." : "Sign in"}
               </button>
               <p
                 onClick={() => setSignInWithPassword(!signInWithPassword)}
-                className="text-center text-lg cursor-pointer font-semibold"
+                className="text-lg font-semibold text-center cursor-pointer"
               >
                 {!signInWithPassword
                   ? "Sign In with Password"
                   : " Sign In with OTP"}
               </p>
-              <div className="flex items-center gap-2 opacity-50 w-full whitespace-nowrap">
+              <div className="flex items-center w-full gap-2 opacity-50 whitespace-nowrap">
                 <hr className="flex-1" />
                 <p className=" text-[10px] flex-1 font-semibold tracking-widest">
                   OR SIGN-IN WITH
@@ -263,23 +269,23 @@ const Signin = () => {
                 <hr className="flex-1" />
               </div>
               {/* social login */}
-              <div className="w-full flex items-center justify-center gap-2">
+              <div className="flex items-center justify-center w-full gap-2">
                 <button
                   disabled={loading}
-                  className="rounded-full w-12 h-12 border text-center"
+                  className="w-12 h-12 text-center border rounded-full"
                 >
-                  <FcGoogle className="text-xl mx-auto" />
+                  <FcGoogle className="mx-auto text-xl" />
                 </button>
-                {/* <button className="rounded-full w-12 h-12 border text-center">
-                  <FaFacebookF className="text-xl mx-auto text-blue-500" />
+                {/* <button className="w-12 h-12 text-center border rounded-full">
+                  <FaFacebookF className="mx-auto text-xl text-blue-500" />
                 </button> */}
               </div>
               {/* sign up  url */}
-              <p className="text-base text-center text-textColor text-opacity-50">
+              <p className="text-base text-center text-opacity-50 text-textColor">
                 Don’t have an account?{" "}
                 <Link
                   to="/sign-up"
-                  className="text-blue-500 underline underline-offset-4 font-semibold text-base opacity-100"
+                  className="text-base font-semibold text-blue-500 underline opacity-100 underline-offset-4"
                 >
                   Sign Up
                 </Link>

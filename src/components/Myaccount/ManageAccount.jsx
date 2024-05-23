@@ -116,7 +116,7 @@ const ManageAccount = () => {
     // setCountries(
     //   Country.getAllCountries().sort((a, b) => a.name.localeCompare(b.name))
     // );
-    
+
     selectedCountryStates();
 
     return () => {
@@ -145,34 +145,34 @@ const ManageAccount = () => {
   // console.log(cities)
 
   return (
-    <div className="lg:space-y-6 space-y-3">
-      <p className="font-semibold md:text-2xl text-xl">Manage Account</p>
+    <div className="space-y-3 lg:space-y-6">
+      <p className="text-xl font-semibold md:text-2xl">Manage Account</p>
       <form
         onSubmit={handleSubmit(handleOnSubmit)}
-        className="w-full grid lg:grid-cols-2 gap-3"
+        className="grid w-full gap-3 lg:grid-cols-2"
       >
         <div
           className={`h-20 w-20 col-span-full cursor-pointer rounded-full border-[3px] ${
             profileImage === null ? "bg-gray-300" : "bg-gray-100"
           } border-blueColor relative`}
         >
-          <div className="relative border-white border-4 w-full h-full rounded-full">
+          <div className="relative w-full h-full border-4 border-white rounded-full">
             {user?.photo && profileImage === null ? (
               <img
                 src={BaseUrl.concat(user?.photo)}
-                className="w-full rounded-full h-full object-cover absolute text-white top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2"
+                className="absolute object-cover w-full h-full text-white -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2"
               />
             ) : profileImage !== null ? (
               <img
                 src={url}
-                className="w-full rounded-full h-full object-cover absolute text-white top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2"
+                className="absolute object-cover w-full h-full text-white -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2"
               />
             ) : (
-              <IoCamera className="w-6 h-6 absolute text-white top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2" />
+              <IoCamera className="absolute w-6 h-6 text-white -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" />
             )}
             <input
               type="file"
-              className="w-full h-full cursor-pointer opacity-0 absolute text-white top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2"
+              className="absolute w-full h-full text-white -translate-x-1/2 -translate-y-1/2 opacity-0 cursor-pointer top-1/2 left-1/2"
               {...register("photo", {
                 onChange: (e) => {
                   setProfileImage(e.target.files[0]);
@@ -198,7 +198,7 @@ const ManageAccount = () => {
             readOnly
             {...register("email")}
             type="email"
-            className="input_field cursor-not-allowed"
+            className="cursor-not-allowed input_field"
           />
           <span className="error">{errors?.email?.message}</span>
         </div>
@@ -206,7 +206,7 @@ const ManageAccount = () => {
           <label htmlFor="phone" className="Label">
             Phone number
           </label>
-          <Controller
+          {/* <Controller
             name="phone"
             control={control}
             rules={{
@@ -241,6 +241,12 @@ const ManageAccount = () => {
                 }}
               />
             )}
+          /> */}
+          <input
+            type="number"
+            {...register("phone")}
+            className="input_field"
+            placeholder="Enter your Phone number"
           />
           <span className="error">{errors?.phone?.message}</span>
         </div>
@@ -252,7 +258,7 @@ const ManageAccount = () => {
             {...register("dob")}
             max={maxDate}
             type="date"
-            className="input_field relative"
+            className="relative input_field"
           />
           <span className="error">{errors?.dob?.message}</span>
         </div>
@@ -263,7 +269,7 @@ const ManageAccount = () => {
           <input
             {...register("anniversary")}
             type="date"
-            className="input_field relative"
+            className="relative input_field"
             max={maxDate}
           />
           <span className="error">{errors?.anniversary?.message}</span>
@@ -276,7 +282,7 @@ const ManageAccount = () => {
             type="text"
             disabled
             readOnly
-            className="input_field cursor-not-allowed"
+            className="cursor-not-allowed input_field"
             value={getValues("country")}
           />
           {/* <select
@@ -344,7 +350,7 @@ const ManageAccount = () => {
           </select>
           <span className="error">{errors?.city?.message}</span>
         </div>
-        <button type="submit" disabled={loading} className="green_button w-40">
+        <button type="submit" disabled={loading} className="w-40 green_button">
           {loading ? "Saving..." : "Save"}
         </button>
       </form>
