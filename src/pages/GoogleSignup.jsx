@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebookF } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,7 +17,6 @@ import {
     handleChangeFcmToken,
     handleRegister,
     handleSocial,
-    handleSocialProfile,
 } from '../redux/AuthSlice';
 import PhoneInput from 'react-phone-input-2';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
@@ -26,9 +25,10 @@ import 'react-phone-input-2/lib/style.css';
 import moment from 'moment';
 import { fromAddress, setDefaults, setKey } from 'react-geocode';
 import { GetToken } from '../Firebase/firebase-messaging-sw';
-import { auth, googleAuthProvider } from '../Firebase/firebaseConfig';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../Firebase/firebaseConfig';
 
-const Signup = () => {
+const GoogleSignup = () => {
     const [showPreferenceBox, setShowPreferenceBox] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [countries, setCountries] = useState([]);
@@ -50,8 +50,6 @@ const Signup = () => {
     const { AbortControllerRef, abortApiCall } = useAbortApiCall();
     const { signupSchema } = ValidationSchema();
 
-    const signal = useRef(null);
-
     const {
         register,
         handleSubmit,
@@ -66,6 +64,43 @@ const Signup = () => {
         resolver: yupResolver(signupSchema),
         defaultValues: { cityLatitude: '', cityLongitude: '' },
     });
+
+    // firebase google login
+
+    const googleLogin = data => {
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+            .then(async result => {
+                console.log(result);
+                if (result.user) {
+                    // Assuming you need to pass the ID token to your backend
+                    const idToken = await result.user.getIdToken();
+
+                    const response = dispatch(
+                        handleSocial({
+                            data: {
+                                ...data,
+                                idToken, // Pass the ID token here
+                            },
+                            // token: token,
+                            signal: AbortControllerRef,
+                        })
+                    );
+
+                    if (response) {
+                        response.then(res => {
+                            if (res?.payload?.success) {
+                                setShowPreferenceBox(true);
+                            }
+                        });
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Google login error:', error);
+                // Handle errors here if needed
+            });
+    };
 
     const onSubmit = data => {
         // const { phone } = data;
@@ -96,46 +131,6 @@ const Signup = () => {
                     setShowPreferenceBox(true);
                 }
             });
-        }
-    };
-
-    // Google login
-    const handleGoogleSignIn = async () => {
-        try {
-            const result = await auth.signInWithPopup(googleAuthProvider);
-            const token = await result.user.getIdToken();
-            const userData = {
-                name: result.user.displayName,
-                email: result.user.email,
-                phone: result.user.phoneNumber,
-                photo: result.user.photoURL,
-                googleId: result.user.uid,
-            };
-
-            // Handle Social Login
-            const socialResponse = await dispatch(
-                handleSocial({
-                    data: userData,
-                    token: token,
-                    signal: signal,
-                })
-            ).unwrap();
-            console.log(socialResponse, '✈🥳👍👍☕⛔');
-
-            // Handle Social Profile
-            const profileResponse = await dispatch(
-                handleSocialProfile({
-                    data: socialResponse.user,
-                    token: socialResponse.token,
-                    signal: signal,
-                })
-            ).unwrap();
-
-            // Navigate to home page or any other page
-            // e.g., history.push('/home');
-        } catch (error) {
-            toast.error('Error during Google sign-in');
-            console.error('Error during Google sign-in:', error);
         }
     };
 
@@ -229,7 +224,6 @@ const Signup = () => {
             abortApiCall();
         };
     }, []);
-
     return (
         <>
             <Helmet>
@@ -274,10 +268,10 @@ const Signup = () => {
                             className="fixed object-cover w-full h-screen lg:hidden -z-10"
                             loading="lazy"
                         />
-                        <div className="relative w-full p-4 space-y-4 bg-white rounded-lg shadow-lg xl:mt-0 mt-14 md:p-10 md:w-2/3">
+                        <div className="bg-white relative text-[#000D23] space-y-4 xl:mt-0 mt-14 rounded-lg md:p-10 p-4 shadow-lg md:w-2/3 w-full">
                             <form
                                 onSubmit={handleSubmit(onSubmit)}
-                                className="space-y-4 text-[#000D23]"
+                                className=" relative text-[#000D23] space-y-4"
                             >
                                 <Link to="/">
                                     <img
@@ -575,7 +569,7 @@ const Signup = () => {
                                 <button
                                     disabled={loading}
                                     className="w-12 h-12 text-center border rounded-full"
-                                    onClick={handleGoogleSignIn}
+                                    onClick={googleLogin}
                                 >
                                     <FcGoogle className="mx-auto text-xl" />
                                 </button>
@@ -601,4 +595,4 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default GoogleSignup;

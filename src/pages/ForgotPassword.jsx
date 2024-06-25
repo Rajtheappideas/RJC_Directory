@@ -40,7 +40,7 @@ const ForgotPassword = () => {
     } = useForm({
         shouldFocusError: true,
         resolver: yupResolver(forgotPasswordSchema),
-        defaultValues: { phone: '+912084422881' },
+        defaultValues: { phone: '7600126780' },
     });
 
     const OnSubmitForgotPassword = data => {
