@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging } from 'firebase/messaging/sw';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+
 const firebaseConfig = {
     apiKey: 'AIzaSyBPkYe5rzjupkGGyCycVUms3df_UdqugS4',
     authDomain: 'rjc-app.firebaseapp.com',
@@ -15,5 +16,3 @@ export const app = initializeApp(firebaseConfig);
 export const googleAuthProvider = new GoogleAuthProvider();
 export const messaging = getMessaging(app);
 export const auth = getAuth(app);
-
-export { signInWithPopup };

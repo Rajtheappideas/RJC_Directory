@@ -27,6 +27,7 @@ import moment from 'moment';
 import { fromAddress, setDefaults, setKey } from 'react-geocode';
 import { GetToken } from '../Firebase/firebase-messaging-sw';
 import { auth, googleAuthProvider } from '../Firebase/firebaseConfig';
+import { signInWithPopup } from 'firebase/auth';
 
 const Signup = () => {
     const [showPreferenceBox, setShowPreferenceBox] = useState(false);
@@ -99,10 +100,10 @@ const Signup = () => {
         }
     };
 
-    // Google login
+    // google login
     const handleGoogleSignIn = async () => {
         try {
-            const result = await auth.signInWithPopup(googleAuthProvider);
+            const result = await signInWithPopup(auth, googleAuthProvider);
             const token = await result.user.getIdToken();
             const userData = {
                 name: result.user.displayName,
@@ -130,6 +131,8 @@ const Signup = () => {
                     signal: signal,
                 })
             ).unwrap();
+
+            navigate('/');
 
             // Navigate to home page or any other page
             // e.g., history.push('/home');
